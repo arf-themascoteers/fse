@@ -11,11 +11,18 @@ if __name__ == '__main__':
     #         "algorithm": "pca"
     #     }
     # )
+    # tasks.append(
+    #     {
+    #         "dataset":DSManager(reduced_features=True, reduced_rows=True),
+    #         "target_feature_size":10,
+    #         "algorithm": "pls"
+    #     }
+    # )
     tasks.append(
         {
             "dataset":DSManager(reduced_features=True, reduced_rows=True),
             "target_feature_size":10,
-            "algorithm": "pls"
+            "algorithm": "rfe"
         }
     )
 
