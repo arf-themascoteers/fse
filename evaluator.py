@@ -1,7 +1,5 @@
 import numpy as np
 from sklearn.decomposition import PCA
-from sklearn.datasets import load_iris
-from sklearn.preprocessing import StandardScaler
 import time
 import os
 
@@ -9,7 +7,7 @@ import os
 class Evaluator:
     def __init__(self, tasks):
         self.tasks = tasks
-        self.filename = str(int(time.time())) + ".csv"
+        self.filename = os.path.join("data",str(int(time.time())) + ".csv")
 
     def write_head_row(self):
         with open(self.filename, 'w') as file:
@@ -34,6 +32,6 @@ class Evaluator:
             print(f"Number of components to retain 95% variance: {num_components}")
 
             pca = PCA(n_components=num_components)
-            X_selected = pca.fit_transform(X_standardized)
+            X_selected = pca.fit_transform(X)
 
             print(f"Selected Features:\n{X_selected}")
