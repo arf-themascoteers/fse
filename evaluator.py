@@ -2,6 +2,9 @@ import numpy as np
 from sklearn.decomposition import PCA
 import time
 import os
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+import math
 
 
 class Evaluator:
@@ -23,16 +26,19 @@ class Evaluator:
             dataset = task["dataset"]
             target_feature_size = task["target_feature_size"]
             algorithm = task["algorithm"]
-            X,y = dataset.split_X_y()
-            pca = PCA()
-            X_pca = pca.fit_transform(X)
-            cumulative_variance_ratio = np.cumsum(pca.explained_variance_ratio_)
-            num_components = np.argmax(cumulative_variance_ratio >= 0.95) + 1
+            X_train, y_train, X_test, y_test, X_validation, y_validation = dataset.get_train_test_validation_X_y()
+            self.get_metrics(X_train, y_train, X_test, y_test)
+            pca = PCA(n_components=target_feature_size)
+            X_train_pca = pca.fit_transform(X_train)
+            X_test_pca = pca.transform(X_test)
+            print(X_train_pca)
+            self.get_metrics(X_train_pca, y_train, X_test_pca, y_test)
 
-            print(f"Number of components to retain 95% variance: {num_components}")
-
-            pca = PCA(n_components=num_components)
-            X_selected = pca.fit_transform(X)
-
-
-            print(f"Selected Features:\n{X_selected}")
+    def get_metrics(self, X_train, y_train, X_test, y_test):
+        model = RandomForestRegressor()
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        r2 = round(r2_score(y_test, y_pred),3)
+        rmse = round(math.sqrt(mean_squared_error(y_test, y_pred)),3)
+        print(r2, rmse)
+        return r2, rmse

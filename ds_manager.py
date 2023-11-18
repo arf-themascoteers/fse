@@ -86,13 +86,24 @@ class DSManager:
         return train_x, train_y, test_x, test_y, validation_x, validation_y
 
     def split_X_y(self):
-        x = self.full_data[:, :-1]
-        y = self.full_data[:, -1]
+        return self.split_X_y_data(self.full_data)
+
+    @staticmethod
+    def split_X_y_data(data):
+        x = data[:, :-1]
+        y = data[:, -1]
         return x, y
 
-    def get_train_test(self):
+    def get_train_test_validation(self):
         train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
-        return train_data, test_data
+        train_data, validation_data = model_selection.train_test_split(train_data, test_size=0.1, random_state=2)
+        return train_data, test_data, validation_data
+
+    def get_train_test_validation_X_y(self):
+        train_data, test_data, validation_data = self.get_train_test_validation()
+        return *DSManager.split_X_y_data(train_data), \
+            *DSManager.split_X_y_data(test_data),\
+            *DSManager.split_X_y_data(validation_data)
 
 
 if __name__ == "__main__":
