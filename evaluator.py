@@ -34,4 +34,5 @@ class Evaluator:
             pca = PCA(n_components=num_components)
             X_selected = pca.fit_transform(X)
 
+
             print(f"Selected Features:\n{X_selected}")
