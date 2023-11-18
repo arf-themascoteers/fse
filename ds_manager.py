@@ -28,6 +28,9 @@ class DSManager:
         self.full_data = df.to_numpy()
         self.full_data = DSManager._normalize(self.full_data)
 
+    def __repr__(self):
+        return self.get_name()
+
     def get_name(self):
         if self.reduced_features:
             if self.reduced_rows:
@@ -104,6 +107,15 @@ class DSManager:
         return *DSManager.split_X_y_data(train_data), \
             *DSManager.split_X_y_data(test_data),\
             *DSManager.split_X_y_data(validation_data)
+
+    def get_train_test(self):
+        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
+        return train_data, test_data
+
+    def get_train_test_X_y(self):
+        train_data, test_data = self.get_train_test()
+        return *DSManager.split_X_y_data(train_data), \
+            *DSManager.split_X_y_data(test_data)
 
 
 if __name__ == "__main__":

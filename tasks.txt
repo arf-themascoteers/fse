@@ -1,0 +1,18 @@
+shyh wei - threshold
+
+train_x
+train_y
+
+test_x
+test_y
+
+1. Original: Train(train_x,train_y) - Score(test_x,test_y)
+2. FE: Z = features(train_x,train_y)
+3. Train(Z(train_x),train_y) - Score(Z(train_x),train_y)
+4. Train(Z(train_x),train_y) - Score(Z(test_x),test_y)
+
+======
+Added limitation - FSA for ANN only
+==
+
+do these tests, dump these cols

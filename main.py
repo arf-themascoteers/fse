@@ -4,12 +4,20 @@ from evaluator import Evaluator
 if __name__ == '__main__':
     algorithms = ["pca"]
     tasks = []
+    # tasks.append(
+    #     {
+    #         "dataset":DSManager(reduced_features=True, reduced_rows=True),
+    #         "target_feature_size":10,
+    #         "algorithm": "pca"
+    #     }
+    # )
     tasks.append(
         {
             "dataset":DSManager(reduced_features=True, reduced_rows=True),
             "target_feature_size":10,
-            "algorithm": "pca"
+            "algorithm": "pls"
         }
     )
+
     ev = Evaluator(tasks)
     ev.evaluate()
