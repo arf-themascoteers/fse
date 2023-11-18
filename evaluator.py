@@ -3,6 +3,7 @@ from sklearn.decomposition import PCA
 from sklearn.datasets import load_iris
 from sklearn.preprocessing import StandardScaler
 import time
+import os
 
 
 class Evaluator:
@@ -24,14 +25,9 @@ class Evaluator:
             dataset = task["dataset"]
             target_feature_size = task["target_feature_size"]
             algorithm = task["algorithm"]
-            X = dataset.X
-            y = data.target
-
-            X_standardized = StandardScaler().fit_transform(X)
-
+            X,y = dataset.split_X_y()
             pca = PCA()
-            X_pca = pca.fit_transform(X_standardized)
-
+            X_pca = pca.fit_transform(X)
             cumulative_variance_ratio = np.cumsum(pca.explained_variance_ratio_)
             num_components = np.argmax(cumulative_variance_ratio >= 0.95) + 1
 
