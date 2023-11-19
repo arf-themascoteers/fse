@@ -7,12 +7,7 @@ if __name__ == '__main__':
         {
             "dataset": DSManager(reduced_features=True, reduced_rows=True),
             "target_feature_size": 10,
-            "algorithm": "pca"
-        },
-        {
-            "dataset":DSManager(reduced_features=True, reduced_rows=True),
-            "target_feature_size":10,
-            "algorithm": "rfe"
+            "algorithm": "pcat95"
         }
     )
     ev = Evaluator(tasks)

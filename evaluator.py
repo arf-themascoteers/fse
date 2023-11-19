@@ -13,9 +13,8 @@ class Evaluator:
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
                 file.write("algorithm,dataset,rows,columns,time,target_size,"
-                           "r2_original,rmse_original,"
-                           "r2_reduced_train,rmse_reduced_train,"
-                           "r2_reduced_test,rmse_reduced_test,"
+                           "r2_original,r2_reduced_train,r2_reduced_test,"
+                           "rmse_original,rmse_reduced_train,rmse_reduced_test,"
                            "selected_features\n")
 
     def evaluate(self):
@@ -34,10 +33,10 @@ class Evaluator:
             elapsed_time = (datetime.now() - start_time).total_seconds()
             with open(self.filename, 'a') as file:
                 file.write(
-                    f"{algorithm_name},{dataset},{dataset.count_rows()},{dataset.count_features()},{elapsed_time},{target_feature_size},"
-                    f"{r2_original},{rmse_original},"
-                    f"{r2_reduced_train},{rmse_reduced_train},"
-                    f"{r2_reduced_test},{rmse_reduced_test},"
+                    f"{algorithm_name},{dataset},{dataset.count_rows()},"
+                    f"{dataset.count_features()},{elapsed_time},{target_feature_size},"
+                    f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
+                    f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
