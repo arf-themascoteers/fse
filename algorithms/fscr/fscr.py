@@ -20,7 +20,7 @@ class FSCR:
         self.epochs = 600
         if self.target_feature_size > 1000:
             self.epochs = 1200
-        self.csv_file = os.path.join("../results", "fscr.csv")
+        self.csv_file = os.path.join("../../results", "fscr.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
 

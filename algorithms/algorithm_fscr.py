@@ -1,5 +1,5 @@
 from algorithm import Algorithm
-from fscr import FSCR
+from algorithms.fscr.fscr import FSCR
 
 
 class AlgorithmFSCR(Algorithm):

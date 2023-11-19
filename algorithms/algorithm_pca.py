@@ -9,4 +9,4 @@ class AlgorithmPCA(Algorithm):
     def get_selector(self):
         pca = PCA(n_components=self.target_feature_size)
         pca.fit(self.X_train)
-        return pca,[]
+        return pca, []
