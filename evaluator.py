@@ -5,6 +5,8 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 import math
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 
 
 class Evaluator:
@@ -27,14 +29,12 @@ class Evaluator:
             if self.is_done(algorithm_name, dataset, target_feature_size):
                 print("Done already. Skipping.")
                 continue
-            start_time = datetime.now()
-            r2_original, rmse_original, \
+            elapsed_time, r2_original, rmse_original, \
                 r2_reduced_train, rmse_reduced_train, \
                 r2_reduced_test, rmse_reduced_test, \
                 selected_features = \
                 self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
-            elapsed_time = (datetime.now() - start_time).total_seconds()
             with open(self.filename, 'a') as file:
                 file.write(
                     f"{algorithm_name},{dataset},{dataset.count_rows()},"
@@ -57,14 +57,18 @@ class Evaluator:
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
         metrics_evaluator = Evaluator.get_default_metric_evaluator()
+        if algorithm_name == "fscr":
+            metrics_evaluator = Evaluator.get_mlp_model()
         _, _, r2_original, rmse_original = Evaluator.get_metrics(X_train, y_train, X_test, y_test, metrics_evaluator)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
+        start_time = datetime.now()
         model, selected_features = algorithm.get_selector()
+        elapsed_time = (datetime.now() - start_time).total_seconds()
         X_train_reduced = model.transform(X_train)
         X_test_reduced = model.transform(X_test)
         r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
             Evaluator.get_metrics(X_train_reduced, y_train, X_test_reduced, y_test, metrics_evaluator)
-        return r2_original, rmse_original, \
+        return elapsed_time, r2_original, rmse_original, \
             r2_reduced_train, rmse_reduced_train, \
             r2_reduced_test, rmse_reduced_test, selected_features
 
@@ -89,7 +93,8 @@ class Evaluator:
 
     @staticmethod
     def get_default_metric_evaluator():
-        return Evaluator.get_mlp_model()
+        #return Evaluator.get_mlp_model()
+        return RandomForestRegressor()
 
     # def do_pca(self,X_train, y_train, target_feature_size):
     #     pca = PCA(n_components=target_feature_size)

@@ -7,6 +7,27 @@ if __name__ == '__main__':
         {
             "dataset": DSManager(reduced_features=True, reduced_rows=True),
             "target_feature_size": 10,
+            "algorithm": "pca"
+        }
+    )
+    tasks.append(
+        {
+            "dataset": DSManager(reduced_features=True, reduced_rows=True),
+            "target_feature_size": 10,
+            "algorithm": "pcat95"
+        }
+    )
+    tasks.append(
+        {
+            "dataset": DSManager(reduced_features=True, reduced_rows=True),
+            "target_feature_size": 10,
+            "algorithm": "rfe"
+        }
+    )
+    tasks.append(
+        {
+            "dataset": DSManager(reduced_features=True, reduced_rows=True),
+            "target_feature_size": 10,
             "algorithm": "fscr"
         }
     )
