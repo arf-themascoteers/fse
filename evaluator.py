@@ -85,7 +85,7 @@ class Evaluator:
         return pls,[]
 
     def do_rfe(self,X_train, y_train, target_feature_size):
-        rfe = RFE(Evaluator.get_internal_model(), n_features_to_select=target_feature_size)
+        rfe = RFE(LinearRegression(), n_features_to_select=target_feature_size)
         rfe.fit(X_train, y_train)
         indices = np.where(rfe.get_support())[0]
         return rfe, indices
@@ -103,7 +103,7 @@ class Evaluator:
         return selector, indices
 
     def get_metrics(self, X_train, y_train, X_test, y_test):
-        model = Evaluator.get_internal_model()
+        model = LinearRegression()
         model.fit(X_train, y_train)
         model.fit(X_train, y_train)
 
