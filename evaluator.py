@@ -1,3 +1,4 @@
+from ds_manager import DSManager
 from datetime import datetime
 import os
 from algorithm_creator import AlgorithmCreator
@@ -13,7 +14,7 @@ class Evaluator:
         self.filename = os.path.join("results","results.csv")
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
-                file.write("algorithm,dataset,rows,columns,time,target_size,"
+                file.write("algorithm,rows,columns,time,target_size,"
                            "r2_original,r2_train,r2_test,"
                            "rmse_original,rmse_train,rmse_test,"
                            "selected_features\n")
@@ -21,12 +22,14 @@ class Evaluator:
     def evaluate(self):
         for task in self.tasks:
             print(task)
-            dataset = task["dataset"]
+            reduced_features = task["reduced_features"]
+            reduced_rows = task["reduced_rows"]
             target_feature_size = task["target_feature_size"]
             algorithm_name = task["algorithm"]
-            if self.is_done(algorithm_name, dataset, target_feature_size):
+            if self.is_done(algorithm_name, target_feature_size):
                 print("Done already. Skipping.")
                 continue
+            dataset = DSManager(reduced_features=reduced_features, reduced_rows=reduced_rows)
             elapsed_time, r2_original, rmse_original, \
                 r2_reduced_train, rmse_reduced_train, \
                 r2_reduced_test, rmse_reduced_test, \
@@ -35,7 +38,7 @@ class Evaluator:
 
             with open(self.filename, 'a') as file:
                 file.write(
-                    f"{algorithm_name},{dataset},{dataset.count_rows()},"
+                    f"{algorithm_name},{dataset.count_rows()},"
                     f"{dataset.count_features()},{elapsed_time},{target_feature_size},"
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
                     f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
