@@ -17,7 +17,7 @@ class Evaluator:
                 file.write("algorithm,rows,columns,time,target_size,"
                            "r2_original,r2_train,r2_test,"
                            "rmse_original,rmse_train,rmse_test,"
-                           "selected_features\n")
+                           "final_indices,selected_features\n")
 
     def evaluate(self):
         for task in self.tasks:
@@ -33,7 +33,7 @@ class Evaluator:
             elapsed_time, r2_original, rmse_original, \
                 r2_reduced_train, rmse_reduced_train, \
                 r2_reduced_test, rmse_reduced_test, \
-                selected_features = \
+                final_indices, selected_features = \
                 self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
             with open(self.filename, 'a') as file:
@@ -42,6 +42,7 @@ class Evaluator:
                     f"{dataset.count_features()},{elapsed_time},{target_feature_size},"
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
                     f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
+                    f"{final_indices},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
@@ -71,7 +72,7 @@ class Evaluator:
             Evaluator.get_metrics(X_train_reduced, y_train, X_test_reduced, y_test, metrics_evaluator)
         return elapsed_time, r2_original, rmse_original, \
             r2_reduced_train, rmse_reduced_train, \
-            r2_reduced_test, rmse_reduced_test, selected_features
+            r2_reduced_test, rmse_reduced_test, X_test_reduced.shape[1], selected_features
 
     @staticmethod
     def get_metrics(X_train, y_train, X_test, y_test, metric_evaluator):
