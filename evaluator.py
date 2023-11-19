@@ -64,6 +64,7 @@ class Evaluator:
         elapsed_time = (datetime.now() - start_time).total_seconds()
         X_train_reduced = model.transform(X_train)
         X_test_reduced = model.transform(X_test)
+        metrics_evaluator = configs.get_metric_evaluator_for_traditional(X_train_reduced.shape[1])
         r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
             Evaluator.get_metrics(X_train_reduced, y_train, X_test_reduced, y_test, metrics_evaluator)
         return elapsed_time, r2_original, rmse_original, \
