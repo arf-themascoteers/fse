@@ -1,3 +1,10 @@
+save models
+
+implement fscr
+
+ann.fit etc
+
+=======
 shyh wei - threshold
 
 train_x
