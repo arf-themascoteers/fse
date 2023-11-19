@@ -14,8 +14,8 @@ class Evaluator:
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
                 file.write("algorithm,dataset,rows,columns,time,target_size,"
-                           "r2_original,r2_reduced_train,r2_reduced_test,"
-                           "rmse_original,rmse_reduced_train,rmse_reduced_test,"
+                           "r2_original,r2_train,r2_test,"
+                           "rmse_original,rmse_train,rmse_test,"
                            "selected_features\n")
 
     def evaluate(self):
