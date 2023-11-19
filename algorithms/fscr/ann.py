@@ -20,8 +20,9 @@ class ANN(nn.Module):
             first_hidden = 8
         elif target_feature_size == 2000:
             first_hidden = 4
+        print(f"ANN - {target_feature_size} - {first_hidden}")
         self.linear = nn.Sequential(
-            nn.Linear(self.target_feature_size, 50),
+            nn.Linear(self.target_feature_size, first_hidden),
             nn.LeakyReLU(),
             nn.Linear(first_hidden, 10),
             nn.LeakyReLU(),
