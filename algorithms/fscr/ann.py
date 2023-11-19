@@ -13,13 +13,17 @@ class ANN(nn.Module):
         first_hidden = 50
         #[10, 100, 200, 1000, 2000]
         if target_feature_size == 100:
-            first_hidden = 15
+            first_hidden = 30
         elif target_feature_size == 200:
+            first_hidden = 20
+        elif target_feature_size == 300:
             first_hidden = 15
         elif target_feature_size == 1000:
-            first_hidden = 8
+            first_hidden = 10
         elif target_feature_size == 2000:
-            first_hidden = 4
+            first_hidden = 5
+        elif target_feature_size > 2000:
+            first_hidden = 3
         print(f"ANN - {target_feature_size} - {first_hidden}")
         self.linear = nn.Sequential(
             nn.Linear(self.target_feature_size, first_hidden),

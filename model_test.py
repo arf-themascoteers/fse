@@ -1,23 +1,18 @@
 from sklearn.neural_network import MLPRegressor
 from ds_manager import DSManager
+from algorithms.algorithm_pca import AlgorithmPCA
+import configs
 
 
-def get_mlp():
-    return MLPRegressor(hidden_layer_sizes=(), max_iter=300, random_state=42, learning_rate_init=0.01)
+for reduced_size in [10, 100, 200, 300, 1000, 2000]:
+    ds = DSManager(reduced_features=False,reduced_rows=False)
+    train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
+    alg = AlgorithmPCA(train_X, train_y, reduced_size)
+    model, features = alg.get_selector()
+    metrics_evaluator = configs.get_metric_evaluator_for_traditional(reduced_size)
 
+    train_X = model.transform(train_X)
+    test_X = model.transform(test_X)
 
-ds = DSManager(reduced_features=False,reduced_rows=False)
-train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
-
-mlp = get_mlp()
-mlp.fit(train_X, train_y)
-print(mlp.score(test_X, test_y))
-
-# s = [64, 6, 16, 25, 5, 4, 57, 60]
-#
-# train_X = train_X[:,s]
-# test_X = test_X[:,s]
-#
-# mlp = get_mlp()
-# mlp.fit(train_X, train_y)
-# print(mlp.score(test_X, test_y))
+    metrics_evaluator.fit(train_X, train_y)
+    print(metrics_evaluator.score(test_X, test_y))
