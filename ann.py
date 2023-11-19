@@ -6,7 +6,7 @@ from torchcubicspline import(natural_cubic_spline_coeffs, NaturalCubicSpline)
 
 
 class ANN(nn.Module):
-    def __init__(self, spline_indices):
+    def __init__(self, target_feature_size):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_band_count = 10
@@ -17,7 +17,7 @@ class ANN(nn.Module):
             nn.LeakyReLU(),
             nn.Linear(10, 1)
         )
-        self.indices = torch.linspace(0, 1, spline_indices).to(self.device)
+        self.indices = torch.linspace(0, 1, target_feature_size).to(self.device)
         modules = []
         for i in range(self.target_band_count):
             modules.append(BandIndex())
@@ -52,3 +52,4 @@ class ANN(nn.Module):
 
     def get_indices(self):
         return [machine.index_value() for machine in self.machines]
+

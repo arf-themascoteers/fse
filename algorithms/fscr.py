@@ -9,19 +9,19 @@ import os
 
 
 class FSCR:
-    def __init__(self, train_x, train_y):
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.train_dataset = SpectralDataset(train_x, train_y)
+    def __init__(self, target_feature_size):
+        self.target_feature_size = target_feature_size
         self.lr = 0.001
-        self.feature_size = train_x.shape[1]
-        self.model = ANN(self.feature_size)
+        self.model = ANN(self.target_feature_size)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = 600
         self.batch_size = 1000
-        if self.feature_size > 1000:
+        self.epochs = 600
+        if self.target_feature_size > 1000:
             self.epochs = 1200
-        self.csv_file = os.path.join("results","fscr.csv")
+        self.csv_file = os.path.join("../results", "fscr.csv")
+        self.original_feature_size = None
         self.start_time = datetime.now()
 
     def get_elapsed_time(self):
@@ -31,7 +31,9 @@ class FSCR:
         weight_decay = self.lr/10
         return torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=weight_decay)
 
-    def train(self):
+    def fit(self, X_train, y_train):
+        self.original_feature_size = X_train.shape[1]
+        self.train_dataset = SpectralDataset(X_train, y_train)
         self.write_columns()
         self.model.train()
         optimizer = self.create_optimizer()
@@ -95,4 +97,10 @@ class FSCR:
         return row
 
     def indexify_raw_index(self, raw_index):
-        return round(raw_index.item() * self.feature_size)
+        return round(raw_index.item() * self.original_feature_size)
+
+    def get_indices(self):
+        return [self.indexify_raw_index(p) for p in self.model.get_indices()]
+
+    def transform(self, X):
+        return X[:,self.get_indices()]

@@ -1,4 +1,5 @@
 from algorithm import Algorithm
+from fscr import FSCR
 
 
 class AlgorithmFSCR(Algorithm):
@@ -6,4 +7,6 @@ class AlgorithmFSCR(Algorithm):
         super().__init__(X_train, y_train, target_feature_size)
 
     def get_selector(self):
-        pass
+        fscr = FSCR(self.target_feature_size)
+        fscr.fit(self.X_train, self.y_train)
+        return fscr, fscr.get_indices()
