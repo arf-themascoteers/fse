@@ -3,6 +3,7 @@ from algorithms.algorithm_pcat95 import AlgorithmPCAT95
 from algorithms.algorithm_rfe import AlgorithmRFE
 from algorithms.algorithm_fscr import AlgorithmFSCR
 from algorithms.algorithm_sfs import AlgorithmSFS
+from algorithms.algorithm_fm import AlgorithmFM
 
 
 class AlgorithmCreator:
@@ -18,3 +19,5 @@ class AlgorithmCreator:
             return AlgorithmFSCR(X_train, y_train, target_feature_size)
         elif name == "sfs":
             return AlgorithmSFS(X_train, y_train, target_feature_size)
+        elif name == "fm":
+            return AlgorithmFM(X_train, y_train, target_feature_size)

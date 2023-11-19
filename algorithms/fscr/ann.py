@@ -10,10 +10,20 @@ class ANN(nn.Module):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
+        first_hidden = 50
+        #[10, 100, 200, 1000, 2000]
+        if target_feature_size == 100:
+            first_hidden = 15
+        elif target_feature_size == 200:
+            first_hidden = 15
+        elif target_feature_size == 1000:
+            first_hidden = 8
+        elif target_feature_size == 2000:
+            first_hidden = 4
         self.linear = nn.Sequential(
             nn.Linear(self.target_feature_size, 50),
             nn.LeakyReLU(),
-            nn.Linear(50, 10),
+            nn.Linear(first_hidden, 10),
             nn.LeakyReLU(),
             nn.Linear(10, 1)
         )
