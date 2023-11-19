@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-from band_index import BandIndex
+from algorithms.fscr.band_index import BandIndex
 from torchcubicspline import(natural_cubic_spline_coeffs, NaturalCubicSpline)
 
 
@@ -9,17 +9,16 @@ class ANN(nn.Module):
     def __init__(self, target_feature_size):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.target_band_count = 10
+        self.target_feature_size = target_feature_size
         self.linear = nn.Sequential(
-            nn.Linear(self.target_band_count, 50),
+            nn.Linear(self.target_feature_size, 50),
             nn.LeakyReLU(),
             nn.Linear(50, 10),
             nn.LeakyReLU(),
             nn.Linear(10, 1)
         )
-        self.indices = torch.linspace(0, 1, target_feature_size).to(self.device)
         modules = []
-        for i in range(self.target_band_count):
+        for i in range(self.target_feature_size):
             modules.append(BandIndex())
         self.machines = nn.ModuleList(modules)
 
@@ -28,9 +27,10 @@ class ANN(nn.Module):
         return -torch.log(1.0 / x - 1.0)
 
     def forward(self, x):
-        outputs = torch.zeros(x.shape[0], self.target_band_count, dtype=torch.float32).to(self.device)
+        outputs = torch.zeros(x.shape[0], self.target_feature_size, dtype=torch.float32).to(self.device)
         x = x.permute(1,0)
-        coeffs = natural_cubic_spline_coeffs(self.indices, x)
+        indices = torch.linspace(0, 1, x.shape[0]).to(self.device)
+        coeffs = natural_cubic_spline_coeffs(indices, x)
         spline = NaturalCubicSpline(coeffs)
         for i,machine in enumerate(self.machines):
             outputs[:,i] = machine(spline)

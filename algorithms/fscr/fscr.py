@@ -1,9 +1,9 @@
 import math
 from sklearn.metrics import mean_squared_error, r2_score
-from spectral_dataset import SpectralDataset
+from algorithms.fscr.spectral_dataset import SpectralDataset
 import torch
 from torch.utils.data import DataLoader
-from ann import ANN
+from algorithms.fscr.ann import ANN
 from datetime import datetime
 import os
 
@@ -20,7 +20,7 @@ class FSCR:
         self.epochs = 600
         if self.target_feature_size > 1000:
             self.epochs = 1200
-        self.csv_file = os.path.join("../../results", "fscr.csv")
+        self.csv_file = os.path.join("results", "fscr.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
 
