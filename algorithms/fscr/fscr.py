@@ -17,9 +17,9 @@ class FSCR:
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.batch_size = 1000
-        self.epochs = 20
+        self.epochs = 200
         if self.target_feature_size > 1000:
-            self.epochs = 20
+            self.epochs = 200
         self.csv_file = os.path.join("results", f"fscr-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
@@ -100,7 +100,7 @@ class FSCR:
         return round(raw_index.item() * self.original_feature_size)
 
     def get_indices(self):
-        return [self.indexify_raw_index(p) for p in self.model.get_indices()]
+        return sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
 
     def transform(self, X):
         return X[:,self.get_indices()]
