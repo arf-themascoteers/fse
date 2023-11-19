@@ -1,12 +1,10 @@
 from datetime import datetime
 import os
 from algorithm_creator import AlgorithmCreator
-from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 import math
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor
+import configs
 
 
 class Evaluator:
@@ -56,9 +54,9 @@ class Evaluator:
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
-        metrics_evaluator = Evaluator.get_default_metric_evaluator()
+        metrics_evaluator = configs.get_metric_evaluator_for_traditional()
         if algorithm_name == "fscr":
-            metrics_evaluator = Evaluator.get_mlp_model()
+            metrics_evaluator = configs.get_metric_evaluator_for_fscr()
         _, _, r2_original, rmse_original = Evaluator.get_metrics(X_train, y_train, X_test, y_test, metrics_evaluator)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         start_time = datetime.now()
@@ -75,7 +73,6 @@ class Evaluator:
     @staticmethod
     def get_metrics(X_train, y_train, X_test, y_test, metric_evaluator):
         metric_evaluator.fit(X_train, y_train)
-        metric_evaluator.fit(X_train, y_train)
 
         y_pred = metric_evaluator.predict(X_train)
         r2_train = round(r2_score(y_train, y_pred), 3)
@@ -87,14 +84,7 @@ class Evaluator:
 
         return r2_train, rmse_train, r2_test, rmse_test
 
-    @staticmethod
-    def get_mlp_model():
-        return MLPRegressor(hidden_layer_sizes=(30,), max_iter=400, random_state=42)
 
-    @staticmethod
-    def get_default_metric_evaluator():
-        #return Evaluator.get_mlp_model()
-        return RandomForestRegressor()
 
     # def do_pca(self,X_train, y_train, target_feature_size):
     #     pca = PCA(n_components=target_feature_size)

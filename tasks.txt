@@ -28,3 +28,16 @@ Ideas
 1: Feature selection model DL?
 
 validate against other datasets?
+==========
+
+justific - 1dcnn - requires downsize
+--hsi downsize could lose valuable info
+---lot of params needed for multiple cnn layers
+
+====
+
+improve perform with MLP
+
+
+Best shot till now: linear of internal, mlp for metric ev for trads, mlp for metric ev for fscr.
+Addition: If required - "FS for ANN" [or favoured for ANN - and concise list]
