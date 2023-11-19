@@ -100,7 +100,8 @@ class FSCR:
         return round(raw_index.item() * self.original_feature_size)
 
     def get_indices(self):
-        return sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
+        indices = sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
+        return list(dict.fromkeys(indices))
 
     def transform(self, X):
         return X[:,self.get_indices()]
