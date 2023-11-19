@@ -2,7 +2,7 @@ from evaluator import Evaluator
 
 if __name__ == '__main__':
     tasks = []
-    for algorithm in ["pca"]:
+    for algorithm in ["pcat95"]:
         for size in [10]:
             tasks.append(
                 {

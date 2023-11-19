@@ -41,3 +41,18 @@ improve perform with MLP
 
 Best shot till now: linear of internal, mlp for metric ev for trads, mlp for metric ev for fscr.
 Addition: If required - "FS for ANN" [or favoured for ANN - and concise list]
+
+===
+show resulting indices
+check if consistent with model
+
+list limitation which can be addresses
+
+==========
+
+1. stop overlapping
+2. exploitation vs exploration
+3. better than cubic spline
+4. select band sequence
+5. mutation
+6. skip
