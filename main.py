@@ -3,33 +3,14 @@ from evaluator import Evaluator
 
 if __name__ == '__main__':
     tasks = []
-    tasks.append(
-        {
-            "dataset": DSManager(reduced_features=False, reduced_rows=False),
-            "target_feature_size": 100,
-            "algorithm": "pca"
-        }
-    )
-    tasks.append(
-        {
-            "dataset": DSManager(reduced_features=False, reduced_rows=False),
-            "target_feature_size": 100,
-            "algorithm": "pcat95"
-        }
-    )
-    tasks.append(
-        {
-            "dataset": DSManager(reduced_features=False, reduced_rows=False),
-            "target_feature_size": 100,
-            "algorithm": "fscr"
-        }
-    )
-    tasks.append(
-        {
-            "dataset": DSManager(reduced_features=False, reduced_rows=False),
-            "target_feature_size": 100,
-            "algorithm": "rfe"
-        }
-    )
+    for algorithm in ["fm","fscr"]:
+        for size in [10,100,200,1000,2000]:
+            tasks.append(
+                {
+                    "dataset": DSManager(reduced_features=False, reduced_rows=False),
+                    "target_feature_size": size,
+                    "algorithm": algorithm
+                }
+            )
     ev = Evaluator(tasks)
     ev.evaluate()
