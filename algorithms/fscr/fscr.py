@@ -17,9 +17,9 @@ class FSCR:
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.batch_size = 1000
-        self.epochs = 600
+        self.epochs = 50
         if self.target_feature_size > 1000:
-            self.epochs = 1200
+            self.epochs = 50
         self.csv_file = os.path.join("results", "fscr.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()

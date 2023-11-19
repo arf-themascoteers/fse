@@ -54,9 +54,9 @@ class Evaluator:
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
-        metrics_evaluator = configs.get_metric_evaluator_for_traditional()
+        metrics_evaluator = configs.get_metric_evaluator_for_traditional(X_train.shape[1])
         if algorithm_name == "fscr":
-            metrics_evaluator = configs.get_metric_evaluator_for_fscr()
+            metrics_evaluator = configs.get_metric_evaluator_for_fscr(X_train.shape[1])
         _, _, r2_original, rmse_original = Evaluator.get_metrics(X_train, y_train, X_test, y_test, metrics_evaluator)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         start_time = datetime.now()
