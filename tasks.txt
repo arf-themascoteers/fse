@@ -23,3 +23,8 @@ Added limitation - FSA for ANN only
 ==
 
 do these tests, dump these cols
+====
+Ideas
+1: Feature selection model DL?
+
+validate against other datasets?

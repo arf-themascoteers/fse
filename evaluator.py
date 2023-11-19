@@ -1,7 +1,6 @@
 from datetime import datetime
 import os
 from algorithm_creator import AlgorithmCreator
-from sklearn.linear_model import LinearRegression
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 import math
@@ -44,9 +43,6 @@ class Evaluator:
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
         metrics_evaluator = Evaluator.get_default_metric_evaluator()
-        if algorithm_name == "fsca":
-            metrics_evaluator = Evaluator.get_mlp_model()
-
         _, _, r2_original, rmse_original = Evaluator.get_metrics(X_train, y_train, X_test, y_test, metrics_evaluator)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         model, selected_features = algorithm.get_selector()
@@ -79,7 +75,7 @@ class Evaluator:
 
     @staticmethod
     def get_default_metric_evaluator():
-        return LinearRegression()
+        return Evaluator.get_mlp_model()
 
     # def do_pca(self,X_train, y_train, target_feature_size):
     #     pca = PCA(n_components=target_feature_size)

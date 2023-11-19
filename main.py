@@ -5,9 +5,14 @@ if __name__ == '__main__':
     tasks = []
     tasks.append(
         {
+            "dataset": DSManager(reduced_features=True, reduced_rows=True),
+            "target_feature_size": 10,
+            "algorithm": "pca"
+        },
+        {
             "dataset":DSManager(reduced_features=True, reduced_rows=True),
             "target_feature_size":10,
-            "algorithm": "pca"
+            "algorithm": "rfe"
         }
     )
     ev = Evaluator(tasks)

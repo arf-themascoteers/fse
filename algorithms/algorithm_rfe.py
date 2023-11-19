@@ -3,7 +3,7 @@ from sklearn.feature_selection import RFE
 from sklearn.linear_model import LinearRegression
 
 
-class AlgorithmPCA(Algorithm):
+class AlgorithmRFE(Algorithm):
     def __init__(self, X_train, y_train, target_feature_size):
         super().__init__(X_train, y_train, target_feature_size)
 
