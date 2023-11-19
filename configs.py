@@ -11,7 +11,7 @@ def get_mlp_model(feature_size):
         hidden_layer = (10,)
     elif feature_size >= 300:
         hidden_layer = ()
-    print(feature_size, hidden_layer)
+    print(f"Configs - {feature_size}, {hidden_layer}")
     return MLPRegressor(hidden_layer_sizes=hidden_layer, max_iter=600, random_state=42, learning_rate_init=0.001)
 
 
