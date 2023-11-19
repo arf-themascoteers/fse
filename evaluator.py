@@ -4,6 +4,7 @@ from algorithm_creator import AlgorithmCreator
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 import math
+import pandas as pd
 
 
 class Evaluator:
@@ -23,6 +24,9 @@ class Evaluator:
             dataset = task["dataset"]
             target_feature_size = task["target_feature_size"]
             algorithm_name = task["algorithm"]
+            if self.is_done(algorithm_name, dataset, target_feature_size):
+                print("Done already. Skipping.")
+                continue
             start_time = datetime.now()
             r2_original, rmse_original, \
                 r2_reduced_train, rmse_reduced_train, \
@@ -38,6 +42,17 @@ class Evaluator:
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
                     f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
+
+    def is_done(self,algorithm_name,dataset,target_feature_size):
+        df = pd.read_csv(self.filename)
+        rows = df.loc[
+            (df['algorithm'] == algorithm_name) &
+            (df['dataset'] == str(dataset)) &
+            (df['rows'] == dataset.count_rows()) &
+            (df['columns'] == dataset.count_features()) &
+            (df['target_size'] == target_feature_size)
+        ]
+        return len(rows) != 0
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
