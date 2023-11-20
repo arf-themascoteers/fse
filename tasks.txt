@@ -68,7 +68,7 @@ Optimizing Predictor Sets in Pseudo Time-Series: A Continuous Relaxation Approac
 
 Future:
 1. Instance-wise
-
+pip instam
 ====
 Questions
 
@@ -85,6 +85,9 @@ Good things
 
 Limitation
 1. sensitive to initialization
+
+Note
+for exploration - traditional local minima escape algorithm
 
 Task
 1. cache
