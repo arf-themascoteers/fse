@@ -65,10 +65,10 @@ class Evaluator:
         _, _, r2_original, rmse_original = Evaluator.get_metrics(X_train, y_train, X_test, y_test, metrics_evaluator)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         start_time = datetime.now()
-        model, selected_features = algorithm.get_selector()
+        selected_features = algorithm.get_selected_indices()
         elapsed_time = (datetime.now() - start_time).total_seconds()
-        X_train_reduced = model.transform(X_train)
-        X_test_reduced = model.transform(X_test)
+        X_train_reduced = X_train[:selected_features]
+        X_test_reduced = X_test[:selected_features]
         metrics_evaluator = configs.get_metric_evaluator_for_traditional(X_train_reduced.shape[1])
         r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
             Evaluator.get_metrics(X_train_reduced, y_train, X_test_reduced, y_test, metrics_evaluator)

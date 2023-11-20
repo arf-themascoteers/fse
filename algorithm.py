@@ -8,5 +8,5 @@ class Algorithm(ABC):
         self.target_feature_size = target_feature_size
 
     @abstractmethod
-    def get_selector(self):
+    def get_selected_indices(self):
         pass

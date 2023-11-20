@@ -11,7 +11,7 @@ rf.fit(train_X, train_y)
 print(rf.score(test_X, test_y))
 
 pcat = AlgorithmPCAT95(train_X, train_y, target_feature_size=2)
-model, selectors = pcat.get_selector()
+model, selectors = pcat.get_selected_indices()
 
 train_X_reduced = model.transform(train_X)
 test_X_reduced = model.transform(test_X)
