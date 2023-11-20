@@ -41,12 +41,8 @@ class ANN(nn.Module):
     def inverse_sigmoid_torch(x):
         return -torch.log(1.0 / x - 1.0)
 
-    def forward(self, x):
+    def forward(self, spline):
         outputs = torch.zeros(x.shape[0], self.target_feature_size, dtype=torch.float32).to(self.device)
-        x = x.permute(1,0)
-        indices = torch.linspace(0, 1, x.shape[0]).to(self.device)
-        coeffs = natural_cubic_spline_coeffs(indices, x)
-        spline = NaturalCubicSpline(coeffs)
         for i,machine in enumerate(self.machines):
             outputs[:,i] = machine(spline)
         soc_hat = self.linear(outputs)
