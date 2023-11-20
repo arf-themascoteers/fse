@@ -56,3 +56,20 @@ list limitation which can be addresses
 4. select band sequence
 5. mutation
 6. skip
+
+=========
+
+Angles:
+
+1. supervised learning with maximum number of predictors
+2. supervised learning with limited predictors through (predictor index update with) continuous relaxation
+3. Learning Optimal Predictor Indices through Continuous Relaxation
+Optimizing Predictor Sets in Pseudo Time-Series: A Continuous Relaxation Approach
+
+Future:
+1. Instance-wise
+
+====
+Questions
+
+1: why not FI (dependent on model)
