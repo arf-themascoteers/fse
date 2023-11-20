@@ -73,3 +73,18 @@ Future:
 Questions
 
 1: why not FI (dependent on model)
+2. why not LDA, vif
+
+Contribution
+
+1. Complexity not dependent on original size
+2. if you have a set of features (mostly for NN - any FS based on underlying algo), you can refine with it.
+
+
+Limitation
+1. sensitive to initialization
+
+Task
+1. cache
+2. produce for 66
+3. later - try for other datasets?
