@@ -7,6 +7,7 @@ from algorithms.algorithm_sbs import AlgorithmSBS
 from algorithms.algorithm_kbest import AlgorithmKBest
 from algorithms.algorithm_fm import AlgorithmFM
 from algorithms.algorithm_tbfi import AlgorithmTBFI
+from algorithms.algorithm_pls import AlgorithmPLS
 
 
 class AlgorithmCreator:
@@ -30,4 +31,6 @@ class AlgorithmCreator:
             return AlgorithmKBest(X_train, y_train, target_feature_size)
         elif name == "tbfi":
             return AlgorithmTBFI(X_train, y_train, target_feature_size)
+        elif name == "pls":
+            return AlgorithmPLS(X_train, y_train, target_feature_size)
 
