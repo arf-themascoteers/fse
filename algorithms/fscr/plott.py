@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
+import os
 
 
 def plot_me_plz(filename):
@@ -37,4 +38,8 @@ def plot_me_plz(filename):
 
 
 if __name__ == "__main__":
-    plot_me_plz("../../results/fscr-1700454870545316.csv")
+    dirr = "../../results"
+    for f in os.listdir(dirr):
+        if f.startswith("fscr"):
+            p = os.path.join(dirr, f)
+            plot_me_plz(p)
