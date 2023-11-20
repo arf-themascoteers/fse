@@ -44,5 +44,6 @@ class ModelANN(nn.Module):
     def predict(self, X):
         self.eval()
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
-        return self(X)
+        y = self(X)
+        return y.detach().cpu().numpy()
 
