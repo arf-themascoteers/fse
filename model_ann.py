@@ -1,6 +1,7 @@
 import torch.nn as nn
 import torch
 import my_utils
+from sklearn.metrics import r2_score
 
 
 class ModelANN(nn.Module):
@@ -34,10 +35,15 @@ class ModelANN(nn.Module):
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
+            if epoch%10 == 0:
+                print(f"{epoch}: {round(loss.item(),5)} "
+                      f"{round(r2_score(y.detach().cpu().numpy(), self.predict(X.detach().cpu().numpy(), False)),5)}")
 
-    def predict(self, X):
+    def predict(self, X, temp=False):
         self.eval()
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
         y = self(X)
+        if temp:
+            self.train()
         return y.detach().cpu().numpy()
 
