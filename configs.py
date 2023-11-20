@@ -4,6 +4,9 @@ from sklearn.neural_network import MLPRegressor
 
 
 def get_mlp_model(feature_size):
+
+    return MLPRegressor(hidden_layer_sizes=(50,10,5), max_iter=200, random_state=42, learning_rate_init=0.01)
+
     hidden_layer = (30,)
     if feature_size >= 100 and feature_size < 200:
         hidden_layer = (20,)
