@@ -1,18 +1,19 @@
 import torch.nn as nn
 import torch
-import configs
+import my_utils
 
 
 class ModelANN(nn.Module):
-    def __init__(self, target_feature_size):
+    def __init__(self, X):
         super().__init__()
         torch.manual_seed(12)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.target_feature_size = target_feature_size
-        h1,h2 = configs.get_hidden(target_feature_size)
-        print("ANN-Model",target_feature_size, h1,h2)
+        rows = X.shape[0]
+        features = X.shape[1]
+        h1,h2 = my_utils.get_hidden(rows, features)
+        print("ANN-Model",features, h1,h2)
         self.linear = nn.Sequential(
-            nn.Linear(self.target_feature_size, h1),
+            nn.Linear(features, h1),
             nn.LeakyReLU(),
             nn.Linear(h1, h2),
             nn.LeakyReLU(),

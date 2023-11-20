@@ -1,7 +1,7 @@
 from sklearn.neural_network import MLPRegressor
 from ds_manager import DSManager
 from algorithms.algorithm_pca import AlgorithmPCA
-import configs
+import my_utils
 
 
 for reduced_size in [10, 100, 200, 300, 1000, 2000]:
@@ -9,7 +9,7 @@ for reduced_size in [10, 100, 200, 300, 1000, 2000]:
     train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
     alg = AlgorithmPCA(train_X, train_y, reduced_size)
     model, features = alg.get_selected_indices()
-    metrics_evaluator = configs.get_metric_evaluator_for_traditional(reduced_size)
+    metrics_evaluator = my_utils.get_metric_evaluator_for_traditional(reduced_size)
 
     train_X = model.transform(train_X)
     test_X = model.transform(test_X)

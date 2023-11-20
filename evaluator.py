@@ -5,7 +5,7 @@ from algorithm_creator import AlgorithmCreator
 from sklearn.metrics import r2_score, mean_squared_error
 import math
 import pandas as pd
-import configs
+import my_utils
 
 
 class Evaluator:
@@ -72,7 +72,7 @@ class Evaluator:
 
     @staticmethod
     def get_metrics(algorithm_name, X_train, y_train, X_test, y_test):
-        metric_evaluator = configs.get_metric_evaluator_for(algorithm_name, X_train.shape[1])
+        metric_evaluator = my_utils.get_metric_evaluator_for(algorithm_name, X_train)
         metric_evaluator.fit(X_train, y_train)
 
         y_pred = metric_evaluator.predict(X_train)

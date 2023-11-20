@@ -2,15 +2,15 @@ import torch.nn as nn
 import torch
 import torch.nn.functional as F
 from algorithms.fscr.band_index import BandIndex
-import configs
+import my_utils
 
 
 class ANN(nn.Module):
-    def __init__(self, target_feature_size):
+    def __init__(self, rows, target_feature_size):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
-        h1,h2 = configs.get_hidden(target_feature_size)
+        h1,h2 = my_utils.get_hidden(rows, target_feature_size)
         print("ANN",target_feature_size, h1,h2)
         self.linear = nn.Sequential(
             nn.Linear(self.target_feature_size, h1),
