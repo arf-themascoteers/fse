@@ -12,4 +12,4 @@ class AlgorithmSFS(Algorithm):
                   k_features=self.target_feature_size,
                   forward=True, floating=False, scoring='r2', cv=5)
         sfs.fit(self.X_train, self.y_train)
-        return sfs.k_feature_idx_
+        return sfs, sfs.k_feature_idx_

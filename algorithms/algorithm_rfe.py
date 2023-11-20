@@ -11,4 +11,4 @@ class AlgorithmRFE(Algorithm):
         rfe = RFE(estimator=configs.get_internal_model(), n_features_to_select= self.target_feature_size)
         rfe.fit(self.X_train, self.y_train)
         indices = [i for i, selected in enumerate(rfe.support_) if selected]
-        return indices
+        return rfe, indices

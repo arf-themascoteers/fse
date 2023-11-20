@@ -9,4 +9,4 @@ class AlgorithmFSCR(Algorithm):
     def get_selected_indices(self):
         fscr = FSCR(self.target_feature_size)
         fscr.fit(self.X_train, self.y_train, self.X_validation, self.y_validation)
-        return fscr.get_indices()
+        return fscr, fscr.get_indices()

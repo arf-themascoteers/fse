@@ -57,27 +57,22 @@ class Evaluator:
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
         print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
-        metrics_evaluator = None
-        if algorithm_name == "fscr":
-            metrics_evaluator = configs.get_metric_evaluator_for_fscr(X_train.shape[1])
-        else:
-            metrics_evaluator = configs.get_metric_evaluator_for_traditional(X_train.shape[1])
-        _, _, r2_original, rmse_original = Evaluator.get_metrics(X_train, y_train, X_test, y_test, metrics_evaluator)
+        _, _, r2_original, rmse_original = Evaluator.get_metrics(algorithm_name, X_train, y_train, X_test, y_test)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         start_time = datetime.now()
-        selected_features = algorithm.get_selected_indices()
+        selected_features = algorithm.fit()
         elapsed_time = (datetime.now() - start_time).total_seconds()
-        X_train_reduced = X_train[:selected_features]
-        X_test_reduced = X_test[:selected_features]
-        metrics_evaluator = configs.get_metric_evaluator_for_traditional(X_train_reduced.shape[1])
+        X_train_reduced = algorithm.transform(X_train)
+        X_test_reduced = algorithm.transform(X_test)
         r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
-            Evaluator.get_metrics(X_train_reduced, y_train, X_test_reduced, y_test, metrics_evaluator)
+            Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
         return elapsed_time, r2_original, rmse_original, \
             r2_reduced_train, rmse_reduced_train, \
             r2_reduced_test, rmse_reduced_test, X_test_reduced.shape[1], selected_features
 
     @staticmethod
-    def get_metrics(X_train, y_train, X_test, y_test, metric_evaluator):
+    def get_metrics(algorithm_name, X_train, y_train, X_test, y_test):
+        metric_evaluator = configs.get_metric_evaluator_for(algorithm_name, X_train.shape[1])
         metric_evaluator.fit(X_train, y_train)
 
         y_pred = metric_evaluator.predict(X_train)

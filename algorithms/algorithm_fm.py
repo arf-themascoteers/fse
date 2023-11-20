@@ -13,4 +13,4 @@ class AlgorithmFM(Algorithm):
         sfm = SelectFromModel(model, threshold=-np.inf, max_features=5)
         sfm.fit(self.X_train, self.y_train)
         selected_feature_indices = np.where(sfm.get_support())[0]
-        return selected_feature_indices
+        return sfm, selected_feature_indices

@@ -10,4 +10,4 @@ class AlgorithmPCAT95(Algorithm):
         pcat95 = PCA(n_components=0.95)
         pcat95.fit(self.X_train)
         print(f"AlgorithmPCAT95: {pcat95.n_components_}")
-        return []
+        return pcat95, []

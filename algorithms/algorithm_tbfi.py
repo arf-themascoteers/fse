@@ -11,4 +11,4 @@ class AlgorithmTBFI(Algorithm):
         model.fit(self.X_train, self.y_train)
         selected_features_indices =  \
             model.feature_importances_.argsort()[-self.target_feature_size:][::-1]
-        return selected_features_indices
+        return model, selected_features_indices

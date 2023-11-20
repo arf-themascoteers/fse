@@ -40,5 +40,11 @@ def get_metric_evaluator_for_fscr(feature_size):
     return get_mlp_model(feature_size)
 
 
+def get_metric_evaluator_for(algorithm_name,feature_size):
+    if algorithm_name == "fscr":
+        return get_metric_evaluator_for_fscr(feature_size)
+    return get_metric_evaluator_for_traditional(feature_size)
+
+
 def get_internal_model():
     return LinearRegression()

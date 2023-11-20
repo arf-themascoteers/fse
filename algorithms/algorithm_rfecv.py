@@ -11,4 +11,4 @@ class AlgorithmPCA(Algorithm):
         rfecv = RFECV(estimator=LinearRegression(), step=1, cv=5, min_features_to_select= self.target_feature_size)
         rfecv.fit(self.X_train, self.y_train)
         indices = [i for i, selected in enumerate(rfecv.support_) if selected]
-        return indices
+        return rfecv, indices
