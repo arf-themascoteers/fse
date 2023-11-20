@@ -36,7 +36,8 @@ class FSCR:
         y = torch.tensor(y, dtype=torch.float32).to(self.device)
         X_test  = torch.tensor(X_test , dtype=torch.float32).to(self.device)
         y_test = torch.tensor(y_test, dtype=torch.float32).to(self.device)
-        size = X.shape[0]
+        row_size = X.shape[0]
+        row_test_size = X_test.shape[0]
         self.original_feature_size = X.shape[1]
         self.write_columns()
         self.model.train()
@@ -44,14 +45,14 @@ class FSCR:
         spline = get_splines(X)
         spline_test = get_splines(X_test)
         for epoch in range(self.epochs):
-            y_hat = self.model(spline, size)
+            y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
             for machine in self.model.machines:
                 loss = loss + machine.range_loss()
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
-            row = self.dump_row(epoch, spline, y, spline_test, y_test, size)
+            row = self.dump_row(epoch, spline, y, spline_test, y_test, row_size, row_test_size)
             print("".join([str(i).ljust(20) for i in row]))
         return self.model
 
@@ -75,9 +76,9 @@ class FSCR:
             file.write(",".join(columns))
             file.write("\n")
 
-    def dump_row(self, epoch, spline, y, spline_test, y_test, size):
-        train_r2, train_rmse = self.evaluate(spline, y, size)
-        test_r2, test_rmse = self.evaluate(spline_test, y_test, size)
+    def dump_row(self, epoch, spline, y, spline_test, y_test, row_size, row_test_size):
+        train_r2, train_rmse = self.evaluate(spline, y, row_size)
+        test_r2, test_rmse = self.evaluate(spline_test, y_test, row_test_size)
         row = [train_r2, test_r2, train_rmse, test_rmse]
         row = [round(r,5) for r in row]
         row = [epoch] + row + [self.get_elapsed_time()]
