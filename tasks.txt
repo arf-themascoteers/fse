@@ -72,7 +72,7 @@ Future:
 ====
 Questions
 
-1: why not FI (dependent on model)
+1: why not FI (dependent on model) - fi dependant on algo.
 2. why not LDA, vif
 
 Contribution
