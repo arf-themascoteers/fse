@@ -10,17 +10,9 @@ class ModelANN(nn.Module):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         rows = X.shape[0]
         features = X.shape[1]
-        h1,h2 = my_utils.get_hidden(rows, features)
-        print("ANN-Model",features, h1,h2)
-        self.linear = nn.Sequential(
-            nn.Linear(features, h1),
-            nn.LeakyReLU(),
-            nn.Linear(h1, h2),
-            nn.LeakyReLU(),
-            nn.Linear(h2, 1)
-        )
-        self.epoch = 1500
-        self.lr = 0.001
+        self.linear = my_utils.get_linear(rows, features)
+        self.epoch = my_utils.get_epoch(rows, features)
+        self.lr = my_utils.get_lr(rows, features)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.to(self.device)
 

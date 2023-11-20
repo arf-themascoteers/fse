@@ -40,10 +40,12 @@ def get_hidden_for_short(feature_size):
         h2 = 0
     return h1, h2
 
+
 def get_hidden(rows, feature_size):
     if rows > 3000:
         return get_hidden_for_full(feature_size)
     return get_hidden_for_short(feature_size)
+
 
 def get_ann(X):
     return ModelANN(X)
@@ -67,17 +69,25 @@ def get_internal_model():
     return LinearRegression()
 
 
-def get_linear(rows, features):
-    h1, h2 = get_hidden(rows, features)
+def get_linear(rows, feature_size):
+    h1, h2 = get_hidden(rows, feature_size)
     if h1 == 0 or h2 == 0:
         return nn.Sequential(
-            nn.Linear(features, h1),
+            nn.Linear(feature_size, h1),
         )
 
     return nn.Sequential(
-        nn.Linear(features, h1),
+        nn.Linear(feature_size, h1),
         nn.LeakyReLU(),
         nn.Linear(h1, h2),
         nn.LeakyReLU(),
         nn.Linear(h2, 1)
     )
+
+
+def get_lr(rows, features):
+    return 0.001
+
+
+def get_epoch(rows, features):
+    return 1500

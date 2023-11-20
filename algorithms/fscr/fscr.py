@@ -5,17 +5,18 @@ import torch
 from algorithms.fscr.ann import ANN
 from datetime import datetime
 import os
+import my_utils
 
 
 class FSCR:
     def __init__(self, rows, target_feature_size):
         self.target_feature_size = target_feature_size
-        self.lr = 0.001
+        self.lr = my_utils.get_lr(rows, target_feature_size)
         self.model = ANN(rows, self.target_feature_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = 1500
+        self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
         self.csv_file = os.path.join("results", f"fscr-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()

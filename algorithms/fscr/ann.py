@@ -10,15 +10,7 @@ class ANN(nn.Module):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
-        h1,h2 = my_utils.get_hidden(rows, target_feature_size)
-        print("ANN",target_feature_size, h1,h2)
-        self.linear = nn.Sequential(
-            nn.Linear(self.target_feature_size, h1),
-            nn.LeakyReLU(),
-            nn.Linear(h1, h2),
-            nn.LeakyReLU(),
-            nn.Linear(h2, 1)
-        )
+        self.linear = my_utils.get_linear(rows, target_feature_size)
         modules = []
         for i in range(self.target_feature_size):
             modules.append(BandIndex())
