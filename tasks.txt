@@ -77,8 +77,9 @@ Questions
 
 Contribution
 
-1. Complexity not dependent on original size
+1. Complexity not dependent on original size. not considering as discrete combination, rather continuous feature.
 2. if you have a set of features (mostly for NN - any FS based on underlying algo), you can refine with it.
+
 
 
 Limitation
@@ -88,3 +89,7 @@ Task
 1. cache
 2. produce for 66
 3. later - try for other datasets?
+
+Justific though Limitation
+
+1. A novel promising approach. Can be bettered by modifying different modules.
