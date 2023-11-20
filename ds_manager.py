@@ -88,11 +88,11 @@ class DSManager:
 
         return train_x, train_y, test_x, test_y, validation_x, validation_y
 
-    def split_X_y(self):
-        return self.split_X_y_data(self.full_data)
+    def get_X_y(self):
+        return self.get_X_y_from_data(self.full_data)
 
     @staticmethod
-    def split_X_y_data(data):
+    def get_X_y_from_data(data):
         x = data[:, :-1]
         y = data[:, -1]
         return x, y
@@ -104,9 +104,9 @@ class DSManager:
 
     def get_train_test_validation_X_y(self):
         train_data, test_data, validation_data = self.get_train_test_validation()
-        return *DSManager.split_X_y_data(train_data), \
-            *DSManager.split_X_y_data(test_data),\
-            *DSManager.split_X_y_data(validation_data)
+        return *DSManager.get_X_y_from_data(train_data), \
+            *DSManager.get_X_y_from_data(test_data),\
+            *DSManager.get_X_y_from_data(validation_data)
 
     def get_train_test(self):
         train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
@@ -114,8 +114,8 @@ class DSManager:
 
     def get_train_test_X_y(self):
         train_data, test_data = self.get_train_test()
-        return *DSManager.split_X_y_data(train_data), \
-            *DSManager.split_X_y_data(test_data)
+        return *DSManager.get_X_y_from_data(train_data), \
+            *DSManager.get_X_y_from_data(test_data)
 
 
 if __name__ == "__main__":
