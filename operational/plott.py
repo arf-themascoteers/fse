@@ -38,7 +38,7 @@ def plot_me_plz(filename):
 
 
 if __name__ == "__main__":
-    dirr = "../../results"
+    dirr = "../results"
     for f in os.listdir(dirr):
         if f.startswith("fscr"):
             p = os.path.join(dirr, f)
