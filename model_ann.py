@@ -6,6 +6,7 @@ import configs
 class ModelANN(nn.Module):
     def __init__(self, target_feature_size):
         super().__init__()
+        torch.manual_seed(12)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
         h1,h2 = configs.get_hidden(target_feature_size)

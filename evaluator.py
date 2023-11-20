@@ -88,6 +88,9 @@ class Evaluator:
         r2_test = round(r2_score(y_test, y_pred), 3)
         rmse_test = round(math.sqrt(mean_squared_error(y_test, y_pred)), 3)
 
+        print(round(r2_train,3),round(rmse_train,3))
+        print(round(r2_test,3),round(rmse_test,3))
+
         return r2_train, rmse_train, r2_test, rmse_test
 
 

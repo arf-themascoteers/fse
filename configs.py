@@ -16,7 +16,7 @@ def get_hidden(feature_size):
     elif feature_size >= 1000 and feature_size < 2000:
         h1 = 8
     elif feature_size >= 2000 and feature_size < 3000:
-        h1 = 5
+        h1 = 4
     elif feature_size >= 3000:
         h1 = 2
         h2 = 1
