@@ -4,6 +4,8 @@ from algorithms.algorithm_rfe import AlgorithmRFE
 from algorithms.algorithm_fscr import AlgorithmFSCR
 from algorithms.algorithm_sfs import AlgorithmSFS
 from algorithms.algorithm_sbs import AlgorithmSBS
+from algorithms.algorithm_boruta import AlgorithmBoruta
+from algorithms.algorithm_kbest import AlgorithmKBest
 from algorithms.algorithm_fm import AlgorithmFM
 
 
@@ -24,3 +26,7 @@ class AlgorithmCreator:
             return AlgorithmSBS(X_train, y_train, target_feature_size)
         elif name == "fm":
             return AlgorithmFM(X_train, y_train, target_feature_size)
+        elif name == "kbest":
+            return AlgorithmKBest(X_train, y_train, target_feature_size)
+        elif name == "boruta":
+            return AlgorithmBoruta(X_train, y_train, target_feature_size)
