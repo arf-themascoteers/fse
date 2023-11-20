@@ -4,7 +4,7 @@ from docx import Document
 csv_file = '../results/results.csv'
 df = pd.read_csv(csv_file)
 doc = Document()
-doc.add_table(rows=1, cols=len(df.columns-1), style='Table Grid')
+doc.add_table(rows=1, cols=len(df.columns)-1, style='Table Grid')
 header_row = doc.tables[0].rows[0].cells
 
 target_col = -1
