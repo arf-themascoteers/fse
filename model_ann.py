@@ -20,9 +20,10 @@ class ModelANN(nn.Module):
         self.epoch = 1500
         self.lr = 0.001
         self.criterion = torch.nn.MSELoss(reduction='mean')
+        self.to(self.device)
 
     def forward(self, X):
-        return self.linear(X).reshape(-1)
+        return self.linear(X.to(self.device)).reshape(-1)
 
     def create_optimizer(self):
         weight_decay = self.lr/10
@@ -43,5 +44,5 @@ class ModelANN(nn.Module):
     def predict(self, X):
         self.eval()
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
-        return self.model(X)
+        return self(X)
 
