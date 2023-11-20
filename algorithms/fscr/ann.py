@@ -41,8 +41,8 @@ class ANN(nn.Module):
     def inverse_sigmoid_torch(x):
         return -torch.log(1.0 / x - 1.0)
 
-    def forward(self, spline):
-        outputs = torch.zeros(x.shape[0], self.target_feature_size, dtype=torch.float32).to(self.device)
+    def forward(self, spline, size):
+        outputs = torch.zeros(size, self.target_feature_size, dtype=torch.float32).to(self.device)
         for i,machine in enumerate(self.machines):
             outputs[:,i] = machine(spline)
         soc_hat = self.linear(outputs)
