@@ -1,6 +1,6 @@
 import math
 from sklearn.metrics import mean_squared_error, r2_score
-from algorithms.fscr.spectral_dataset import SpectralDataset
+from approximator import get_splines
 import torch
 from torch.utils.data import DataLoader
 from algorithms.fscr.ann import ANN
@@ -16,7 +16,6 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.batch_size = 1000
         self.epochs = 200
         if self.target_feature_size > 1000:
             self.epochs = 200
@@ -33,26 +32,21 @@ class FSCR:
 
     def fit(self, X_train, y_train):
         self.original_feature_size = X_train.shape[1]
-        self.train_dataset = SpectralDataset(X_train, y_train)
         self.write_columns()
         self.model.train()
         optimizer = self.create_optimizer()
-        dataloader = DataLoader(self.train_dataset, batch_size=self.batch_size)
+        X_train = torch.tensor(X_train, dtype=torch.float32).to(self.device)
+        y_train = torch.tensor(y_train, dtype=torch.float32).to(self.device)
+        spline = get_splines(X_train).to(self.device)
         for epoch in range(self.epochs):
-            rows = []
-            for batch_number,(x, y) in enumerate(dataloader):
-                x = x.to(self.device)
-                y = y.to(self.device)
-                y_hat = self.model(x)
-                loss = self.criterion(y_hat, y)
-                for machine in self.model.machines:
-                    loss = loss + machine.range_loss()
-                loss.backward()
-                optimizer.step()
-                optimizer.zero_grad()
-
+            y_hat = self.model(spline)
+            loss = self.criterion(y_hat, y_train)
+            for machine in self.model.machines:
+                loss = loss + machine.range_loss()
+            loss.backward()
+            optimizer.step()
+            optimizer.zero_grad()
             row = self.dump_row(epoch)
-            rows.append(row)
             print("".join([str(i).ljust(20) for i in row]))
         return self.model
 
