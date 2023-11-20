@@ -19,6 +19,7 @@ class ModelANN(nn.Module):
         )
         self.epoch = 1500
         self.lr = 0.001
+        self.criterion = torch.nn.MSELoss(reduction='mean')
 
     def forward(self, X):
         return self.linear(X).reshape(-1)
@@ -32,8 +33,8 @@ class ModelANN(nn.Module):
         optimizer = self.create_optimizer()
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
         y = torch.tensor(y, dtype=torch.float32).to(self.device)
-        for epoch in range(self.epochs):
-            y_hat = self.model(X)
+        for epoch in range(self.epoch):
+            y_hat = self(X)
             loss = self.criterion(y_hat, y)
             loss.backward()
             optimizer.step()
