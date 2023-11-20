@@ -1,4 +1,3 @@
-from sklearn.model_selection import train_test_split
 import math
 from sklearn.metrics import mean_squared_error, r2_score
 from approximator import get_splines
@@ -16,32 +15,31 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = 250
+        self.epochs = 400
         self.csv_file = os.path.join("results", f"fscr-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
 
     def get_elapsed_time(self):
-        return (datetime.now() - self.start_time).total_seconds()
+        return round((datetime.now() - self.start_time).total_seconds(),2)
 
     def create_optimizer(self):
         weight_decay = self.lr/10
         return torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=weight_decay)
 
-    def fit(self, X, y):
-        X, X_test, y, y_test = train_test_split(X,y,test_size=0.1,random_state=41)
+    def fit(self, X, y, X_validation, y_validation):
         row_size = X.shape[0]
-        row_test_size = X_test.shape[0]
+        row_test_size = X_validation.shape[0]
         self.original_feature_size = X.shape[1]
         self.write_columns()
         self.model.train()
         optimizer = self.create_optimizer()
         X = torch.tensor(X, dtype=torch.float32).to(self.device)
         spline = get_splines(X, self.device)
-        X_test = torch.tensor(X_test, dtype=torch.float32).to(self.device)
-        spline_test = get_splines(X_test, self.device)
+        X_validation = torch.tensor(X_validation, dtype=torch.float32).to(self.device)
+        spline_validation = get_splines(X_validation, self.device)
         y = torch.tensor(y, dtype=torch.float32).to(self.device)
-        y_test = torch.tensor(y_test, dtype=torch.float32).to(self.device)
+        y_validation = torch.tensor(y_validation, dtype=torch.float32).to(self.device)
         for epoch in range(self.epochs):
             y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
@@ -50,7 +48,7 @@ class FSCR:
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
-            row = self.dump_row(epoch, spline, y, spline_test, y_test, row_size, row_test_size)
+            row = self.dump_row(epoch, spline, y, spline_validation, y_validation, row_size, row_test_size)
             print("".join([str(i).ljust(20) for i in row]))
         return self.model
 
