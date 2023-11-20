@@ -39,7 +39,7 @@ class Evaluator:
             with open(self.filename, 'a') as file:
                 file.write(
                     f"{algorithm_name},{dataset.count_rows()},"
-                    f"{dataset.count_features()},{elapsed_time},{target_feature_size},{final_indices},"
+                    f"{dataset.count_features()},{round(elapsed_time,2)},{target_feature_size},{final_indices},"
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
                     f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
