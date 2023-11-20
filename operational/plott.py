@@ -38,6 +38,8 @@ def plot_me_plz(filename):
 
 
 if __name__ == "__main__":
+    plot_me_plz("../saved/fscr_full_full/fscr-1700490480697355.csv")
+    exit()
     dirr = "../results"
     for f in os.listdir(dirr):
         if f.startswith("fscr"):
