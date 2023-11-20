@@ -30,18 +30,18 @@ class FSCR:
 
     def fit(self, X, y):
         X, X_test, y, y_test = train_test_split(X,y,test_size=0.1,random_state=42)
-        X  = torch.tensor(X , dtype=torch.float32).to(self.device)
-        y = torch.tensor(y, dtype=torch.float32).to(self.device)
-        X_test  = torch.tensor(X_test , dtype=torch.float32).to(self.device)
-        y_test = torch.tensor(y_test, dtype=torch.float32).to(self.device)
         row_size = X.shape[0]
         row_test_size = X_test.shape[0]
         self.original_feature_size = X.shape[1]
         self.write_columns()
         self.model.train()
         optimizer = self.create_optimizer()
-        spline = get_splines(X).to(self.device)
-        spline_test = get_splines(X_test).to(self.device)
+        X = torch.tensor(X, dtype=torch.float32).to(self.device)
+        spline = get_splines(X, self.device)
+        X_test = torch.tensor(X_test, dtype=torch.float32).to(self.device)
+        spline_test = get_splines(X_test, self.device)
+        y = torch.tensor(y, dtype=torch.float32).to(self.device)
+        y_test = torch.tensor(y_test, dtype=torch.float32).to(self.device)
         for epoch in range(self.epochs):
             y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
