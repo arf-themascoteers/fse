@@ -56,6 +56,7 @@ class Evaluator:
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
+        print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
         metrics_evaluator = None
         if algorithm_name == "fscr":
             metrics_evaluator = configs.get_metric_evaluator_for_fscr(X_train.shape[1])

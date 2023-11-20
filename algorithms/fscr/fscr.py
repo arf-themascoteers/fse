@@ -15,7 +15,7 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = 400
+        self.epochs = 320
         self.csv_file = os.path.join("results", f"fscr-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
@@ -28,6 +28,7 @@ class FSCR:
         return torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=weight_decay)
 
     def fit(self, X, y, X_validation, y_validation):
+        print(f"X,X_validation: {X.shape} {X_validation.shape}")
         row_size = X.shape[0]
         row_test_size = X_validation.shape[0]
         self.original_feature_size = X.shape[1]
