@@ -11,6 +11,7 @@ class ANN(nn.Module):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
         self.linear = my_utils.get_linear(rows, target_feature_size)
+        print(self.linear)
         modules = []
         for i in range(self.target_feature_size):
             modules.append(BandIndex())

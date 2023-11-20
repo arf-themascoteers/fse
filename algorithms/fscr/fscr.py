@@ -51,7 +51,7 @@ class FSCR:
             optimizer.step()
             optimizer.zero_grad()
             row = self.dump_row(epoch, spline, y, spline_validation, y_validation, row_size, row_test_size)
-            if epoch%10 == 0:
+            if epoch%50 == 0:
                 print("".join([str(i).ljust(20) for i in row]))
         return self.get_indices()
 

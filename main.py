@@ -4,11 +4,11 @@ if __name__ == '__main__':
     short_size = [5,10,15,20,25,30]
     big_size = [10,100,200,250,1000,2000]
     tasks = []
-    for size in short_size:
+    for size in big_size:
         tasks.append(
             {
-                "reduced_features":True,
-                "reduced_rows":True,
+                "reduced_features":False,
+                "reduced_rows":False,
                 "target_feature_size": size,
                 "algorithm": "fscr"
             }

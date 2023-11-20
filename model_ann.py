@@ -12,6 +12,7 @@ class ModelANN(nn.Module):
         rows = X.shape[0]
         features = X.shape[1]
         self.linear = my_utils.get_linear(rows, features)
+        print(self.linear)
         self.epoch = my_utils.get_epoch(rows, features)
         self.lr = my_utils.get_lr(rows, features)
         self.criterion = torch.nn.MSELoss(reduction='mean')
@@ -35,7 +36,7 @@ class ModelANN(nn.Module):
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
-            if epoch%10 == 0:
+            if epoch%50 == 0:
                 print(f"{epoch}: {round(loss.item(),5)} "
                       f"{round(r2_score(y.detach().cpu().numpy(), self.predict(X.detach().cpu().numpy(), False)),5)}")
 
