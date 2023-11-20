@@ -1,6 +1,6 @@
 from algorithm import Algorithm
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
-import configs
+import my_utils
 
 
 class AlgorithmSFS(Algorithm):
@@ -8,7 +8,7 @@ class AlgorithmSFS(Algorithm):
         super().__init__(X_train, y_train, target_feature_size)
 
     def get_selected_indices(self):
-        sfs = SFS(configs.get_internal_model(),
+        sfs = SFS(my_utils.get_internal_model(),
                   k_features=self.target_feature_size,
                   forward=True, floating=False, scoring='r2', cv=5)
         sfs.fit(self.X_train, self.y_train)

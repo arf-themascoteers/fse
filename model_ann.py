@@ -1,25 +1,18 @@
 import torch.nn as nn
 import torch
-import configs
+import my_utils
 
 
 class ModelANN(nn.Module):
-    def __init__(self, target_feature_size):
+    def __init__(self, X):
         super().__init__()
         torch.manual_seed(12)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.target_feature_size = target_feature_size
-        h1,h2 = configs.get_hidden(target_feature_size)
-        print("ANN-Model",target_feature_size, h1,h2)
-        self.linear = nn.Sequential(
-            nn.Linear(self.target_feature_size, h1),
-            nn.LeakyReLU(),
-            nn.Linear(h1, h2),
-            nn.LeakyReLU(),
-            nn.Linear(h2, 1)
-        )
-        self.epoch = 1500
-        self.lr = 0.001
+        rows = X.shape[0]
+        features = X.shape[1]
+        self.linear = my_utils.get_linear(rows, features)
+        self.epoch = my_utils.get_epoch(rows, features)
+        self.lr = my_utils.get_lr(rows, features)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.to(self.device)
 

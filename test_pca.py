@@ -1,7 +1,7 @@
 from sklearn.neural_network import MLPRegressor
 from ds_manager import DSManager
 from algorithms.algorithm_pca import AlgorithmPCA
-import configs
+import my_utils
 import numpy as np
 
 ds = DSManager(reduced_features=False,reduced_rows=False)

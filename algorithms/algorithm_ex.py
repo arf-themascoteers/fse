@@ -1,6 +1,6 @@
 from algorithm import Algorithm
 from mlxtend.feature_selection import ExhaustiveFeatureSelector
-import configs
+import my_utils
 
 
 class AlgorithmEx(Algorithm):
@@ -8,7 +8,7 @@ class AlgorithmEx(Algorithm):
         super().__init__(X_train, y_train, target_feature_size)
 
     def get_selected_indices(self):
-        selector = ExhaustiveFeatureSelector(configs.get_internal_model(),
+        selector = ExhaustiveFeatureSelector(my_utils.get_internal_model(),
                                              min_features=1,
                                              max_features=self.target_feature_size,
                                              scoring='neg_mean_squared_error', print_progress=True)
