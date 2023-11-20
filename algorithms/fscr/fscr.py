@@ -16,9 +16,9 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = 2000
+        self.epochs = 1000
         if self.target_feature_size > 1000:
-            self.epochs = 2000
+            self.epochs = 1000
         self.csv_file = os.path.join("results", f"fscr-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
@@ -68,7 +68,7 @@ class FSCR:
         return max(r2,0), rmse
 
     def write_columns(self):
-        columns = ["epoch","train_r2","test_re","train_rmse","test_rmse","time"]
+        columns = ["epoch","train_r2","validation_r2","train_rmse","validation_rmse","time"]
         for index,p in enumerate(self.model.get_indices()):
             columns.append(f"band_{index+1}")
         print("".join([c.ljust(20) for c in columns]))
