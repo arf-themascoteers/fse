@@ -2,12 +2,12 @@ from evaluator import Evaluator
 
 if __name__ == '__main__':
     tasks = []
-    for algorithm in ["pca","fm","fscr"]:
-        for size in [10,100,200,1000,2000]:
+    for algorithm in ["pca"]:
+        for size in [5,10,20,30]:
             tasks.append(
                 {
-                    "reduced_features":False,
-                    "reduced_rows":False,
+                    "reduced_features":True,
+                    "reduced_rows":True,
                     "target_feature_size": size,
                     "algorithm": algorithm
                 }
