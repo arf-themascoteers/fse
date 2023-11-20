@@ -16,9 +16,9 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = 200
+        self.epochs = 2000
         if self.target_feature_size > 1000:
-            self.epochs = 200
+            self.epochs = 2000
         self.csv_file = os.path.join("results", f"fscr-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
