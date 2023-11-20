@@ -14,10 +14,10 @@ class Evaluator:
         self.filename = os.path.join("results","results.csv")
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
-                file.write("algorithm,rows,columns,time,target_size,"
+                file.write("algorithm,rows,columns,time,target_size,final_size,"
                            "r2_original,r2_train,r2_test,"
                            "rmse_original,rmse_train,rmse_test,"
-                           "final_indices,selected_features\n")
+                           "selected_features\n")
 
     def evaluate(self):
         for task in self.tasks:
@@ -39,10 +39,9 @@ class Evaluator:
             with open(self.filename, 'a') as file:
                 file.write(
                     f"{algorithm_name},{dataset.count_rows()},"
-                    f"{dataset.count_features()},{elapsed_time},{target_feature_size},"
+                    f"{dataset.count_features()},{elapsed_time},{target_feature_size},{final_indices},"
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
                     f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
-                    f"{final_indices},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
