@@ -40,8 +40,8 @@ class FSCR:
         self.write_columns()
         self.model.train()
         optimizer = self.create_optimizer()
-        spline = get_splines(X)
-        spline_test = get_splines(X_test)
+        spline = get_splines(X).to(self.device)
+        spline_test = get_splines(X_test).to(self.device)
         for epoch in range(self.epochs):
             y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
