@@ -6,7 +6,7 @@ def plot_me_plz(filename):
     df = pd.read_csv(filename)
     all_columns = list(df.columns)
     band_columns = [col for col in all_columns if "band" in col]
-    fig, axes = plt.subplots(nrows=1, ncols=2,figsize=(20, 10))
+    fig, axes = plt.subplots(nrows=1, ncols=2,figsize=(10, 5))
     axes = axes.flatten()
 
     axes[0].plot(df["train_r2"].tolist(), label="train_r2")
@@ -37,4 +37,4 @@ def plot_me_plz(filename):
 
 
 if __name__ == "__main__":
-    plot_me_plz("../../results/fscr-1700450995373353.csv")
+    plot_me_plz("../../results/fscr-1700453491904314.csv")
