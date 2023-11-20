@@ -1,6 +1,7 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.neural_network import MLPRegressor
+from model_ann import ModelANN
 
 
 def get_hidden(feature_size):
@@ -17,17 +18,17 @@ def get_hidden(feature_size):
     elif feature_size >= 2000 and feature_size < 3000:
         h1 = 5
     elif feature_size >= 3000:
-        h1 = 3
-        h2 = 4
+        h1 = 2
+        h2 = 1
     return h1, h2
 
 
 def get_mlp_model(feature_size):
-    #for size in [10, 50, 100, 150, 200, 1000, 2000]:
+    return ModelANN(feature_size)
     hidden = get_hidden(feature_size)
     print("Configs",hidden)
     return MLPRegressor(hidden_layer_sizes=hidden,
-                        max_iter=1500, random_state=41,
+                        max_iter=1500, random_state=10,
                         learning_rate_init=0.001)
 
 
