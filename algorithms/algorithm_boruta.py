@@ -4,7 +4,7 @@ from boruta import BorutaPy
 import numpy as np
 
 
-class AlgorithmFM(Algorithm):
+class AlgorithmBoruta(Algorithm):
     def __init__(self, X_train, y_train, target_feature_size):
         super().__init__(X_train, y_train, target_feature_size)
 
