@@ -96,3 +96,5 @@ Justific though Limitation
 
 
 1500 epochs - 0.001 best
+
+=====try 2500 epochs
