@@ -37,7 +37,7 @@ class FSCR:
         optimizer = self.create_optimizer()
         X_train = torch.tensor(X_train, dtype=torch.float32).to(self.device)
         y_train = torch.tensor(y_train, dtype=torch.float32).to(self.device)
-        spline = get_splines(X_train).to(self.device)
+        spline = get_splines(X_train)
         for epoch in range(self.epochs):
             y_hat = self.model(spline)
             loss = self.criterion(y_hat, y_train)
