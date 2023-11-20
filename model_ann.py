@@ -10,7 +10,7 @@ class ModelANN(nn.Module):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
         h1,h2 = configs.get_hidden(target_feature_size)
-        print("ANN-Model",h1,h2)
+        print("ANN-Model",target_feature_size, h1,h2)
         self.linear = nn.Sequential(
             nn.Linear(self.target_feature_size, h1),
             nn.LeakyReLU(),
