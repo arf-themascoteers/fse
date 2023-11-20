@@ -16,11 +16,13 @@ def get_hidden_for_full(feature_size):
         h1 = 10
     elif feature_size >= 1000 and feature_size < 2000:
         h1 = 8
+        h2 = 0
     elif feature_size >= 2000 and feature_size < 3000:
         h1 = 4
+        h2 = 0
     elif feature_size >= 3000:
-        h1 = 2
-        h2 = 1
+        h1 = 0
+        h2 = 0
     return h1, h2
 
 
@@ -71,11 +73,14 @@ def get_internal_model():
 
 def get_linear(rows, feature_size):
     h1, h2 = get_hidden(rows, feature_size)
-    if h1 == 0 or h2 == 0:
+    if h1 == 0:
+        return nn.Sequential(nn.Linear(feature_size, 1))
+    if h2 == 0:
         return nn.Sequential(
             nn.Linear(feature_size, h1),
+            nn.LeakyReLU(),
+            nn.Linear(h1, 1),
         )
-
     return nn.Sequential(
         nn.Linear(feature_size, h1),
         nn.LeakyReLU(),
