@@ -93,3 +93,6 @@ Task
 Justific though Limitation
 
 1. A novel promising approach. Can be bettered by modifying different modules.
+
+
+1500 epochs - 0.001 best
