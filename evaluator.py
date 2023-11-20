@@ -46,6 +46,8 @@ class Evaluator:
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
         df = pd.read_csv(self.filename)
+        if len(df) == 0:
+            return False
         rows = df.loc[
             (df['algorithm'] == algorithm_name) &
             (df['rows'] == dataset.count_rows()) &
