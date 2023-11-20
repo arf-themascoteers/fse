@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch
 import torch.nn.functional as F
 from algorithms.fscr.band_index import BandIndex
-from torchcubicspline import(natural_cubic_spline_coeffs, NaturalCubicSpline)
+import configs
 
 
 class ANN(nn.Module):
@@ -10,12 +10,14 @@ class ANN(nn.Module):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
+        h1,h2 = configs.get_hidden(target_feature_size)
+        print("ANN",h1,h2)
         self.linear = nn.Sequential(
-            nn.Linear(self.target_feature_size, 50),
+            nn.Linear(self.target_feature_size, h1),
             nn.LeakyReLU(),
-            nn.Linear(50, 10),
+            nn.Linear(h1, h2),
             nn.LeakyReLU(),
-            nn.Linear(10, 1)
+            nn.Linear(h2, 1)
         )
         modules = []
         for i in range(self.target_feature_size):
