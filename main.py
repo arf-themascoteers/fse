@@ -8,8 +8,8 @@ if __name__ == '__main__':
         for algorithm in ["fscrns","fscr"]:
             tasks.append(
                 {
-                    "reduced_features":True,
-                    "reduced_rows":True,
+                    "reduced_features":False,
+                    "reduced_rows":False,
                     "target_feature_size": size,
                     "algorithm": algorithm
                 }

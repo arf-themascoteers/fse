@@ -18,7 +18,7 @@ class FSCR:
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
-        self.csv_file = os.path.join("results", f"fscr-{str(datetime.now().timestamp()).replace('.','')}.csv")
+        self.csv_file = os.path.join("results", f"fscr-{sigmoid}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
 
