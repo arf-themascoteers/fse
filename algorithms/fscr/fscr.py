@@ -9,10 +9,10 @@ import my_utils
 
 
 class FSCR:
-    def __init__(self, rows, target_feature_size):
+    def __init__(self, rows, target_feature_size, sigmoid=True):
         self.target_feature_size = target_feature_size
         self.lr = my_utils.get_lr(rows, target_feature_size)
-        self.model = ANN(rows, self.target_feature_size)
+        self.model = ANN(rows, self.target_feature_size, sigmoid)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')

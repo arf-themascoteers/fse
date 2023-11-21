@@ -6,7 +6,7 @@ import my_utils
 
 
 class ANN(nn.Module):
-    def __init__(self, rows, target_feature_size):
+    def __init__(self, rows, target_feature_size, sigmoid=True):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
@@ -14,7 +14,7 @@ class ANN(nn.Module):
         print(self.linear)
         modules = []
         for i in range(self.target_feature_size):
-            modules.append(BandIndex())
+            modules.append(BandIndex(sigmoid))
         self.machines = nn.ModuleList(modules)
 
     @staticmethod
