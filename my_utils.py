@@ -17,8 +17,8 @@ def get_hidden_for_full(feature_size):
     elif 350 <= feature_size < 400:
         h1 = 16
     elif 400 <= feature_size:
-        h1 = 3
-        h2 = 0
+        h1 = 10
+        h2 = 8
 
     return h1, h2
 
