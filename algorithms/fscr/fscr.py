@@ -93,7 +93,7 @@ class FSCR:
         multiplier = self.original_feature_size
         if not self.sigmoid:
             multiplier = multiplier-1
-        return round(raw_index.item() * self.original_feature_size)
+        return round(raw_index.item() * multiplier)
 
     def get_indices(self):
         indices = sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
