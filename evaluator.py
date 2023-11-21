@@ -78,15 +78,15 @@ class Evaluator:
         metric_evaluator.fit(X_train, y_train)
 
         y_pred = metric_evaluator.predict(X_train)
-        r2_train = round(r2_score(y_train, y_pred), 3)
-        rmse_train = round(math.sqrt(mean_squared_error(y_train, y_pred)), 3)
+        r2_train = round(r2_score(y_train, y_pred), 2)
+        rmse_train = round(math.sqrt(mean_squared_error(y_train, y_pred)), 2)
 
         y_pred = metric_evaluator.predict(X_test)
-        r2_test = round(r2_score(y_test, y_pred), 3)
-        rmse_test = round(math.sqrt(mean_squared_error(y_test, y_pred)), 3)
+        r2_test = round(r2_score(y_test, y_pred), 2)
+        rmse_test = round(math.sqrt(mean_squared_error(y_test, y_pred)), 2)
 
-        print(round(r2_train,3),round(rmse_train,3))
-        print(round(r2_test,3),round(rmse_test,3))
+        print(f"r2 train {r2_train}")
+        print(f"r2 test {r2_test}")
 
         return r2_train, rmse_train, r2_test, rmse_test
 
