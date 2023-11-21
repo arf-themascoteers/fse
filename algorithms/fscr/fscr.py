@@ -10,6 +10,7 @@ import my_utils
 
 class FSCR:
     def __init__(self, rows, target_feature_size, sigmoid=True):
+        self.sigmoid = sigmoid
         self.target_feature_size = target_feature_size
         self.lr = my_utils.get_lr(rows, target_feature_size)
         self.model = ANN(rows, self.target_feature_size, sigmoid)
@@ -89,6 +90,9 @@ class FSCR:
         return row
 
     def indexify_raw_index(self, raw_index):
+        multiplier = self.original_feature_size
+        if not self.sigmoid:
+            multiplier = multiplier-1
         return round(raw_index.item() * self.original_feature_size)
 
     def get_indices(self):
