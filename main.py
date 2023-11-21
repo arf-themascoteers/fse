@@ -13,7 +13,7 @@ if __name__ == '__main__':
         }
     )
     for size in big_size:
-        for algorithm in ["pca","fscr"]:
+        for algorithm in ["fscrns","fscr"]:
             tasks.append(
                 {
                     "reduced_features":False,
