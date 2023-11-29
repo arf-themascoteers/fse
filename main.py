@@ -1,7 +1,7 @@
 from evaluator import Evaluator
 
 if __name__ == '__main__':
-    sizes = [4]
+    sizes = [2]
     #sizes = [10, 50, 100, 150, 200, 250, 300, 350]
     tasks = []
     for size in sizes:
