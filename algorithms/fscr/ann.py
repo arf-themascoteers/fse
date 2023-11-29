@@ -11,10 +11,9 @@ class ANN(nn.Module):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
         self.linear = my_utils.get_linear(rows, target_feature_size)
-        init_vals = torch.linspace(0.001,0.99, target_feature_size+2)
         modules = []
         for i in range(self.target_feature_size):
-            modules.append(BandIndex(init_vals[i+1],sigmoid))
+            modules.append(BandIndex(sigmoid))
         self.machines = nn.ModuleList(modules)
 
     @staticmethod

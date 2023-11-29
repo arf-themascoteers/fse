@@ -47,7 +47,7 @@ class FSCR:
             y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
             for machine in self.model.machines:
-                loss = loss + machine.range_loss()
+                loss = loss + machine.range_loss() + self.distance_loss()
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
@@ -55,6 +55,14 @@ class FSCR:
             if epoch%50 == 0:
                 print("".join([str(i).ljust(20) for i in row]))
         return self.get_indices()
+
+    def distance_loss(self):
+        loss = 0
+        for i in range(0, len(self.model.machines)-1):
+            for j in range(i+1, len(self.model.machines)):
+                if abs(self.indexify_raw_index(self.model.machines[j].index_value()) - self.indexify_raw_index(self.model.machines[i].index_value())) < 3:
+                    loss = loss + 1
+        return loss
 
     def evaluate(self,spline,y,size):
         self.model.eval()
