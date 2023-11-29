@@ -13,7 +13,7 @@ class ModelANN(nn.Module):
         features = X.shape[1]
         self.linear = my_utils.get_linear(rows, features)
         print(self.linear)
-        self.epoch = my_utils.get_epoch(rows, features)
+        self.epoch = 10#my_utils.get_epoch(rows, features)
         self.lr = my_utils.get_lr(rows, features)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.to(self.device)
