@@ -4,10 +4,11 @@ import torch.nn.functional as F
 
 
 class BandIndex(nn.Module):
-    def __init__(self, sigmoid=True):
+    def __init__(self, val=None, sigmoid=True):
         super().__init__()
         self.sigmoid = sigmoid
-        val = torch.rand(1)
+        if val is None:
+            val = torch.rand(1)
         if self.sigmoid:
             val = (val*10)-5
         self.raw_index = nn.Parameter(val)
