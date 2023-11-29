@@ -69,6 +69,12 @@ def get_internal_model():
 
 
 def get_linear(rows, feature_size):
+    return nn.Sequential(
+        nn.Linear(feature_size, 30),
+        nn.LeakyReLU(),
+        nn.Linear(30,1)
+    )
+
     h1, h2 = get_hidden(rows, feature_size)
     if h1 == 0:
         return nn.Sequential(nn.Linear(feature_size, 1))
@@ -88,7 +94,7 @@ def get_linear(rows, feature_size):
 
 
 def get_lr(rows, features):
-    return 0.001
+    return 0.01
 
 
 def get_epoch(rows, features):
