@@ -14,7 +14,7 @@ class ANN(nn.Module):
         init_vals = torch.linspace(0.001,0.99, target_feature_size+2)
         modules = []
         for i in range(self.target_feature_size):
-            modules.append(BandIndex(init_vals[i+1],sigmoid))
+            modules.append(BandIndex( ANN.inverse_sigmoid_torch(init_vals[i+1]),sigmoid))
         self.machines = nn.ModuleList(modules)
 
     @staticmethod

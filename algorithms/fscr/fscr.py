@@ -17,7 +17,7 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
+        self.epochs = 15000#my_utils.get_epoch(rows, self.target_feature_size)
         self.csv_file = os.path.join("results", f"fscr-{sigmoid}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
@@ -52,6 +52,7 @@ class FSCR:
             optimizer.step()
             optimizer.zero_grad()
             row = self.dump_row(epoch, spline, y, spline_validation, y_validation, row_size, row_test_size)
+            row.append(round(loss.item(),4))
             if epoch%50 == 0:
                 print("".join([str(i).ljust(20) for i in row]))
         return self.get_indices()

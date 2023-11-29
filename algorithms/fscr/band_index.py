@@ -9,8 +9,8 @@ class BandIndex(nn.Module):
         self.sigmoid = sigmoid
         if val is None:
             val = torch.rand(1)
-        if self.sigmoid:
-            val = (val*10)-5
+            if self.sigmoid:
+                val = (val*10)-5
         self.raw_index = nn.Parameter(val)
 
     def forward(self, spline):
