@@ -17,7 +17,7 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
+        self.epochs = 150000#my_utils.get_epoch(rows, self.target_feature_size)
         self.csv_file = os.path.join("results", f"fscr-{sigmoid}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
@@ -26,8 +26,14 @@ class FSCR:
         return round((datetime.now() - self.start_time).total_seconds(),2)
 
     def create_optimizer(self):
-        weight_decay = self.lr/10
-        return torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=weight_decay)
+        #weight_decay = self.lr/10
+        #return torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=weight_decay)
+        params = [
+            {'params': self.model.machines.parameters(), 'lr': 0.01, 'weight_decay': 0},
+            {'params': self.model.linear.parameters(), 'lr': 0.01, 'weight_decay': 0.0001},
+        ]
+
+        return torch.optim.Adam(params)
 
     def fit(self, X, y, X_validation, y_validation):
         print(f"X,X_validation: {X.shape} {X_validation.shape}")
