@@ -16,8 +16,8 @@ class FSCR:
         self.model = ANN(rows, self.target_feature_size, sigmoid)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
-        self.criterion = torch.nn.MSELoss(reduction='mean')
-        self.epochs = my_utils.get_epoch(rows, self.target_feature_size)
+        self.criterion = torch.nn.MSELoss(reduction='sum')
+        self.epochs = 20000#my_utils.get_epoch(rows, self.target_feature_size)
         self.csv_file = os.path.join("results", f"fscr-{sigmoid}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
@@ -45,14 +45,17 @@ class FSCR:
         y_validation = torch.tensor(y_validation, dtype=torch.float32).to(self.device)
         for epoch in range(self.epochs):
             y_hat = self.model(spline, row_size)
-            loss = self.criterion(y_hat, y)
-            for machine in self.model.machines:
-                loss = loss + machine.range_loss()
+            soc_loss = self.criterion(y_hat, y)
+            retention_loss = self.model.retention_loss()
+            loss = soc_loss + retention_loss*10
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
             row = self.dump_row(epoch, spline, y, spline_validation, y_validation, row_size, row_test_size)
-            if epoch%50 == 0:
+            row.append(round(soc_loss.item(),4))
+            row.append(round(retention_loss.item(),4))
+            row.append(round(loss.item(),4))
+            if epoch%1 == 0:
                 print("".join([str(i).ljust(20) for i in row]))
         return self.get_indices()
 
