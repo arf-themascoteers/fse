@@ -31,10 +31,10 @@ class ANN(nn.Module):
 
     def retention_loss(self):
         loss = None
-        for i in range(1, len(self.machines)):
+        for i in range(3, len(self.machines)):
             later_band = self.machines[i].raw_index
             past_band = self.machines[i-1].raw_index
-            this_loss = F.relu(past_band-later_band)
+            this_loss = -1 * torch.square(past_band-later_band)
             if loss is None:
                 loss = this_loss
             else:
