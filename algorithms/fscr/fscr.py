@@ -6,6 +6,11 @@ from algorithms.fscr.ann import ANN
 from datetime import datetime
 import os
 import my_utils
+import matplotlib.pyplot as plt
+import numpy as np
+import copy
+import matplotlib
+#matplotlib.use("TkAgg")
 
 
 class FSCR:
@@ -46,14 +51,37 @@ class FSCR:
         for epoch in range(self.epochs):
             y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
+            par_item = self.model.machines[0].raw_index.item()
             for machine in self.model.machines:
                 loss = loss + machine.range_loss()
-            loss.backward()
-            optimizer.step()
-            optimizer.zero_grad()
+            loss_item = loss.item()
             row = self.dump_row(epoch, spline, y, spline_validation, y_validation, row_size, row_test_size)
             if epoch%50 == 0:
                 print("".join([str(i).ljust(20) for i in row]))
+                weight_values = np.linspace(par_item - 1, par_item + 1, 101)
+                gradients = []
+                dummy_model = copy.deepcopy(self.model)
+                for weight in weight_values:
+                    dummy_model.machines[0].raw_index.data = torch.tensor(weight).to(X.device)
+                    y_hat = dummy_model(spline, row_size)
+                    loss = self.criterion(y_hat, y)
+                    for machine in self.model.machines:
+                        loss = loss + machine.range_loss()
+                    gradients.append(loss.item())
+                # Plot the graph
+                plt.plot(weight_values, gradients, marker='o', linestyle='-', color='b')
+                plt.scatter(par_item, loss_item, color='red', label='Yo', s=100)
+                print(f"{par_item} {loss_item}")
+                plt.xlabel('i')
+                plt.ylabel('Gradient of Loss')
+                plt.title('Gradient of Loss vs i')
+                plt.show()
+                print("ok")
+
+            loss.backward()
+            optimizer.step()
+            optimizer.zero_grad()
+
         return self.get_indices()
 
     def evaluate(self,spline,y,size):
