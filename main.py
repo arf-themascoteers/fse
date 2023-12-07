@@ -8,7 +8,7 @@ if __name__ == '__main__':
             tasks.append(
                 {
                     "reduced_features":True,
-                    "reduced_rows":True,
+                    "reduced_rows":False,
                     "target_feature_size": size,
                     "algorithm": algorithm
                 }
