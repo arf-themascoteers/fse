@@ -1,11 +1,10 @@
 from evaluator import Evaluator
 
 if __name__ == '__main__':
-    sizes = [2]
-    #sizes = [10, 50, 100, 150, 200, 250, 300, 350]
+    sizes = [2,5,10,15,20]
     tasks = []
     for size in sizes:
-        for algorithm in ["fscr"]:
+        for algorithm in ["mi","rfe","lasso","fscr"]:
             tasks.append(
                 {
                     "reduced_features":True,
