@@ -69,6 +69,10 @@ def get_internal_model():
 
 
 def get_linear(rows, feature_size):
+    if rows < feature_size:
+        return nn.Sequential(
+            nn.Linear(feature_size, 1),
+        )
     h1, h2 = get_hidden(rows, feature_size)
     if h1 == 0:
         return nn.Sequential(nn.Linear(feature_size, 1))
