@@ -11,6 +11,8 @@ from algorithms.algorithm_fm import AlgorithmFM
 from algorithms.algorithm_tbfi import AlgorithmTBFI
 from algorithms.algorithm_pls import AlgorithmPLS
 from algorithms.algorithm_ex import AlgorithmEx
+from algorithms.algorithm_mi import AlgorithmMI
+from algorithms.algorithm_lasso import AlgorithmLasso
 
 
 class AlgorithmCreator:
@@ -42,4 +44,8 @@ class AlgorithmCreator:
             return AlgorithmPLS(X_train, y_train, target_feature_size)
         elif name == "ex":
             return AlgorithmEx(X_train, y_train, target_feature_size)
+        elif name == "mi":
+            return AlgorithmMI(X_train, y_train, target_feature_size)
+        elif name == "lasso":
+            return AlgorithmLasso(X_train, y_train, target_feature_size)
 
