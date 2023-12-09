@@ -11,3 +11,5 @@ explained_variance_ratios = pca.explained_variance_ratio_
 cumulative_explained_variance = np.cumsum(explained_variance_ratios)
 num_components_95_percent = np.argmax(cumulative_explained_variance >= 0.95) + 1
 print("Number of components explaining at least 95% variance:", num_components_95_percent)
+
+print(cumulative_explained_variance)
