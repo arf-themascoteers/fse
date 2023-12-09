@@ -13,7 +13,7 @@ class FSCR:
         self.sigmoid = sigmoid
         self.target_feature_size = target_feature_size
         self.lr = my_utils.get_lr(rows, target_feature_size)
-        self.model = ANN(rows, self.target_feature_size, sigmoid)
+        self.model = ANN(self.target_feature_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
@@ -44,21 +44,19 @@ class FSCR:
         y = torch.tensor(y, dtype=torch.float32).to(self.device)
         y_validation = torch.tensor(y_validation, dtype=torch.float32).to(self.device)
         for epoch in range(self.epochs):
-            y_hat = self.model(spline, row_size)
+            y_hat = self.model(X, spline)
             loss = self.criterion(y_hat, y)
-            for machine in self.model.machines:
-                loss = loss + machine.range_loss()
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
-            row = self.dump_row(epoch, spline, y, spline_validation, y_validation, row_size, row_test_size)
+            row = self.dump_row(epoch, X, spline, y, X_validation, spline_validation, y_validation)
             if epoch%50 == 0:
                 print("".join([str(i).ljust(20) for i in row]))
         return self.get_indices()
 
-    def evaluate(self,spline,y,size):
+    def evaluate(self,X, spline,y):
         self.model.eval()
-        y_hat = self.model(spline, size)
+        y_hat = self.model(X, spline)
         y_hat = y_hat.reshape(-1)
         y_hat = y_hat.detach().cpu().numpy()
         y = y.detach().cpu().numpy()
@@ -76,9 +74,9 @@ class FSCR:
             file.write(",".join(columns))
             file.write("\n")
 
-    def dump_row(self, epoch, spline, y, spline_test, y_test, row_size, row_test_size):
-        train_r2, train_rmse = self.evaluate(spline, y, row_size)
-        test_r2, test_rmse = self.evaluate(spline_test, y_test, row_test_size)
+    def dump_row(self, epoch, X, spline, y, X_validation, spline_validation, y_validation):
+        train_r2, train_rmse = self.evaluate(X, spline, y)
+        test_r2, test_rmse = self.evaluate(X_validation, spline_validation, y_validation)
         row = [train_r2, test_r2, train_rmse, test_rmse]
         row = [round(r,5) for r in row]
         row = [epoch] + row + [self.get_elapsed_time()]
