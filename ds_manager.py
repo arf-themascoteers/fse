@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn import model_selection
 from sklearn.preprocessing import MinMaxScaler
@@ -7,26 +8,49 @@ import numpy as np
 class DSManager:
     def __init__(self,reduced_features=True, reduced_rows=True):
         np.random.seed(0)
-        dataset = "data/dataset_66_min.csv"
         self.reduced_features = reduced_features
         self.reduced_rows = reduced_rows
-        if reduced_features:
-            if reduced_rows:
-                dataset = "data/dataset_66_min.csv"
-            else:
-                dataset = "data/dataset_66.csv"
-        else:
-            if reduced_rows:
-                dataset = "data/dataset_min.csv"
-            else:
-                dataset = "data/dataset.csv"
-        df = pd.read_csv(dataset)
-        self.X_columns = DSManager.get_wavelengths(reduced_features)
+        self.X_columns = DSManager.get_wavelengths(self.reduced_features)
         self.y_column = "oc"
+        self.train_ds = self.get_train()
+        self.test_ds = self.get_test()
+        train_index = self.train_ds.shape[0]
+        full_data = np.concatenate((self.train_ds, self.test_ds), axis=0)
+        full_data = DSManager._normalize(full_data)
+        self.train_ds = full_data[0:train_index]
+        self.test_ds = full_data[train_index:]
+
+    def get_train(self):
+        root = "data"
+        root = os.path.join(root, "train")
+        if self.reduced_features:
+            if self.reduced_rows:
+                exit(0)
+            else:
+                dataset = os.path.join(root, "downscaled.csv")
+        else:
+            if self.reduced_rows:
+                dataset = os.path.join(root, "truncated.csv")
+            else:
+                dataset = os.path.join(root, "original.csv")
+        return self.get_ds(dataset)
+
+    def get_test(self):
+        root = "data"
+        root = os.path.join(root, "test")
+        if self.reduced_features:
+            if self.reduced_rows:
+                exit(0)
+            else:
+                dataset = os.path.join(root, "downscaled.csv")
+        else:
+            dataset = os.path.join(root, "original.csv")
+        return self.get_ds(dataset)
+
+    def get_ds(self, dataset):
+        df = pd.read_csv(dataset)
         df = df[self.X_columns+[self.y_column]]
-        df = df.sample(frac=1)
-        self.full_data = df.to_numpy()
-        self.full_data = DSManager._normalize(self.full_data)
+        return df.to_numpy()
 
     def __repr__(self):
         return self.get_name()
@@ -44,7 +68,7 @@ class DSManager:
                 return "All Rows & Features"
 
     def count_rows(self):
-        return self.full_data.shape[0]
+        return self.train_ds.shape[0] + self.test_ds.shape[0]
 
     def count_features(self):
         return len(self.X_columns)
@@ -77,7 +101,7 @@ class DSManager:
         return data
 
     def get_datasets(self):
-        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
+        train_data, test_data = self.train_ds, self.test_ds
         train_data, validation_data = model_selection.train_test_split(train_data, test_size=0.1, random_state=2)
         train_x = train_data[:, :-1]
         train_y = train_data[:, -1]
@@ -89,7 +113,7 @@ class DSManager:
         return train_x, train_y, test_x, test_y, validation_x, validation_y
 
     def get_X_y(self):
-        return self.get_X_y_from_data(self.full_data)
+        return self.get_X_y_from_data(np.concatenate((self.train_ds, self.test_ds), axis=0))
 
     @staticmethod
     def get_X_y_from_data(data):
@@ -98,7 +122,7 @@ class DSManager:
         return x, y
 
     def get_train_test_validation(self):
-        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
+        train_data, test_data = self.train_ds, self.test_ds
         train_data, validation_data = model_selection.train_test_split(train_data, test_size=0.1, random_state=2)
         return train_data, test_data, validation_data
 
@@ -109,7 +133,7 @@ class DSManager:
             *DSManager.get_X_y_from_data(validation_data)
 
     def get_train_test(self):
-        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
+        train_data, test_data = self.train_ds, self.test_ds
         return train_data, test_data
 
     def get_train_test_X_y(self):
@@ -120,7 +144,6 @@ class DSManager:
 
 if __name__ == "__main__":
     d = DSManager(True, False)
-    print(d.full_data.shape)
     # x = d.full_data
     # sampled_rows_indices = np.random.choice(x.shape[0], size=10, replace=False)
     # sampled_rows = x[sampled_rows_indices, :]
