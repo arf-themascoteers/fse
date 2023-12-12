@@ -4,7 +4,7 @@ if __name__ == '__main__':
     tasks = []
     x = [(False, False), (True, False), (False, True)]
     for reduced_features, reduced_rows in x:
-        for algorithm in ["mi","lasso","fscr","rfe"]:
+        for algorithm in ["mi","lasso","fscr","sfs"]:
             for size in [2, 5, 10, 15, 20]:
                 tasks.append(
                     {
