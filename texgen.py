@@ -12,7 +12,7 @@ def get_dataset(rows, columns):
         return "original"
     return "truncated"
 
-df = pd.read_csv("results/good/results.csv")
+df = pd.read_csv("results/final/results.csv")
 df.drop(inplace=True, columns=["selected_features"])
 time = {}
 r2 = {}
