@@ -8,8 +8,8 @@ if __name__ == '__main__':
             for size in [2, 5, 10, 15, 20]:
                 tasks.append(
                     {
-                        "reduced_features":True,
-                        "reduced_rows":False,
+                        "reduced_features":reduced_features,
+                        "reduced_rows":reduced_rows,
                         "target_feature_size": size,
                         "algorithm": algorithm
                     }
