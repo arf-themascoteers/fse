@@ -26,7 +26,7 @@ class AlgorithmCreator:
             return AlgorithmPCAT95(X_train, y_train, target_feature_size)
         elif name == "rfe":
             return AlgorithmRFE(X_train, y_train, target_feature_size)
-        elif name == "fscr":
+        elif name == "fsdr":
             return AlgorithmFSCR(X_train, y_train, target_feature_size)
         elif name == "fscrns":
             return AlgorithmFSCRNS(X_train, y_train, target_feature_size)
