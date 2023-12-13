@@ -26,7 +26,7 @@ def plot_me_plz(filename):
     plt.tight_layout()
     plt.title(filename)
     plt.show()
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=(10, 3))
     for band in band_columns:
         plt.plot(df[band].tolist(), label=band)
     plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
@@ -38,6 +38,8 @@ def plot_me_plz(filename):
 
 
 if __name__ == "__main__":
+    plot_me_plz("../results/original/fscr-True-5-1702307391980256.csv")
+    exit(0)
     dirr = "../results"
     for f in os.listdir(dirr):
         if f.startswith("fscr"):
