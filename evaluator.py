@@ -34,8 +34,7 @@ class Evaluator:
                 r2_reduced_train, rmse_reduced_train, \
                 r2_reduced_test, rmse_reduced_test, \
                 final_indices, selected_features = \
-                1, 1, 1, 1, 1, 1, 1,1,[1]
-                #self.do_algorithm(algorithm_name, dataset, target_feature_size)
+                self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
 
             with open(self.filename, 'a') as file:
