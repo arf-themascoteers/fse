@@ -79,7 +79,7 @@ for metric, metric_data in data.items():
                 formatted_number = "{:.2f}".format(value)
                 if value == vals[0]:
                     print(r" & \textbf{"+formatted_number+r"} ", end="")
-                elif value == vals[0]:
+                elif value == vals[1]:
                     print(r" & \textcolor{blue}{" + formatted_number + r"} ", end="")
                 else:
                     print(f" & {formatted_number} ", end="")
