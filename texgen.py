@@ -1,5 +1,10 @@
 import pandas as pd
 
+def is_reverse(key):
+    if key in ["$time$","$RMSE$"]:
+        return False
+    return True
+
 def get_dataset(rows, columns):
     if columns == 66:
         return "downsampled"
@@ -47,11 +52,12 @@ data = {
 }
 
 print(r"\begin{tabular}")
-print(r"{|l|l|r|r|r|r|r|}\hline Metric & Dataset & t  & MI & SFS & LASSO & FSDR \\\hline")
+print(r"{|l|l|r|r|r|r|r|}\hline Metric & Dataset & t  & MI & SFS & LASSO & FSDR \\ \hline")
 
 for metric, metric_data in data.items():
-    for dataset, dataset_data in metric_data.items():
-        print(r"\multirow{15}{*}{"+metric+r"} & \multirow{5}{*}{"+dataset+"}")
+    print(r"\multirow{15}{*}{" + metric + r"} ")
+    for index, (dataset, dataset_data) in enumerate(metric_data.items()):
+        print("\t" + r" & \multirow{5}{*}{"+dataset+"}")
         first = True
         for t,t_data in dataset_data.items():
             if not first:
@@ -60,10 +66,27 @@ for metric, metric_data in data.items():
                 print(" \t ", end="")
             first = False
             print(f" & {t} ", end="")
-            for algorithm, value in t_data.items():
+            keys = list(t_data.keys())
+            custom_order = ['mi', 'sfs', 'lasso', 'fsdr']
+            sorted_keys = sorted(keys, key=lambda x: custom_order.index(x))
+            vals = []
+            for key in sorted_keys:
+                value = t_data[key]
+                vals.append(value)
+            vals = sorted(vals, reverse=is_reverse(metric))
+            for key in sorted_keys:
+                value = t_data[key]
                 formatted_number = "{:.2f}".format(value)
-                print(f" & {algorithm}{formatted_number} ", end="")
-            print("")
-
+                if value == vals[0]:
+                    print(r" & \textbf{"+formatted_number+r"} ", end="")
+                elif value == vals[0]:
+                    print(r" & \textcolor{blue}{" + formatted_number + r"} ", end="")
+                else:
+                    print(f" & {formatted_number} ", end="")
+            print(r"\\")
+        if index != len(metric_data)-1:
+            print(r"\cline{2-7}")
+        else:
+            print("\hline")
 print("")
 print(r"\end{tabular}")
