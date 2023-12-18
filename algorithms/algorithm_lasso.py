@@ -10,9 +10,12 @@ class AlgorithmLasso(Algorithm):
         self.indices = None
 
     def get_selected_indices(self):
-        self.lasso = Lasso(alpha=1.0)
+        self.lasso = Lasso(alpha=0.001)
         self.lasso.fit(self.X_train, self.y_train)
         self.indices = np.argsort(np.abs(self.lasso.coef_))[::-1][:self.target_feature_size]
+        for i in range(len(self.lasso.coef_)):
+            if i not in self.indices:
+                self.lasso.coef_[i] = 0
         return self, self.indices
 
     def transform(self, X):

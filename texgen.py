@@ -12,16 +12,21 @@ def get_dataset(rows, columns):
         return "original"
     return "truncated"
 
-df = pd.read_csv("results/final/results.csv")
+df = pd.read_csv("results/results.csv")
 df.drop(inplace=True, columns=["selected_features"])
 time = {}
 r2 = {}
 rmse = {}
+r2_emb = {}
+rmse_emb = {}
 
 dataset = None
 data_time = {}
 data_r2 = {}
 data_rmse = {}
+data_r2_emb = {}
+data_rmse_emb = {}
+
 algorithm = None
 
 for index, row in df.iterrows():
@@ -31,6 +36,9 @@ for index, row in df.iterrows():
         data_time[dataset] = {}
         data_r2[dataset] = {}
         data_rmse[dataset] = {}
+        data_r2_emb[dataset] = {}
+        data_rmse_emb[dataset] = {}
+
 
     t = str(row["target_size"])
 
@@ -38,17 +46,23 @@ for index, row in df.iterrows():
         data_time[dataset][t] = {}
         data_r2[dataset][t] = {}
         data_rmse[dataset][t] = {}
+        data_r2_emb[dataset][t] = {}
+        data_rmse_emb[dataset][t] = {}
 
     algorithm = row["algorithm"]
 
     data_time[dataset][t][algorithm] = row["time"]
     data_r2[dataset][t][algorithm] = row["r2_test"]
     data_rmse[dataset][t][algorithm] = row["rmse_test"]
+    data_r2_emb[dataset][t][algorithm] = row["r2"]
+    data_rmse_emb[dataset][t][algorithm] = row["rmse"]
 
 data = {
     "$time$" : data_time,
     "$R^2$" : data_r2,
     "$RMSE$" : data_rmse,
+    "$R^2$ (embedded)": data_r2_emb,
+    "$RMSE$ (embedded)": data_rmse_emb,
 }
 
 print(r"\begin{tabular}")
@@ -80,7 +94,7 @@ for metric, metric_data in data.items():
                 if value == vals[0]:
                     print(r" & \textbf{"+formatted_number+r"} ", end="")
                 elif value == vals[1]:
-                    print(r" & \textcolor{blue}{" + formatted_number + r"} ", end="")
+                    print(r" & \textit{\textcolor{blue}{" + formatted_number + r"}} ", end="")
                 else:
                     print(f" & {formatted_number} ", end="")
             print(r"\\")

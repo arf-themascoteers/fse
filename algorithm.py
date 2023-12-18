@@ -28,6 +28,8 @@ class Algorithm(ABC):
         if hasattr(self.model, "predict"):
             y_pred = self.model.predict(X)
             r2 = round(r2_score(y, y_pred), 2)
+            r2 = max(0, r2)
             rmse = round(math.sqrt(mean_squared_error(y, y_pred)), 2)
+            rmse = max(0,rmse)
             return r2, rmse
-        return 0,0
+        return -1,-1
