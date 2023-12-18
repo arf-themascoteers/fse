@@ -16,7 +16,7 @@ class Evaluator:
             with open(self.filename, 'w') as file:
                 file.write("algorithm,rows,columns,time,target_size,final_size,"
                            "r2_original,r2_train,r2_test,"
-                           "rmse_original,rmse_train,rmse_test,"
+                           "rmse_original,rmse_train,rmse_test,r2,rmse,"
                            "selected_features\n")
 
     def evaluate(self):
@@ -30,7 +30,7 @@ class Evaluator:
             # if self.is_done(algorithm_name, dataset, target_feature_size):
             #     print("Done already. Skipping.")
             #     continue
-            elapsed_time, r2_original, rmse_original, \
+            r2, rmse, elapsed_time, r2_original, rmse_original, \
                 r2_reduced_train, rmse_reduced_train, \
                 r2_reduced_test, rmse_reduced_test, \
                 final_indices, selected_features = \
@@ -42,7 +42,7 @@ class Evaluator:
                     f"{algorithm_name},{dataset.count_rows()},"
                     f"{dataset.count_features()},{round(elapsed_time,2)},{target_feature_size},{final_indices},"
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
-                    f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
+                    f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},{r2},{rmse}"
                     f"{';'.join(str(i) for i in selected_features)}\n")
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
@@ -67,9 +67,10 @@ class Evaluator:
         elapsed_time = (datetime.now() - start_time).total_seconds()
         X_train_reduced = algorithm.transform(X_train)
         X_test_reduced = algorithm.transform(X_test)
+        r2, rmse = algorithm.predict_it(X_test, y_test)
         r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
             Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
-        return elapsed_time, r2_original, rmse_original, \
+        return r2, rmse, elapsed_time, r2_original, rmse_original, \
             r2_reduced_train, rmse_reduced_train, \
             r2_reduced_test, rmse_reduced_test, X_test_reduced.shape[1], selected_features
 

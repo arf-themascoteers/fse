@@ -101,3 +101,10 @@ class FSCR:
 
     def transform(self, X):
         return X[:,self.get_indices()]
+
+    def predict(self, X):
+        X = torch.tensor(X, dtype=torch.float32).to(self.device)
+        row_size = X.shape[0]
+        spline = get_splines(X, self.device)
+        y_hat = self.model(spline, row_size)
+        return y_hat.detach().cpu().numpy()

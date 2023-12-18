@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+import math
 
 
 class Algorithm(ABC):
@@ -21,3 +23,11 @@ class Algorithm(ABC):
     @abstractmethod
     def get_selected_indices(self):
         pass
+
+    def predict_it(self, X, y):
+        if hasattr(self.model, "predict"):
+            y_pred = self.model.predict(X)
+            r2 = round(r2_score(y, y_pred), 2)
+            rmse = round(math.sqrt(mean_squared_error(y, y_pred)), 2)
+            return r2, rmse
+        return 0,0
