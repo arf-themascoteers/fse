@@ -80,7 +80,7 @@ for metric, metric_data in data.items():
                 if value == vals[0]:
                     print(r" & \textbf{"+formatted_number+r"} ", end="")
                 elif value == vals[1]:
-                    print(r" & \textcolor{blue}{" + formatted_number + r"} ", end="")
+                    print(r" & \textit{\textcolor{blue}{" + formatted_number + r"}} ", end="")
                 else:
                     print(f" & {formatted_number} ", end="")
             print(r"\\")
