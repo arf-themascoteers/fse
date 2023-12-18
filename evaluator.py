@@ -42,7 +42,7 @@ class Evaluator:
                     f"{algorithm_name},{dataset.count_rows()},"
                     f"{dataset.count_features()},{round(elapsed_time,2)},{target_feature_size},{final_indices},"
                     f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
-                    f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},{r2},{rmse}"
+                    f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},{r2},{rmse},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
