@@ -11,7 +11,13 @@ class ModelANN(nn.Module):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         rows = X.shape[0]
         features = X.shape[1]
-        self.linear = my_utils.get_linear(rows, features)
+        self.linear = nn.Sequential(
+            nn.Linear(features, 15),
+            nn.LeakyReLU(),
+            nn.Linear(15, 10),
+            nn.LeakyReLU(),
+            nn.Linear(10, 1)
+        )
         print(self.linear)
         self.epoch = my_utils.get_epoch(rows, features)
         self.lr = my_utils.get_lr(rows, features)
