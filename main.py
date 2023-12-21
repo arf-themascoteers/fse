@@ -5,8 +5,8 @@ if __name__ == '__main__':
     x = [(False, False), (True, False), (False, True)]
     #x = [(True, False)]
     for reduced_features, reduced_rows in x:
-        #for algorithm in ["lasso"]:
-        for algorithm in ["mi","sfs","lasso","fsdr"]:
+        for algorithm in ["lasso"]:
+        #for algorithm in ["mi","sfs","lasso","fsdr"]:
             for size in [2, 5, 10, 15, 20]:
             #for size in [2, 5]:
                 tasks.append(
