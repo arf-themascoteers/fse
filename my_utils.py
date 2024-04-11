@@ -96,4 +96,4 @@ def get_lr(rows, features):
 
 
 def get_epoch(rows, features):
-    return 1500
+    return 2500

@@ -10,12 +10,17 @@ class ANN(nn.Module):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
+        # self.linear = nn.Sequential(
+        #     nn.Linear(self.target_feature_size, 15),
+        #     nn.LeakyReLU(),
+        #     nn.Linear(15, 10),
+        #     nn.LeakyReLU(),
+        #     nn.Linear(10, 1)
+        # )
         self.linear = nn.Sequential(
-            nn.Linear(self.target_feature_size, 15),
+            nn.Linear(self.target_feature_size, 5),
             nn.LeakyReLU(),
-            nn.Linear(15, 10),
-            nn.LeakyReLU(),
-            nn.Linear(10, 1)
+            nn.Linear(5, 1)
         )
         init_vals = torch.linspace(0.001,0.99, target_feature_size+2)
         modules = []
