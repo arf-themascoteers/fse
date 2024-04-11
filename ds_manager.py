@@ -5,24 +5,13 @@ import numpy as np
 
 
 class DSManager:
-    def __init__(self,reduced_features=True, reduced_rows=True):
+    def __init__(self,dataset):
+        self.dataset = dataset
         np.random.seed(0)
-        dataset = "data/dataset_66_min.csv"
-        self.reduced_features = reduced_features
-        self.reduced_rows = reduced_rows
-        if reduced_features:
-            if reduced_rows:
-                dataset = "data/dataset_66_min.csv"
-            else:
-                dataset = "data/dataset_66.csv"
-        else:
-            if reduced_rows:
-                dataset = "data/dataset_min.csv"
-            else:
-                dataset = "data/dataset.csv"
-        df = pd.read_csv(dataset)
-        self.X_columns = DSManager.get_wavelengths(reduced_features)
-        self.y_column = "oc"
+        dataset_path = f"data/{dataset}.csv"
+        df = pd.read_csv(dataset_path)
+        self.X_columns = DSManager.get_spectral_columns(df, self.dataset)
+        self.y_column = DSManager.get_y_column(self.dataset)
         df = df[self.X_columns+[self.y_column]]
         df = df.sample(frac=1)
         self.full_data = df.to_numpy()
@@ -32,16 +21,7 @@ class DSManager:
         return self.get_name()
 
     def get_name(self):
-        if self.reduced_features:
-            if self.reduced_rows:
-                return "Reduced Rows & Features"
-            else:
-                return "All Rows, Reduced Features"
-        else:
-            if self.reduced_rows:
-                return "Reduced Rows, All Features"
-            else:
-                return "All Rows & Features"
+        return self.dataset
 
     def count_rows(self):
         return self.full_data.shape[0]
@@ -63,10 +43,19 @@ class DSManager:
         return wvs
 
     @staticmethod
-    def get_wavelengths(reduced_features=True):
-        if reduced_features:
-            return [str(i) for i in range(66)]
-        return list(DSManager.wavelengths_itr())
+    def get_spectral_columns(df, dataset):
+        start_index = 13
+        if "brazilian" in dataset:
+            start_index = 1
+        cols = list(df.columns)
+        return cols[start_index:]
+
+    @staticmethod
+    def get_y_column(dataset):
+        col = "oc"
+        if "brazilian" in dataset:
+            col = "MO (gddm3)"
+        return col
 
     @staticmethod
     def _normalize(data):
