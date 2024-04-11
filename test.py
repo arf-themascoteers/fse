@@ -3,9 +3,9 @@ from evaluator import Evaluator
 if __name__ == '__main__':
     tasks = []
     #for dataset in ["lucas_full","brazilian","lucas_skipped"]:
-    for dataset in ["lucas_skipped"]:
-        for algorithm in ["fsdr","mi","lasso"]:
-            for size in [5,10,20]:
+    for dataset in ["demmin"]:
+        for algorithm in ["mi","lasso","fsdr"]:
+            for size in [2,5,10,20]:
                 tasks.append(
                     {
                         "dataset": dataset,

@@ -44,11 +44,7 @@ class DSManager:
 
     @staticmethod
     def get_spectral_columns(df, dataset):
-        start_index = 1
-        if "brazilian" in dataset:
-            start_index = 1
-        cols = list(df.columns)
-        return cols[start_index:]
+        return list(df.columns)[1:]
 
     @staticmethod
     def get_y_column(dataset):

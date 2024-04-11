@@ -119,13 +119,31 @@ def plot_lucas_skipped_min():
     plt.show()
 
 
+def plot_demmin():
+    df = pd.read_csv(r"data/demmin.csv")
+    data = df.iloc[0,1:].to_numpy()
+    x = list(range(data.shape[0]))
+    plt.plot(x,data)
+    plt.show()
+
+    data = df.iloc[20,1:].to_numpy()
+    x = list(range(data.shape[0]))
+    plt.plot(x,data)
+    plt.show()
+
+    data = df.iloc[30,1:].to_numpy()
+    x = list(range(data.shape[0]))
+    plt.plot(x,data)
+    plt.show()
+
 if __name__ == "__main__":
-    plot_brazilian()
-    plot_lucas_absorbance()
-    plot_lucas_reflectance()
-    plot_lucas_full()
-    plot_lucas_min()
-    plot_lucas_down_min()
-    plot_lucas_down()
-    plot_lucas_skipped()
-    plot_lucas_skipped_min()
+    # plot_brazilian()
+    # plot_lucas_absorbance()
+    # plot_lucas_reflectance()
+    # plot_lucas_full()
+    # plot_lucas_min()
+    # plot_lucas_down_min()
+    # plot_lucas_down()
+    # plot_lucas_skipped()
+    # plot_lucas_skipped_min()
+    plot_demmin()

@@ -1,15 +1,19 @@
 from sklearn.decomposition import PCA
 import numpy as np
 from ds_manager import DSManager
+from sklearn.linear_model import LinearRegression
 
-ds = DSManager(reduced_features=False,reduced_rows=False)
+ds = DSManager(dataset="demmin")
 train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
 
-pca = PCA()
-X_pca = pca.fit_transform(train_X)
-explained_variance_ratios = pca.explained_variance_ratio_
-cumulative_explained_variance = np.cumsum(explained_variance_ratios)
-num_components_95_percent = np.argmax(cumulative_explained_variance >= 0.95) + 1
-print("Number of components explaining at least 95% variance:", num_components_95_percent)
 
-print(cumulative_explained_variance)
+pca = PCA(n_components=7)
+X_pca = pca.fit_transform(train_X)
+mlr = LinearRegression()
+mlr.fit(X_pca, train_y)
+print(mlr.score(X_pca, train_y))
+
+X_pca_test = pca.fit_transform(test_X)
+mlr.fit(X_pca_test, test_y)
+print(mlr.score(X_pca_test, test_y))
+
