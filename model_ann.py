@@ -18,10 +18,17 @@ class ModelANN(nn.Module):
         #     nn.LeakyReLU(),
         #     nn.Linear(10, 1)
         # )
+        # self.linear = nn.Sequential(
+        #     nn.Linear(self.target_feature_size, 5),
+        #     nn.LeakyReLU(),
+        #     nn.Linear(5, 1)
+        # )
         self.linear = nn.Sequential(
-            nn.Linear(self.target_feature_size, 5),
+            nn.Linear(self.target_feature_size, 4),
             nn.LeakyReLU(),
-            nn.Linear(5, 1)
+            nn.Linear(4, 4),
+            nn.LeakyReLU(),
+            nn.Linear(4, 1)
         )
         self.epoch = my_utils.get_epoch(rows, self.target_feature_size)
         self.lr = my_utils.get_lr(rows, self.target_feature_size)

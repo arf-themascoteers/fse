@@ -15,8 +15,8 @@ class Evaluator:
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
                 file.write("algorithm,rows,columns,time,target_size,final_size,"
-                           "r2_original,r2_train,r2_test,"
-                           "rmse_original,rmse_train,rmse_test,"
+                           "r2_train,r2_test,"
+                           "rmse_train,rmse_test,"
                            "selected_features\n")
 
     def evaluate(self):
@@ -40,8 +40,8 @@ class Evaluator:
                 file.write(
                     f"{algorithm_name},{dataset.count_rows()},"
                     f"{dataset.count_features()},{round(elapsed_time,2)},{target_feature_size},{final_indices},"
-                    f"{r2_original},{r2_reduced_train},{r2_reduced_test},"
-                    f"{rmse_original},{rmse_reduced_train},{rmse_reduced_test},"
+                    f"{r2_reduced_train},{r2_reduced_test},"
+                    f"{rmse_reduced_train},{rmse_reduced_test},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
@@ -59,7 +59,7 @@ class Evaluator:
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
         print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
-        _, _, r2_original, rmse_original = Evaluator.get_metrics(algorithm_name, X_train, y_train, X_test, y_test)
+        #_, _, r2_original, rmse_original = Evaluator.get_metrics(algorithm_name, X_train, y_train, X_test, y_test)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         start_time = datetime.now()
         selected_features = algorithm.fit()
@@ -68,13 +68,13 @@ class Evaluator:
         X_test_reduced = algorithm.transform(X_test)
         r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
             Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
-        return elapsed_time, r2_original, rmse_original, \
+        return elapsed_time, 0, 0, \
             r2_reduced_train, rmse_reduced_train, \
             r2_reduced_test, rmse_reduced_test, X_test_reduced.shape[1], selected_features
 
     @staticmethod
     def get_metrics(algorithm_name, X_train, y_train, X_test, y_test):
-        metric_evaluator = my_utils.get_metric_evaluator_for(algorithm_name, X_train)
+        metric_evaluator = my_utils.get_metric_evaluator(algorithm_name, X_train)
         metric_evaluator.fit(X_train, y_train)
 
         y_pred = metric_evaluator.predict(X_train)

@@ -62,8 +62,8 @@ class DSManager:
         return data
 
     def get_datasets(self):
-        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
-        train_data, validation_data = model_selection.train_test_split(train_data, test_size=0.1, random_state=2)
+        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.3, random_state=2)
+        train_data, validation_data = model_selection.train_test_split(train_data, test_size=0.2, random_state=2)
         train_x = train_data[:, :-1]
         train_y = train_data[:, -1]
         test_x = test_data[:, :-1]
@@ -94,7 +94,7 @@ class DSManager:
             *DSManager.get_X_y_from_data(validation_data)
 
     def get_train_test(self):
-        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.1, random_state=2)
+        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.3, random_state=2)
         return train_data, test_data
 
     def get_train_test_X_y(self):

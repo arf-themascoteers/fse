@@ -1,6 +1,7 @@
 from sklearn.linear_model import LinearRegression
 from model_ann import ModelANN
 import torch.nn as nn
+from sklearn.ensemble import RandomForestRegressor
 
 
 def get_hidden_for_full(feature_size):
@@ -58,10 +59,8 @@ def get_metric_evaluator_for_fscr(X):
     return get_ann(X)
 
 
-def get_metric_evaluator_for(algorithm_name,X):
-    if algorithm_name == "fsdr":
-        return get_metric_evaluator_for_fscr(X)
-    return get_metric_evaluator_for_traditional(X)
+def get_metric_evaluator(algorithm_name, X):
+    return RandomForestRegressor()
 
 
 def get_internal_model():
@@ -96,4 +95,4 @@ def get_lr(rows, features):
 
 
 def get_epoch(rows, features):
-    return 2500
+    return 350
