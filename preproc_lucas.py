@@ -1,7 +1,7 @@
 import pandas as pd
 import pywt
 
-lucas = pd.read_csv("data/lucas/lucas.csv")
+lucas = pd.read_csv("data/lucas/reflectance.csv")
 
 bands = list(lucas.columns)
 bands = bands[13:]
