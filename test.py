@@ -2,9 +2,9 @@ from evaluator import Evaluator
 
 if __name__ == '__main__':
     tasks = []
-    for dataset in ["lucas_full","lucas_down","lucas_min"]:
+    for dataset in ["lucas_full","brazilian","lucas_min"]:
         for algorithm in ["fsdr","mi","lasso"]:
-            for size in [5]:
+            for size in [5,10,20]:
                 tasks.append(
                     {
                         "dataset": dataset,

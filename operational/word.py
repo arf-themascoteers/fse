@@ -1,7 +1,7 @@
 import pandas as pd
 from docx import Document
 
-csv_file = '../results/results.csv'
+csv_file = '../results/archive/results.csv'
 df = pd.read_csv(csv_file)
 doc = Document()
 doc.add_table(rows=1, cols=len(df.columns)-1, style='Table Grid')
