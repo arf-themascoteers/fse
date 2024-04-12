@@ -49,6 +49,6 @@ class AlgorithmCreator:
             return AlgorithmMI(X_train, y_train, target_feature_size)
         elif name == "lasso":
             return AlgorithmLasso(X_train, y_train, target_feature_size)
-        elif name == "CARS":
+        elif name == "cars":
             return AlgorithmCARS(X_train, y_train, target_feature_size)
 
