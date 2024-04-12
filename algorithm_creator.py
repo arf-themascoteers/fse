@@ -14,6 +14,7 @@ from algorithms.algorithm_ex import AlgorithmEx
 from algorithms.algorithm_mi import AlgorithmMI
 from algorithms.algorithm_lasso import AlgorithmLasso
 from algorithms.algorithm_cars import AlgorithmCARS
+from algorithms.algorithm_spa import AlgorithmSPA
 
 
 class AlgorithmCreator:
@@ -51,4 +52,6 @@ class AlgorithmCreator:
             return AlgorithmLasso(X_train, y_train, target_feature_size)
         elif name == "cars":
             return AlgorithmCARS(X_train, y_train, target_feature_size)
+        elif name == "spa":
+            return AlgorithmSPA(X_train, y_train, target_feature_size)
 
