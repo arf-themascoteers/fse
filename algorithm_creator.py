@@ -15,6 +15,8 @@ from algorithms.algorithm_mi import AlgorithmMI
 from algorithms.algorithm_lasso import AlgorithmLasso
 from algorithms.algorithm_cars import AlgorithmCARS
 from algorithms.algorithm_spa import AlgorithmSPA
+from algorithms.algorithm_mcuve import AlgorithmMCUVE
+from algorithms.algorithm_rf import AlgorithmRF
 
 
 class AlgorithmCreator:
@@ -54,4 +56,8 @@ class AlgorithmCreator:
             return AlgorithmCARS(X_train, y_train, target_feature_size)
         elif name == "spa":
             return AlgorithmSPA(X_train, y_train, target_feature_size)
+        elif name == "mcuve":
+            return AlgorithmMCUVE(X_train, y_train, target_feature_size)
+        elif name == "rf":
+            return AlgorithmRF(X_train, y_train, target_feature_size)
 
