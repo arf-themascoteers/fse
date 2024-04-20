@@ -9,9 +9,10 @@ import my_utils
 
 
 class Evaluator:
-    def __init__(self, tasks):
+    def __init__(self, tasks, filename="results.csv"):
         self.tasks = tasks
-        self.filename = os.path.join("results","results.csv")
+        self.filename = filename
+        self.filename = os.path.join("results",self.filename)
         if not os.path.exists(self.filename):
             with open(self.filename, 'w') as file:
                 file.write("algorithm,rows,columns,time,target_size,final_size,"
