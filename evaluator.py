@@ -28,22 +28,7 @@ class Evaluator:
             target_feature_size = task["target_feature_size"]
             algorithm_name = task["algorithm"]
             dataset = DSManager(dataset=dataset, folds=self.folds)
-            if self.is_done(algorithm_name, dataset, target_feature_size):
-                print("Done already. Skipping.")
-                continue
-            elapsed_time, r2_original, rmse_original, \
-                r2_reduced_train, rmse_reduced_train, \
-                r2_reduced_test, rmse_reduced_test, \
-                final_indices, selected_features = \
-                self.do_algorithm(algorithm_name, dataset, target_feature_size)
-
-            with open(self.filename, 'a') as file:
-                file.write(
-                    f"{algorithm_name},{dataset.count_rows()},"
-                    f"{dataset.count_features()},{round(elapsed_time,2)},{target_feature_size},{final_indices},"
-                    f"{r2_reduced_train},{r2_reduced_test},"
-                    f"{rmse_reduced_train},{rmse_reduced_test},"
-                    f"{';'.join(str(i) for i in selected_features)}\n")
+            self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
         df = pd.read_csv(self.filename)
@@ -58,19 +43,34 @@ class Evaluator:
         return len(rows) != 0
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
-        X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
-        print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
-        algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
-        start_time = datetime.now()
-        selected_features = algorithm.fit()
-        elapsed_time = (datetime.now() - start_time).total_seconds()
-        X_train_reduced = algorithm.transform(X_train)
-        X_test_reduced = algorithm.transform(X_test)
-        r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
-            Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
-        return elapsed_time, 0, 0, \
-            r2_reduced_train, rmse_reduced_train, \
-            r2_reduced_test, rmse_reduced_test, X_test_reduced.shape[1], selected_features
+        for fold_number, (X_train, y_train, X_test, y_test) in enumerate(dataset.get_k_folds()):
+            if self.is_done(algorithm_name, dataset, target_feature_size):
+                print("Done already. Skipping.")
+                continue
+            print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
+            algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
+            start_time = datetime.now()
+            selected_features = algorithm.fit()
+            elapsed_time = (datetime.now() - start_time).total_seconds()
+            X_train_reduced = algorithm.transform(X_train)
+            X_test_reduced = algorithm.transform(X_test)
+            r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
+                Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
+
+            with open(self.filename, 'a') as file:
+                file.write(
+                    f"{algorithm_name},"
+                    f"{dataset.count_rows()},"
+                    f"{dataset.count_features()},"
+                    f"{round(elapsed_time,2)},"
+                    f"{len(selected_features)},"
+                    f"{selected_features},"
+                    f"{r2_reduced_train},"
+                    f"{r2_reduced_test},"
+                    f"{rmse_reduced_train},"
+                    f"{rmse_reduced_test},"
+                    f"{';'.join(str(i) for i in selected_features)}\n")
+
 
     @staticmethod
     def get_metrics(algorithm_name, X_train, y_train, X_test, y_test):

@@ -2,9 +2,9 @@ from evaluator import Evaluator
 
 if __name__ == '__main__':
     tasks = []
-    for algorithm in ["mcuve", "cars", "spa", "rf"]:
+    for algorithm in ["mcuve", "cars", "lasso", "rf"]:
         for dataset in ["brazilian","lucas_skipped","lucas_full"]:
-            for size in [2, 5, 10, 20, 30]:
+            for size in [5, 10, 15, 20, 25, 30]:
                 tasks.append(
                     {
                         "dataset": dataset,
@@ -12,5 +12,5 @@ if __name__ == '__main__':
                         "algorithm": algorithm
                     }
                 )
-    ev = Evaluator(tasks,"mcsr.csv")
+    ev = Evaluator(tasks,"quick.csv")
     ev.evaluate()

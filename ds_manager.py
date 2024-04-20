@@ -12,7 +12,7 @@ class DSManager:
         np.random.seed(0)
         dataset_path = f"data/{dataset}.csv"
         df = pd.read_csv(dataset_path)
-        self.X_columns = DSManager.get_spectral_columns(df, self.dataset)
+        self.X_columns = DSManager.get_spectral_columns(df)
         self.y_column = DSManager.get_y_column(self.dataset)
         df = df[self.X_columns+[self.y_column]]
         df = df.sample(frac=1)
@@ -45,7 +45,7 @@ class DSManager:
         return wvs
 
     @staticmethod
-    def get_spectral_columns(df, dataset):
+    def get_spectral_columns(df):
         return list(df.columns)[1:]
 
     @staticmethod
@@ -64,6 +64,8 @@ class DSManager:
         return data
 
     def get_k_folds(self):
+        if self.folds == 1:
+            return self.get_train_test_X_y()
         kf = KFold(n_splits=self.folds)
         for i, (train_index, test_index) in enumerate(kf.split(self.full_data)):
             train_data = self.full_data[train_index]
@@ -89,5 +91,8 @@ class DSManager:
 
 
 if __name__ == "__main__":
-    d = DSManager(True, False)
+    d = DSManager("brazilian")
     print(d.full_data.shape)
+    d = DSManager("lucas_skipped",10)
+    for fold_number, (train_x, train_y, test_x, test_y) in enumerate(d.get_k_folds()):
+        print(fold_number, test_y[0])
