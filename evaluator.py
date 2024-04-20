@@ -9,7 +9,8 @@ import my_utils
 
 
 class Evaluator:
-    def __init__(self, tasks, filename="results.csv"):
+    def __init__(self, tasks, folds=1, filename="results.csv"):
+        self.folds = folds
         self.tasks = tasks
         self.filename = filename
         self.filename = os.path.join("results",self.filename)
@@ -26,7 +27,7 @@ class Evaluator:
             dataset = task["dataset"]
             target_feature_size = task["target_feature_size"]
             algorithm_name = task["algorithm"]
-            dataset = DSManager(dataset=dataset)
+            dataset = DSManager(dataset=dataset, folds=self.folds)
             if self.is_done(algorithm_name, dataset, target_feature_size):
                 print("Done already. Skipping.")
                 continue
@@ -35,7 +36,6 @@ class Evaluator:
                 r2_reduced_test, rmse_reduced_test, \
                 final_indices, selected_features = \
                 self.do_algorithm(algorithm_name, dataset, target_feature_size)
-
 
             with open(self.filename, 'a') as file:
                 file.write(
@@ -60,7 +60,6 @@ class Evaluator:
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         X_train, y_train, X_test, y_test = dataset.get_train_test_X_y()
         print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
-        #_, _, r2_original, rmse_original = Evaluator.get_metrics(algorithm_name, X_train, y_train, X_test, y_test)
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
         start_time = datetime.now()
         selected_features = algorithm.fit()
@@ -90,35 +89,3 @@ class Evaluator:
         print(f"r2 test {r2_test}")
 
         return r2_train, rmse_train, r2_test, rmse_test
-
-
-
-    # def do_pca(self,X_train, y_train, target_feature_size):
-    #     pca = PCA(n_components=target_feature_size)
-    #     pca.fit(X_train)
-    #     return pca,[]
-    #
-    # def do_pls(self,X_train, y_train, target_feature_size):
-    #     pls = PLSRegression(n_components=target_feature_size)
-    #     pls.fit(X_train, y_train)
-    #     return pls,[]
-    #
-    # def do_rfe(self,X_train, y_train, target_feature_size):
-    #     rfe = RFE(LinearRegression(), n_features_to_select=target_feature_size)
-    #     rfe.fit(X_train, y_train)
-    #     indices = np.where(rfe.get_support())[0]
-    #     return rfe, indices
-    #
-    # def do_kbest(self,X_train, y_train, target_feature_size):
-    #     kbest = SelectKBest(score_func=f_regression, k=target_feature_size)
-    #     kbest.fit(X_train, y_train)
-    #     indices = np.where(kbest.get_support())[0]
-    #     return kbest, indices
-    #
-    # def do_frommodel(self,X_train, y_train, target_feature_size):
-    #     selector = SelectFromModel(Evaluator.get_internal_model(), threshold='median', max_features=target_feature_size)
-    #     selector.fit(X_train, y_train)
-    #     indices = np.where(selector.get_support())[0]
-    #     return selector, indices
-
-

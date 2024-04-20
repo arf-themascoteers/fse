@@ -12,5 +12,5 @@ if __name__ == '__main__':
                         "algorithm": algorithm
                     }
                 )
-    ev = Evaluator(tasks)
+    ev = Evaluator(tasks,"mcsr.csv")
     ev.evaluate()

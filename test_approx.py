@@ -4,8 +4,8 @@ from ds_manager import DSManager
 from approximator import get_splines
 
 
-ds = DSManager(reduced_features=True, reduced_rows=True)
-X,y = ds.get_X_y()
+ds = DSManager(dataset="lucas_full")
+X,y = ds.get_all_X_y()
 X = torch.tensor(X, dtype=torch.float32)
 y = torch.tensor(y, dtype=torch.float32)
 splines = get_splines(X)
