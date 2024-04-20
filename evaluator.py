@@ -12,10 +12,11 @@ class Evaluator:
     def __init__(self, tasks, folds=1, filename="results.csv"):
         self.folds = folds
         self.tasks = tasks
-        self.filename = filename
-        self.filename = os.path.join("results",self.filename)
-        if not os.path.exists(self.filename):
-            with open(self.filename, 'w') as file:
+        self.summary_filename = filename
+        self.details_filename = f"details_{filename}.csv"
+        self.summary_filename = os.path.join("results", self.summary_filename)
+        if not os.path.exists(self.summary_filename):
+            with open(self.summary_filename, 'w') as file:
                 file.write("algorithm,rows,columns,time,target_size,final_size,"
                            "r2_train,r2_test,"
                            "rmse_train,rmse_test,"
@@ -31,7 +32,7 @@ class Evaluator:
             self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
-        df = pd.read_csv(self.filename)
+        df = pd.read_csv(self.summary_filename)
         if len(df) == 0:
             return False
         rows = df.loc[
@@ -44,10 +45,6 @@ class Evaluator:
 
     def do_algorithm(self, algorithm_name, dataset, target_feature_size):
         for fold_number, (X_train, y_train, X_test, y_test) in enumerate(dataset.get_k_folds()):
-            if self.is_done(algorithm_name, dataset, target_feature_size):
-                print("Done already. Skipping.")
-                continue
-            print(f"X_train,X_test: {X_train.shape} {X_test.shape}")
             algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_feature_size)
             start_time = datetime.now()
             selected_features = algorithm.fit()
@@ -57,7 +54,7 @@ class Evaluator:
             r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
                 Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
 
-            with open(self.filename, 'a') as file:
+            with open(self.summary_filename, 'a') as file:
                 file.write(
                     f"{algorithm_name},"
                     f"{dataset.count_rows()},"
