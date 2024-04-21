@@ -72,16 +72,13 @@ class Evaluator:
         selected_features = algorithm.fit()
         elapsed_time = (datetime.now() - start_time).total_seconds()
 
-        X_test_for_train = algorithm.transform(test_for_train_x)
-        X_test_for_test = algorithm.transform(test_for_test_x)
+        test_for_train_x = algorithm.transform(test_for_train_x)
+        test_for_test_x = algorithm.transform(test_for_test_x)
         algorithm.fit()
-        y_pred = algorithm.predict(X_test_for_test)
-        metric1, metric2 = Evaluator.calculate_metrics(dataset, test_for_test_y, y_pred)
-
+        metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y)
         with open(self.all_features_details_file, 'a') as file:
             file.write(f"{fold},{algorithm_name},{dataset},{target_size},"
-                       f"{X_test_for_test.shape[1]},{elapsed_time},{metric1},{metric2},{selected_features}\n")
-
+                       f"{test_for_test_x.shape[1]},{elapsed_time},{metric1},{metric2},{selected_features}\n")
         self.update_summary_for_dataset_target_fold_algorithm(dataset, target_size, algorithm_name)
 
     def update_summary_for_dataset_target_fold_algorithm(self, dataset, target_size, algorithm_name):
@@ -158,12 +155,16 @@ class Evaluator:
         if metric1 is not None and metric2 is not None:
             print(f"Fold {fold} for {dataset_name} was done")
             return
+        metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset_name, X_train, y_train, X_test, y_test)
+        with open(self.all_features_details_file, 'a') as file:
+            file.write(f"{fold},{dataset_name},{metric1},{metric2}\n")
+
+    @staticmethod
+    def evaluate_train_test_pair(dataset_name, X_train, y_train, X_test, y_test):
         algorithm = my_utils.get_metric_evaluator(dataset_name)
         algorithm.fit(X_train, y_train)
         y_pred = algorithm.predict(X_test)
-        metric1, metric2 = Evaluator.calculate_metrics(dataset_name, y_test, y_pred)
-        with open(self.all_features_details_file, 'a') as file:
-            file.write(f"{fold},{dataset_name},{metric1},{metric2}\n")
+        return Evaluator.calculate_metrics(dataset_name, y_test, y_pred)
 
     def get_saved_metrics_for_all_feature_set_fold(self, fold, dataset):
         df = pd.read_csv(self.all_features_details_file)
