@@ -22,14 +22,14 @@ for index, row in lucas_full.iterrows():
     signal = row.iloc[1:]
     short_signal, _, _, _, _, _, _ = pywt.wavedec(signal, 'db1', level=6)
     lucas_down.loc[len(lucas_down)] = [row.iloc[0]] + list(short_signal)
-lucas_down.to_csv(f"data/lucas_down.csv", index=False)
+lucas_down.to_csv(f"data/lucas_downsampled.csv", index=False)
 
 lucas_down_min = pd.DataFrame(columns=reduced_columns)
 for index, row in lucas_min.iterrows():
     signal = row.iloc[1:]
     short_signal, _, _, _, _, _, _ = pywt.wavedec(signal, 'db1', level=6)
     lucas_down_min.loc[len(lucas_down_min)] = [row.iloc[0]] + list(short_signal)
-lucas_down_min.to_csv(f"data/lucas_down_min.csv", index=False)
+lucas_down_min.to_csv(f"data/lucas_downsampled_min.csv", index=False)
 
 selected_indices = list(range(1,4201,64))
 lucas_skipped = pd.DataFrame(columns=reduced_columns)
