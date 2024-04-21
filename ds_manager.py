@@ -66,18 +66,19 @@ class DSManager:
 
     def get_k_folds(self):
         if self.folds == 1:
-            return self.get_all_set_X_y()
-        kf = KFold(n_splits=self.folds)
-        for i, (train_index, test_index) in enumerate(kf.split(self.full_data)):
-            train_data = self.full_data[train_index]
-            test_data = self.full_data[test_index]
-            yield self.split_train_validation_ev_parts(train_data, test_data)
+            yield self.get_all_set_X_y()
+        else:
+            kf = KFold(n_splits=self.folds)
+            for i, (train_index, test_index) in enumerate(kf.split(self.full_data)):
+                train_data = self.full_data[train_index]
+                test_data = self.full_data[test_index]
+                yield self.split_train_validation_ev_parts(train_data, test_data)
 
     def split_train_validation_ev_parts(self, train_data, test_data):
         train_data, validation_data = train_test_split(train_data, test_size=0.1, random_state=40)
         test_for_train_data, test_for_test_data = train_test_split(test_data, test_size=0.5, random_state=40)
         return (*DSManager.get_X_y_from_data(train_data),
-               *DSManager.get_X_y_from_data(train_data),
+               *DSManager.get_X_y_from_data(validation_data),
                *DSManager.get_X_y_from_data(test_for_train_data),
                *DSManager.get_X_y_from_data(test_for_test_data)
                )
@@ -101,15 +102,31 @@ class DSManager:
 
 
 if __name__ == "__main__":
-    d = DSManager("brazilian")
+    d = DSManager("lucas_skipped")
     print(d.full_data.shape)
+    d = DSManager("lucas_skipped",1)
+    for fold, (train_x, train_y, validation_x, validation_y, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(d.get_k_folds()):
+        print(fold)
+        print(train_x.shape)
+        print(train_y.shape)
+        print(validation_x.shape)
+        print(validation_y.shape)
+        print(test_for_train_x.shape)
+        print(test_for_train_y.shape)
+        print(test_for_test_x.shape)
+        print(test_for_test_y.shape)
+
+
     d = DSManager("lucas_skipped",10)
-    for fold_number, (train_x, train_y, validation_x, validation_y, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(d.get_k_folds()):
-        print(fold_number, train_x.shape)
-        print(fold_number, train_y.shape)
-        print(fold_number, validation_x.shape)
-        print(fold_number, validation_y.shape)
-        print(fold_number, test_for_train_x.shape)
-        print(fold_number, test_for_train_y.shape)
-        print(fold_number, test_for_test_x.shape)
-        print(fold_number, test_for_test_y.shape)
+    for fold, (train_x, train_y, validation_x, validation_y, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(d.get_k_folds()):
+        print(fold)
+        print(train_x.shape)
+        print(train_y.shape)
+        print(validation_x.shape)
+        print(validation_y.shape)
+        print(test_for_train_x.shape)
+        print(test_for_train_y.shape)
+        print(test_for_test_x.shape)
+        print(test_for_test_y.shape)
+        print("bye")
+        break

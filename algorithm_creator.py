@@ -21,43 +21,43 @@ from algorithms.algorithm_rf import AlgorithmRF
 
 class AlgorithmCreator:
     @staticmethod
-    def create(name, X_train, y_train, X_validation, y_validation, target_feature_size):
+    def create(name, target_feature_size, X_train, y_train, X_validation, y_validation):
         if name == "pca":
-            return AlgorithmPCA(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmPCA(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "lle":
-            return AlgorithmLLE(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmLLE(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "pcat95":
-            return AlgorithmPCAT95(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmPCAT95(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "rfe":
-            return AlgorithmRFE(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmRFE(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "fsdr":
-            return AlgorithmFSCR(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmFSCR(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "fscrns":
-            return AlgorithmFSCRNS(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmFSCRNS(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "sfs":
-            return AlgorithmSFS(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmSFS(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "sbs":
-            return AlgorithmSBS(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmSBS(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "fm":
-            return AlgorithmFM(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmFM(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "kbest":
-            return AlgorithmKBest(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmKBest(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "tbfi":
-            return AlgorithmTBFI(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmTBFI(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "pls":
-            return AlgorithmPLS(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmPLS(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "ex":
-            return AlgorithmEx(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmEx(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "mi":
-            return AlgorithmMI(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmMI(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "lasso":
-            return AlgorithmLasso(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmLasso(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "cars":
-            return AlgorithmCARS(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmCARS(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "spa":
-            return AlgorithmSPA(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmSPA(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "mcuve":
-            return AlgorithmMCUVE(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmMCUVE(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "rf":
-            return AlgorithmRF(X_train, y_train, X_validation, y_validation, target_feature_size)
+            return AlgorithmRF(target_feature_size, X_train, y_train, X_validation, y_validation)
 

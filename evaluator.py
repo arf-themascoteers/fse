@@ -7,7 +7,6 @@ import math
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import cohen_kappa_score
-from sklearn.model_selection import train_test_split
 import my_utils
 
 
@@ -46,19 +45,29 @@ class Evaluator:
             dataset = DSManager(name=dataset_name, folds=self.folds)
             self.evaluate_for_all_features(dataset)
             for target_feature_size in self.task.target_feature_sizes:
-                for fold_number, (X_train, y_train, X_test_for_train, y_test_for_train, X_test_for_test, y_test_for_test) in enumerate(dataset.get_k_folds()):
+                for fold, (train_x, train_y, validation_x, validation_y, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(dataset.get_k_folds()):
                     for algorithm in self.task.algorithms:
                         self.evaluate_for_dataset_target_fold_algorithm(
-                            dataset_name, target_feature_size, fold_number, algorithm, X_train, y_train, X_test_for_train, X_test_for_test, y_test_for_train, y_test_for_test)
+                            dataset_name, target_feature_size, fold, algorithm,
+                            train_x, train_y,
+                            validation_x, validation_y,
+                            test_for_train_x, test_for_train_y,
+                            test_for_test_x, test_for_test_y
+                        )
 
-    def evaluate_for_dataset_target_fold_algorithm(self, dataset, target_size, fold, algorithm_name, X_train, y_train, X_test_for_train, X_test_for_test, y_test_for_train, y_test_for_test):
-        time, target_size, final_size, metric1_train,metric1_test,metric2_train,metric2_test,selected_features = (
-            self.get_saved_metrics_dataset_target_fold_algorithm(dataset, target_size, fold, algorithm_name))
+    def evaluate_for_dataset_target_fold_algorithm(self,
+                                                   dataset, target_size, fold, algorithm_name,
+                                                   train_x, train_y,
+                                                   validation_x, validation_y,
+                                                   test_for_train_x, test_for_train_y,
+                                                   test_for_test_x, test_for_test_y
+                                                   ):
+        final_size, time, metric1, metric2, selected_features = self.get_saved_metrics_dataset_target_fold_algorithm(dataset, target_size, fold, algorithm_name)
         if time is not None:
             print(f"Fold {fold} for {dataset} for {algorithm_name} for size {target_size} was done")
             return
 
-        algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_size)
+        algorithm = AlgorithmCreator.create(algorithm_name, target_size, train_x, train_y, validation_x, validation_y)
         start_time = datetime.now()
         selected_features = algorithm.fit()
         elapsed_time = (datetime.now() - start_time).total_seconds()
@@ -97,11 +106,11 @@ class Evaluator:
         if len(rows) == 0:
             return None, None
         row = rows.iloc[0]
-        return row["time"], row["final_size"], row["metric1_train"], row["metric1_test"], row["metric2_train"], row["metric2_test"], row["selected_features"]
+        return row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"]
 
     def evaluate_for_all_features(self, dataset):
-        for fold_number, (X_train, y_train, X_test_for_train, y_test_for_train, X_test_for_test, y_test_for_test) in enumerate(dataset.get_k_folds()):
-            self.evaluate_for_all_features_fold(fold_number, dataset.name, X_test_for_train, y_test_for_train, X_test_for_test, y_test_for_test)
+        for fold, (_, _, _, _, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(dataset.get_k_folds()):
+            self.evaluate_for_all_features_fold(fold, dataset.name, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y)
         self.evaluate_for_all_features_summary(dataset.name)
 
     def evaluate_for_all_features_summary(self, dataset):

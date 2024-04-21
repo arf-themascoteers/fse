@@ -3,8 +3,8 @@ from sklearn.feature_selection import SelectKBest, f_regression
 
 
 class AlgorithmKBest(Algorithm):
-    def __init__(self, X_train, y_train, X_validation, y_validation, target_feature_size):
-        super().__init__(X_train, y_train, X_validation, y_validation, target_feature_size)
+    def __init__(self, target_feature_size, X_train, y_train, X_validation, y_validation):
+        super().__init__(target_feature_size, X_train, y_train, X_validation, y_validation)
 
     def get_selected_indices(self):
         selector = SelectKBest(score_func=f_regression, k=self.target_feature_size)
