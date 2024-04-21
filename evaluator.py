@@ -9,9 +9,9 @@ import my_utils
 
 
 class Evaluator:
-    def __init__(self, tasks, folds=1, filename="results.csv"):
+    def __init__(self, task, folds=1, filename="results.csv"):
+        self.task = task
         self.folds = folds
-        self.tasks = tasks
         self.summary_filename = filename
         self.details_filename = f"details_{filename}.csv"
         self.summary_filename = os.path.join("results", self.summary_filename)
@@ -23,13 +23,14 @@ class Evaluator:
                            "selected_features\n")
 
     def evaluate(self):
-        for task in self.tasks:
-            print(task)
-            dataset = task["dataset"]
-            target_feature_size = task["target_feature_size"]
-            algorithm_name = task["algorithm"]
-            dataset = DSManager(dataset=dataset, folds=self.folds)
-            self.do_algorithm(algorithm_name, dataset, target_feature_size)
+        for dataset in self.task.datasets:
+            for target_feature_size in self.task.target_feature_sizes:
+                self.evaluate_dataset_target_feature_size(dataset, target_feature_size)
+
+    def evaluate_dataset_target_feature_size(self, dataset, target_feature_size):
+        dataset = DSManager(dataset=dataset, folds=self.folds)
+
+        self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
         df = pd.read_csv(self.summary_filename)
