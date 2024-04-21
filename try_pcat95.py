@@ -4,7 +4,7 @@ from algorithms.algorithm_pcat95 import AlgorithmPCAT95
 from sklearn.ensemble import RandomForestRegressor
 
 ds = DSManager(reduced_features=True,reduced_rows=True)
-train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
+train_X, train_y, test_X, test_y = ds.get_all_set_X_y()
 
 rf = RandomForestRegressor()
 rf.fit(train_X, train_y)

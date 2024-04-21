@@ -4,7 +4,7 @@ from ds_manager import DSManager
 from sklearn.linear_model import LinearRegression
 
 ds = DSManager(name="demmin")
-train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
+train_X, train_y, test_X, test_y = ds.get_all_set_X_y()
 
 
 pca = PCA(n_components=7)

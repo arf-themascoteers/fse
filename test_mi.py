@@ -7,7 +7,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 d = DSManager(reduced_features=True, reduced_rows=True)
 mlr = LinearRegression()
-trainx, trainy, testx, testy = d.get_train_test_X_y()
+trainx, trainy, testx, testy = d.get_all_set_X_y()
 
 mi_scores = mutual_info_regression(trainx, trainy)
 k = 5

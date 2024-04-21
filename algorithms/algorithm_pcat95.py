@@ -3,8 +3,8 @@ from sklearn.decomposition import PCA
 
 
 class AlgorithmPCAT95(Algorithm):
-    def __init__(self, X_train, y_train, target_feature_size):
-        super().__init__(X_train, y_train, target_feature_size)
+    def __init__(self, X_train, y_train, X_validation, y_validation, target_feature_size):
+        super().__init__(X_train, y_train, X_validation, y_validation, target_feature_size)
 
     def get_selected_indices(self):
         pcat95 = PCA(n_components=0.95)

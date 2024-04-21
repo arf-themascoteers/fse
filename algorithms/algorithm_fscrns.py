@@ -3,8 +3,8 @@ from algorithms.fscr.fscr import FSCR
 
 
 class AlgorithmFSCRNS(Algorithm):
-    def __init__(self, X_train, y_train, target_feature_size):
-        super().__init__(X_train, y_train, target_feature_size)
+    def __init__(self, X_train, y_train, X_validation, y_validation, target_feature_size):
+        super().__init__(X_train, y_train, X_validation, y_validation, target_feature_size)
 
     def get_selected_indices(self):
         fscr = FSCR(self.X_train.shape[0], self.target_feature_size, False)

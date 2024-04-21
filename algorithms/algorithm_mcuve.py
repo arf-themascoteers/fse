@@ -3,8 +3,8 @@ from auswahl import MCUVE
 
 
 class AlgorithmMCUVE(Algorithm):
-    def __init__(self, X_train, y_train, target_feature_size):
-        super().__init__(X_train, y_train, target_feature_size)
+    def __init__(self, X_train, y_train, X_validation, y_validation, target_feature_size):
+        super().__init__(X_train, y_train, X_validation, y_validation, target_feature_size)
 
     def get_selected_indices(self):
         selector = MCUVE(n_features_to_select=self.target_feature_size)

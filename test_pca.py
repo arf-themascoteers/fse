@@ -5,7 +5,7 @@ import my_utils
 import numpy as np
 
 ds = DSManager(reduced_features=False,reduced_rows=False)
-train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
+train_X, train_y, test_X, test_y = ds.get_all_set_X_y()
 alg = AlgorithmPCA(train_X, train_y, 10)
 pca, features = alg.get_selected_indices()
 explained_variance_ratios = pca.explained_variance_ratio_

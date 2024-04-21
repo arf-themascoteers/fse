@@ -21,43 +21,43 @@ from algorithms.algorithm_rf import AlgorithmRF
 
 class AlgorithmCreator:
     @staticmethod
-    def create(name, X_train, y_train, target_feature_size):
+    def create(name, X_train, y_train, X_validation, y_validation, target_feature_size):
         if name == "pca":
-            return AlgorithmPCA(X_train, y_train, target_feature_size)
+            return AlgorithmPCA(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "lle":
-            return AlgorithmLLE(X_train, y_train, target_feature_size)
+            return AlgorithmLLE(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "pcat95":
-            return AlgorithmPCAT95(X_train, y_train, target_feature_size)
+            return AlgorithmPCAT95(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "rfe":
-            return AlgorithmRFE(X_train, y_train, target_feature_size)
+            return AlgorithmRFE(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "fsdr":
-            return AlgorithmFSCR(X_train, y_train, target_feature_size)
+            return AlgorithmFSCR(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "fscrns":
-            return AlgorithmFSCRNS(X_train, y_train, target_feature_size)
+            return AlgorithmFSCRNS(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "sfs":
-            return AlgorithmSFS(X_train, y_train, target_feature_size)
+            return AlgorithmSFS(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "sbs":
-            return AlgorithmSBS(X_train, y_train, target_feature_size)
+            return AlgorithmSBS(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "fm":
-            return AlgorithmFM(X_train, y_train, target_feature_size)
+            return AlgorithmFM(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "kbest":
-            return AlgorithmKBest(X_train, y_train, target_feature_size)
+            return AlgorithmKBest(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "tbfi":
-            return AlgorithmTBFI(X_train, y_train, target_feature_size)
+            return AlgorithmTBFI(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "pls":
-            return AlgorithmPLS(X_train, y_train, target_feature_size)
+            return AlgorithmPLS(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "ex":
-            return AlgorithmEx(X_train, y_train, target_feature_size)
+            return AlgorithmEx(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "mi":
-            return AlgorithmMI(X_train, y_train, target_feature_size)
+            return AlgorithmMI(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "lasso":
-            return AlgorithmLasso(X_train, y_train, target_feature_size)
+            return AlgorithmLasso(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "cars":
-            return AlgorithmCARS(X_train, y_train, target_feature_size)
+            return AlgorithmCARS(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "spa":
-            return AlgorithmSPA(X_train, y_train, target_feature_size)
+            return AlgorithmSPA(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "mcuve":
-            return AlgorithmMCUVE(X_train, y_train, target_feature_size)
+            return AlgorithmMCUVE(X_train, y_train, X_validation, y_validation, target_feature_size)
         elif name == "rf":
-            return AlgorithmRF(X_train, y_train, target_feature_size)
+            return AlgorithmRF(X_train, y_train, X_validation, y_validation, target_feature_size)
 

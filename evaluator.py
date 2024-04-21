@@ -27,17 +27,11 @@ class Evaluator:
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("algorithm,dataset,time,target_size,final_size,"
-                           "metric1_train,metric1_test,"
-                           "metric2_train,metric2_test,"
-                           "selected_features\n")
+                file.write("algorithm,dataset,target_size,final_size,time,metric1,metric2,selected_features\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("fold,algorithm,dataset,time,target_size,final_size,"
-                           "metric1_train,metric1_test,"
-                           "metric2_train,metric2_test,"
-                           "selected_features\n")
+                file.write("fold,algorithm,dataset,target_size,final_size,time,metric1,metric2,selected_features\n")
 
         if not os.path.exists(self.all_features_summary_file):
             with open(self.all_features_summary_file, 'w') as file:
@@ -52,8 +46,7 @@ class Evaluator:
             dataset = DSManager(name=dataset_name, folds=self.folds)
             self.evaluate_for_all_features(dataset)
             for target_feature_size in self.task.target_feature_sizes:
-                for fold_number, (X_train, y_train, X_test, y_test) in enumerate(dataset.get_k_folds()):
-                    X_test_for_train, X_test_for_test, y_test_for_train, y_test_for_test = train_test_split(X_test, y_test, test_size=0.5, random_state=40)
+                for fold_number, (X_train, y_train, X_test_for_train, y_test_for_train, X_test_for_test, y_test_for_test) in enumerate(dataset.get_k_folds()):
                     for algorithm in self.task.algorithms:
                         self.evaluate_for_dataset_target_fold_algorithm(
                             dataset_name, target_feature_size, fold_number, algorithm, X_train, y_train, X_test_for_train, X_test_for_test, y_test_for_train, y_test_for_test)
@@ -107,8 +100,8 @@ class Evaluator:
         return row["time"], row["final_size"], row["metric1_train"], row["metric1_test"], row["metric2_train"], row["metric2_test"], row["selected_features"]
 
     def evaluate_for_all_features(self, dataset):
-        for fold_number, (X_train, y_train, X_test, y_test) in enumerate(dataset.get_k_folds()):
-            self.evaluate_for_all_features_fold(fold_number, dataset.name, X_train, y_train, X_test, y_test)
+        for fold_number, (X_train, y_train, X_test_for_train, y_test_for_train, X_test_for_test, y_test_for_test) in enumerate(dataset.get_k_folds()):
+            self.evaluate_for_all_features_fold(fold_number, dataset.name, X_test_for_train, y_test_for_train, X_test_for_test, y_test_for_test)
         self.evaluate_for_all_features_summary(dataset.name)
 
     def evaluate_for_all_features_summary(self, dataset):
