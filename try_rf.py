@@ -4,7 +4,7 @@ from ds_manager import DSManager
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 
-ds = DSManager(dataset="brazilian")
+ds = DSManager(name="brazilian")
 train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
 print(train_X.shape[0])
 print(test_X.shape[0])

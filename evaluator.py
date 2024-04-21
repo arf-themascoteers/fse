@@ -13,11 +13,32 @@ class Evaluator:
         self.task = task
         self.folds = folds
         self.summary_filename = filename
-        self.details_filename = f"details_{filename}.csv"
-        self.summary_filename = os.path.join("results", self.summary_filename)
-        if not os.path.exists(self.summary_filename):
-            with open(self.summary_filename, 'w') as file:
-                file.write("algorithm,rows,columns,time,target_size,final_size,"
+        self.details_filename = f"details_{self.summary_filename}.csv"
+        self.all_features_details_filename = f"all_features_details_{self.summary_filename}.csv"
+        self.all_features_summary_filename = f"all_features_summary_{self.summary_filename}.csv"
+
+        self.summary_file = os.path.join("results", self.summary_filename)
+        self.details_file = os.path.join("results", self.details_filename)
+        self.all_features_details_file = os.path.join("results", self.all_features_details_filename)
+        self.all_features_summary_file = os.path.join("results", self.all_features_summary_filename)
+
+        if not os.path.exists(self.summary_file):
+            with open(self.summary_file, 'w') as file:
+                file.write("algorithm,dataset,time,target_size,final_size,"
+                           "r2_train,r2_test,"
+                           "rmse_train,rmse_test,"
+                           "selected_features\n")
+
+        if not os.path.exists(self.details_file):
+            with open(self.summary_file, 'w') as file:
+                file.write("fold,algorithm,dataset,time,target_size,final_size,"
+                           "r2_train,r2_test,"
+                           "rmse_train,rmse_test,"
+                           "selected_features\n")
+
+        if not os.path.exists(self.details_file):
+            with open(self.summary_file, 'w') as file:
+                file.write("fold,algorithm,dataset,time,target_size,final_size,"
                            "r2_train,r2_test,"
                            "rmse_train,rmse_test,"
                            "selected_features\n")
@@ -27,13 +48,13 @@ class Evaluator:
             for target_feature_size in self.task.target_feature_sizes:
                 self.evaluate_dataset_target_feature_size(dataset, target_feature_size)
 
-    def evaluate_dataset_target_feature_size(self, dataset, target_feature_size):
-        dataset = DSManager(dataset=dataset, folds=self.folds)
-
+    def evaluate_dataset_target_feature_size(self, dataset_name, target_feature_size):
+        dataset = DSManager(name=dataset_name, folds=self.folds)
+        Evaluator.get_metrics(dataset)
         self.do_algorithm(algorithm_name, dataset, target_feature_size)
 
     def is_done(self,algorithm_name,dataset,target_feature_size):
-        df = pd.read_csv(self.summary_filename)
+        df = pd.read_csv(self.summary_file)
         if len(df) == 0:
             return False
         rows = df.loc[
@@ -55,7 +76,7 @@ class Evaluator:
             r2_reduced_train, rmse_reduced_train, r2_reduced_test, rmse_reduced_test = \
                 Evaluator.get_metrics(algorithm_name, X_train_reduced, y_train, X_test_reduced, y_test)
 
-            with open(self.summary_filename, 'a') as file:
+            with open(self.summary_file, 'a') as file:
                 file.write(
                     f"{algorithm_name},"
                     f"{dataset.count_rows()},"
@@ -69,10 +90,9 @@ class Evaluator:
                     f"{rmse_reduced_test},"
                     f"{';'.join(str(i) for i in selected_features)}\n")
 
+    def get_metrics(self, dataset):
+        metric_evaluator = my_utils.get_metric_evaluator(dataset)
 
-    @staticmethod
-    def get_metrics(algorithm_name, X_train, y_train, X_test, y_test):
-        metric_evaluator = my_utils.get_metric_evaluator(algorithm_name, X_train)
         metric_evaluator.fit(X_train, y_train)
 
         y_pred = metric_evaluator.predict(X_train)

@@ -6,14 +6,14 @@ from sklearn.model_selection import KFold
 
 
 class DSManager:
-    def __init__(self,dataset, folds=1):
-        self.dataset = dataset
+    def __init__(self, name, folds=1):
+        self.name = name
         self.folds = folds
         np.random.seed(0)
-        dataset_path = f"data/{dataset}.csv"
+        dataset_path = f"data/{name}.csv"
         df = pd.read_csv(dataset_path)
         self.X_columns = DSManager.get_spectral_columns(df)
-        self.y_column = DSManager.get_y_column(self.dataset)
+        self.y_column = DSManager.get_y_column(self.name)
         df = df[self.X_columns+[self.y_column]]
         df = df.sample(frac=1)
         self.full_data = df.to_numpy()
@@ -23,7 +23,7 @@ class DSManager:
         return self.get_name()
 
     def get_name(self):
-        return self.dataset
+        return self.name
 
     def count_rows(self):
         return self.full_data.shape[0]

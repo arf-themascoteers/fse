@@ -3,7 +3,7 @@ import numpy as np
 from ds_manager import DSManager
 from sklearn.linear_model import LinearRegression
 
-ds = DSManager(dataset="demmin")
+ds = DSManager(name="demmin")
 train_X, train_y, test_X, test_y = ds.get_train_test_X_y()
 
 
