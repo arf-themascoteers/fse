@@ -15,9 +15,9 @@ class Evaluator:
         self.task = task
         self.folds = folds
         self.summary_filename = filename
-        self.details_filename = f"details_{self.summary_filename}.csv"
-        self.all_features_details_filename = f"all_features_details_{self.summary_filename}.csv"
-        self.all_features_summary_filename = f"all_features_summary_{self.summary_filename}.csv"
+        self.details_filename = f"details_{self.summary_filename}"
+        self.all_features_details_filename = f"all_features_details_{self.summary_filename}"
+        self.all_features_summary_filename = f"all_features_summary_{self.summary_filename}"
 
         self.summary_file = os.path.join("results", self.summary_filename)
         self.details_file = os.path.join("results", self.details_filename)

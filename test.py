@@ -7,9 +7,9 @@ if __name__ == '__main__':
         "target_feature_sizes" : [5, 10, 15, 20, 25, 30]
     }
     tasks = {
-        "algorithms" : ["mcuve", "lasso"],
-        "datasets" : ["brazilian", "lucas_skipped"],
-        "target_feature_sizes" : [5, 10]
+        "algorithms" : ["lasso", "mi"],
+        "datasets" : ["brazilian", "lucas_skipped_min"],
+        "target_feature_sizes" : [2, 5]
     }
     ev = Evaluator(tasks,5,"quick.csv")
     ev.evaluate()
