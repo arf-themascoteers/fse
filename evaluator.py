@@ -72,26 +72,46 @@ class Evaluator:
         selected_features = algorithm.fit()
         elapsed_time = (datetime.now() - start_time).total_seconds()
 
-        X_test_for_train = algorithm.transform(X_test_for_train)
-        X_test_for_test = algorithm.transform(X_test_for_test)
-        algorithm.fit(X_test_for_train, y_test_for_train)
+        X_test_for_train = algorithm.transform(test_for_train_x)
+        X_test_for_test = algorithm.transform(test_for_test_x)
+        algorithm.fit(X_test_for_train, test_for_train_y)
         y_pred = algorithm.predict(X_test_for_test)
-        metric1_train, metric2_train = Evaluator.calculate_metrics(dataset, y_test_for_test, y_pred)
+        metric1, metric2 = Evaluator.calculate_metrics(dataset, test_for_test_y, y_pred)
 
+        with open(self.all_features_details_file, 'a') as file:
+            file.write(f"{fold},{algorithm_name},{dataset},{target_size},"
+                       f"{X_test_for_test.shape[1]},{elapsed_time},{metric1},{metric2},{selected_features}\n")
 
-        with open(self.summary_file, 'a') as file:
-            file.write(
-                f"{algorithm_name},"
-                f"{dataset.count_rows()},"
-                f"{dataset.count_features()},"
-                f"{round(elapsed_time, 2)},"
-                f"{len(selected_features)},"
-                f"{selected_features},"
-                f"{metric1_reduced_train},"
-                f"{metric1_reduced_test},"
-                f"{metric2_reduced_train},"
-                f"{metric2_reduced_test},"
-                f"{';'.join(str(i) for i in selected_features)}\n")
+    def update_summary_for_dataset_target_fold_algorithm(self, dataset, target_size, algorithm_name):
+        df = pd.read_csv(self.details_file)
+        df = df[
+            (df["dataset"] == dataset) &
+            (df["target_size"] == target_size) &
+            (df["algorithm"] == algorithm_name)
+            ]
+        if len(df) == 0:
+            return
+
+        final_size = round(df["final_size"].mean(), 2)
+        time = round(df["time"].mean(), 2)
+        metric1 = round(df["metric1"].mean(), 2)
+        metric2 = round(df["metric2"].mean(), 2)
+        selected_features = '||'.join(df['selected_features'])
+
+        df2 = pd.read_csv(self.summary_file)
+        mask = ((df2["dataset"] == dataset) & (df2["target_size"] == target_size) & (df2["algorithm"] == algorithm_name))
+        if len(df2[mask]) == 0:
+            df2.loc[len(df2)] = {
+                "dataset":dataset, "target_size":target_size, "algorithm": algorithm_name,
+                "final_size":final_size,"time":time,"metric1":metric1,"metric2":metric2
+            }
+        else:
+            df2.loc[mask, 'final_size'] = final_size
+            df2.loc[mask, 'time'] = time
+            df2.loc[mask, 'metric1'] = metric1
+            df2.loc[mask, 'metric2'] = metric2
+            df2.loc[mask, 'selected_features'] = selected_features
+        df2.to_csv(self.all_features_summary_file, index=False)
 
     def get_saved_metrics_dataset_target_fold_algorithm(self, dataset, target_size, fold, algorithm):
         df = pd.read_csv(self.details_file)
@@ -111,17 +131,25 @@ class Evaluator:
     def evaluate_for_all_features(self, dataset):
         for fold, (_, _, _, _, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(dataset.get_k_folds()):
             self.evaluate_for_all_features_fold(fold, dataset.name, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y)
-        self.evaluate_for_all_features_summary(dataset.name)
+        self.update_for_all_features_summary(dataset.name)
 
-    def evaluate_for_all_features_summary(self, dataset):
+    def update_for_all_features_summary(self, dataset):
         df = pd.read_csv(self.all_features_details_file)
         df = df[df["dataset"] == dataset]
+        if len(df) == 0:
+            return
+
         metric1 = round(df["metric1"].mean(),2)
         metric2 = round(df["metric2"].mean(),2)
 
         df2 = pd.read_csv(self.all_features_summary_file)
-        df2.loc[df['dataset'] == dataset, 'metric1'] = metric1
-        df2.loc[df['dataset'] == dataset, 'metric2'] = metric2
+        mask = (df2['dataset'] == dataset)
+        if len(df[mask]) == 0:
+            df2.loc[len(df2)] = {"dataset":dataset, "metric1":metric1, "metric2": metric2}
+        else:
+            df2.loc[mask, 'metric1'] = metric1
+            df2.loc[mask, 'metric2'] = metric2
+        df2.to_csv(self.all_features_summary_file, index=False)
 
     def evaluate_for_all_features_fold(self, fold, dataset_name, X_train, y_train, X_test, y_test):
         metric1, metric2 = self.get_saved_metrics_for_all_feature_set_fold(fold, dataset_name)
@@ -153,26 +181,15 @@ class Evaluator:
 
     @staticmethod
     def calculate_metrics_for_classification(y_test, y_pred):
-        accuracy = round(accuracy_score(y_test, y_pred),2)
-        kappa = round(cohen_kappa_score(y_test, y_pred), 2)
+        accuracy = accuracy_score(y_test, y_pred)
+        kappa = cohen_kappa_score(y_test, y_pred)
         return accuracy, kappa
 
     @staticmethod
     def calculate_metrics_for_regression(y_test, y_pred):
-        r2 = round(r2_score(y_test, y_pred), 2)
-        rmse = round(math.sqrt(mean_squared_error(y_test, y_pred)), 2)
+        r2 = r2_score(y_test, y_pred)
+        rmse = math.sqrt(mean_squared_error(y_test, y_pred))
         return r2, rmse
 
 
-    def is_done(self,algorithm_name,dataset,target_feature_size):
-        df = pd.read_csv(self.summary_file)
-        if len(df) == 0:
-            return False
-        rows = df.loc[
-            (df['algorithm'] == algorithm_name) &
-            (df['rows'] == dataset.count_rows()) &
-            (df['columns'] == dataset.count_features()) &
-            (df['target_size'] == target_feature_size)
-        ]
-        return len(rows) != 0
 
