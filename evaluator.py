@@ -82,6 +82,8 @@ class Evaluator:
             file.write(f"{fold},{algorithm_name},{dataset},{target_size},"
                        f"{X_test_for_test.shape[1]},{elapsed_time},{metric1},{metric2},{selected_features}\n")
 
+        self.update_summary_for_dataset_target_fold_algorithm(dataset, target_size, algorithm_name)
+
     def update_summary_for_dataset_target_fold_algorithm(self, dataset, target_size, algorithm_name):
         df = pd.read_csv(self.details_file)
         df = df[
