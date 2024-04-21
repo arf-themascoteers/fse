@@ -41,12 +41,12 @@ class Evaluator:
                 file.write("fold,dataset,metric1,metric2\n")
 
     def evaluate(self):
-        for dataset_name in self.task.datasets:
+        for dataset_name in self.task["datasets"]:
             dataset = DSManager(name=dataset_name, folds=self.folds)
             self.evaluate_for_all_features(dataset)
-            for target_feature_size in self.task.target_feature_sizes:
+            for target_feature_size in self.task["target_feature_sizes"]:
                 for fold, (train_x, train_y, validation_x, validation_y, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(dataset.get_k_folds()):
-                    for algorithm in self.task.algorithms:
+                    for algorithm in self.task["algorithms"]:
                         self.evaluate_for_dataset_target_fold_algorithm(
                             dataset_name, target_feature_size, fold, algorithm,
                             train_x, train_y,
@@ -74,7 +74,7 @@ class Evaluator:
 
         X_test_for_train = algorithm.transform(test_for_train_x)
         X_test_for_test = algorithm.transform(test_for_test_x)
-        algorithm.fit(X_test_for_train, test_for_train_y)
+        algorithm.fit()
         y_pred = algorithm.predict(X_test_for_test)
         metric1, metric2 = Evaluator.calculate_metrics(dataset, test_for_test_y, y_pred)
 
@@ -118,7 +118,7 @@ class Evaluator:
     def get_saved_metrics_dataset_target_fold_algorithm(self, dataset, target_size, fold, algorithm):
         df = pd.read_csv(self.details_file)
         if len(df) == 0:
-            return None, None
+            return None, None, None, None, None
         rows = df.loc[
             (df["dataset"] == dataset) &
             (df["target_size"] == target_size) &
@@ -126,7 +126,7 @@ class Evaluator:
             (df["algorithm"] == algorithm)
             ]
         if len(rows) == 0:
-            return None, None
+            return None, None, None, None, None
         row = rows.iloc[0]
         return row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"]
 
@@ -146,7 +146,7 @@ class Evaluator:
 
         df2 = pd.read_csv(self.all_features_summary_file)
         mask = (df2['dataset'] == dataset)
-        if len(df[mask]) == 0:
+        if len(df2[mask]) == 0:
             df2.loc[len(df2)] = {"dataset":dataset, "metric1":metric1, "metric2": metric2}
         else:
             df2.loc[mask, 'metric1'] = metric1
