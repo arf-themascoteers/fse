@@ -11,7 +11,7 @@ lucas_full.to_csv("data/lucas_full.csv", index=False)
 
 lucas_full = pd.read_csv("data/lucas_full.csv")
 
-lucas_min = lucas_full.sample(frac=0.04, random_state=10)
+lucas_min = lucas_full.sample(frac=0.04, random_state=40)
 lucas_min.to_csv("data/lucas_min.csv", index=False)
 
 lucas_min = pd.read_csv("data/lucas_min.csv")

@@ -82,7 +82,7 @@ class DSManager:
         return x, y
 
     def get_train_test(self):
-        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.3, random_state=2)
+        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.3, random_state=40)
         return train_data, test_data
 
     def get_train_test_X_y(self):

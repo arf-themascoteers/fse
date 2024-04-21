@@ -7,6 +7,7 @@ import math
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import cohen_kappa_score
+from sklearn.model_selection import train_test_split
 import my_utils
 
 
@@ -52,36 +53,29 @@ class Evaluator:
             self.evaluate_for_all_features(dataset)
             for target_feature_size in self.task.target_feature_sizes:
                 for fold_number, (X_train, y_train, X_test, y_test) in enumerate(dataset.get_k_folds()):
+                    X_test_for_train, X_test_for_test, y_test_for_train, y_test_for_test = train_test_split(X_test, y_test, test_size=0.5, random_state=40)
                     for algorithm in self.task.algorithms:
                         self.evaluate_for_dataset_target_fold_algorithm(
-                            dataset_name, target_feature_size, fold_number, algorithm, X_train, y_train, X_test, y_test)
+                            dataset_name, target_feature_size, fold_number, algorithm, X_train, y_train, X_test_for_train, X_test_for_test, y_test_for_train, y_test_for_test)
 
-    def evaluate_for_dataset_target_fold_algorithm( self, dataset, target_size, fold, algorithm, X_train, y_train, X_test, y_test):
+    def evaluate_for_dataset_target_fold_algorithm(self, dataset, target_size, fold, algorithm_name, X_train, y_train, X_test_for_train, X_test_for_test, y_test_for_train, y_test_for_test):
         time, target_size, final_size, metric1_train,metric1_test,metric2_train,metric2_test,selected_features = (
-            self.get_saved_metrics_dataset_target_fold_algorithm(dataset, target_size, fold, algorithm))
-        if metric1 is not None and metric2 is not None:
-            print(f"Fold {fold} for {dataset} for {algorithm} for size {target_size} was done")
+            self.get_saved_metrics_dataset_target_fold_algorithm(dataset, target_size, fold, algorithm_name))
+        if time is not None:
+            print(f"Fold {fold} for {dataset} for {algorithm_name} for size {target_size} was done")
             return
-        ev_algorithm = my_utils.get_metric_evaluator(dataset)
-        ev_algorithm.fit(X_train, y_train)
-        y_pred = algorithm.predict(X_test)
-        metric1, metric2 = Evaluator.calculate_metrics(dataset, y_test, y_pred)
-        with open(self.all_features_details_file, 'a') as file:
-            file.write(f"{fold},{dataset},{metric1},{metric2}\n")
-
-        
-        metric1 = round(df["metric1"].mean(), 2)
-        metric2 = round(df["metric2"].mean(), 2)
 
         algorithm = AlgorithmCreator.create(algorithm_name, X_train, y_train, target_size)
         start_time = datetime.now()
         selected_features = algorithm.fit()
         elapsed_time = (datetime.now() - start_time).total_seconds()
-        X_train_reduced = algorithm.transform(X_train)
-        X_test_reduced = algorithm.transform(X_test)
-        metric1_reduced_train, metric2_reduced_train, metric1_reduced_test, metric2_reduced_test = \
-            Evaluator.evaluate_for_all_features_fold(algorithm_name, X_train_reduced, y_train,
-                                                     X_test_reduced, y_test)
+
+        X_test_for_train = algorithm.transform(X_test_for_train)
+        X_test_for_test = algorithm.transform(X_test_for_test)
+        algorithm.fit(X_test_for_train, y_test_for_train)
+        y_pred = algorithm.predict(X_test_for_test)
+        metric1_train, metric2_train = Evaluator.calculate_metrics(dataset, y_test_for_test, y_pred)
+
 
         with open(self.summary_file, 'a') as file:
             file.write(

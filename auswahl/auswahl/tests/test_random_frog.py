@@ -43,7 +43,7 @@ def test_reproducible_run(data):
     X, y = data
 
     # Passing an int for the random state has to result in the same outcome for each call of the fit method
-    selector = RandomFrog(n_features_to_select=2, n_iterations=100, random_state=42)
+    selector = RandomFrog(n_features_to_select=2, n_iterations=100, random_state=40)
     frequencies1 = selector.fit(X, y).frequencies_.copy()
     frequencies2 = selector.fit(X, y).frequencies_
     assert_array_equal(frequencies1, frequencies2)
@@ -88,7 +88,7 @@ def test_reproducible_run_interval_random_frog(interval_data):
     X, y = interval_data
 
     # Passing an int for the random state has to result in the same outcome for each call of the fit method
-    selector = IntervalRandomFrog(n_intervals_to_select=2, interval_width=2, n_iterations=100, random_state=42)
+    selector = IntervalRandomFrog(n_intervals_to_select=2, interval_width=2, n_iterations=100, random_state=40)
     frequencies1 = selector.fit(X, y).frequencies_.copy()
     frequencies2 = selector.fit(X, y).frequencies_
     assert_array_equal(frequencies1, frequencies2)

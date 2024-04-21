@@ -23,7 +23,7 @@ result = benchmark([(X, y, 'data_example', 0.8)],
                    features=[i for i in range(1, 10)],
                    methods=[vip, mcuve, cars],
                    n_runs=10,
-                   random_state=42,
+                   random_state=40,
                    stab_metrics=[DengScore(), ZucknickScore(correlation_threshold=0.8)],
                    n_jobs=5,
                    verbose=False)

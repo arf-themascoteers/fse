@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 def plot_demmin():
     df = pd.read_csv(r"data/demmin.csv")
-    df = df.sample(frac=0.1, random_state=2)
+    df = df.sample(frac=0.1, random_state=40)
     data = df.iloc[:,1:].to_numpy()
     x = list(range(data.shape[1]))
     for i in range(data.shape[0]):
@@ -18,7 +18,7 @@ def plot_demmin():
 
 def plot_lucas():
     df = pd.read_csv(r"data/lucas_min.csv")
-    df = df.sample(frac=0.01, random_state=2)
+    df = df.sample(frac=0.01, random_state=40)
     data = df.iloc[:,1:].to_numpy()
     x = list(range(data.shape[1]))
     for i in range(data.shape[0]):
@@ -31,7 +31,7 @@ def plot_lucas():
 
 def plot_brazilian():
     df = pd.read_csv(r"data/brazilian.csv")
-    df = df.sample(frac=0.05, random_state=2)
+    df = df.sample(frac=0.05, random_state=40)
     data = df.iloc[:,1:].to_numpy()
     x = list(range(data.shape[1]))
     for i in range(data.shape[0]):

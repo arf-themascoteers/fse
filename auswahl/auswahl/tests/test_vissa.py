@@ -30,7 +30,7 @@ def test_reproducible_run(data):
     X, y = data
 
     # Passing an int for the random state has to result in the same outcome for each call of the fit method
-    selector = VISSA(n_features_to_select=2, random_state=42, n_submodels=100)
+    selector = VISSA(n_features_to_select=2, random_state=40, n_submodels=100)
     weights1 = selector.fit(X, y).frequency_.copy()
     weights2 = selector.fit(X, y).frequency_
     assert_array_equal(weights1, weights2)

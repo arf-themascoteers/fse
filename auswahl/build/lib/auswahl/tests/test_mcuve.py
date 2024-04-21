@@ -31,7 +31,7 @@ def test_reproducible_run(data):
     X, y = data
 
     # Passing an int for the random state has to result in the same outcome for each call of the fit method
-    selector = MCUVE(n_features_to_select=2, random_state=42)
+    selector = MCUVE(n_features_to_select=2, random_state=40)
     stability1 = selector.fit(X, y).stability_.copy()
     stability2 = selector.fit(X, y).stability_
     assert_array_almost_equal(stability1, stability2)
