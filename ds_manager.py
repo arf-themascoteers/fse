@@ -11,7 +11,6 @@ class DSManager:
     def __init__(self, name, folds=1):
         self.name = name
         self.folds = folds
-        np.random.seed(0)
         dataset_path = f"data/{name}.csv"
         df = pd.read_csv(dataset_path)
         self.X_columns = DSManager.get_spectral_columns(df)

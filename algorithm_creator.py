@@ -3,7 +3,7 @@ from algorithms.algorithm_lle import AlgorithmLLE
 from algorithms.algorithm_pcat95 import AlgorithmPCAT95
 from algorithms.algorithm_rfe import AlgorithmRFE
 from algorithms.algorithm_fscr import AlgorithmFSCR
-from algorithms.algorithm_fscrns import AlgorithmFSCRNS
+from algorithms.algorithm_fscrd import AlgorithmFSCRD
 from algorithms.algorithm_sfs import AlgorithmSFS
 from algorithms.algorithm_sbs import AlgorithmSBS
 from algorithms.algorithm_kbest import AlgorithmKBest
@@ -32,8 +32,8 @@ class AlgorithmCreator:
             return AlgorithmRFE(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "fsdr":
             return AlgorithmFSCR(target_feature_size, X_train, y_train, X_validation, y_validation)
-        elif name == "fscrns":
-            return AlgorithmFSCRNS(target_feature_size, X_train, y_train, X_validation, y_validation)
+        elif name == "fsdrd":
+            return AlgorithmFSCRD(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "sfs":
             return AlgorithmSFS(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "sbs":

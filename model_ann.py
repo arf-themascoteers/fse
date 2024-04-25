@@ -7,7 +7,6 @@ from sklearn.metrics import r2_score
 class ModelANN(nn.Module):
     def __init__(self, X):
         super().__init__()
-        torch.manual_seed(3)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         rows = X.shape[0]
         self.target_feature_size = X.shape[1]
