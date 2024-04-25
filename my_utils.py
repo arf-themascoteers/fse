@@ -1,6 +1,4 @@
 from sklearn.linear_model import LinearRegression
-import torch.nn as nn
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.svm import SVC
 
