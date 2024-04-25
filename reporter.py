@@ -24,7 +24,7 @@ class Reporter:
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
-                file.write("dataset,target_size,algorithm,final_size,time,metric1,metric2,selected_features\n")
+                file.write("dataset,target_size,algorithm,time,metric1,metric2,selected_features\n")
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
