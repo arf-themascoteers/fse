@@ -10,7 +10,7 @@ class Algorithm(ABC):
 
     def fit(self):
         self.model, self.selected_indices = self.get_selected_indices()
-        return self.selected_indices
+        return sorted(self.selected_indices)
 
     def transform(self, X):
         if len(self.selected_indices) != 0:
