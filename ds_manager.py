@@ -16,15 +16,16 @@ class DSManager:
         self.X_columns = DSManager.get_spectral_columns(df)
         self.y_column = DSManager.get_y_column(self.name)
         df = df[self.X_columns+[self.y_column]]
-        df = df.sample(frac=1)
+        df = df.sample(frac=1, random_state=0)
         self.full_data = df.to_numpy()
         self.full_data = DSManager._normalize(self.full_data)
 
     def __repr__(self):
         return self.get_name()
 
-    def get_task(self):
-        DSManager.get_task_by_name(self.get_name())
+    @staticmethod
+    def get_task(dataset_name):
+        DSManager.get_task_by_name(dataset_name)
 
     @staticmethod
     def get_dataset_names():
