@@ -1,13 +1,5 @@
-from ds_manager import DSManager
-from datetime import datetime
 import os
-from algorithm_creator import AlgorithmCreator
-from sklearn.metrics import r2_score, mean_squared_error
-import math
 import pandas as pd
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import cohen_kappa_score
-import my_utils
 
 
 class Reporter:
@@ -97,7 +89,7 @@ class Reporter:
             df2.loc[mask, 'metric2'] = metric2
         df2.to_csv(self.all_features_summary_file, index=False)
 
-    def get_saved_metrics_dataset_target_fold_algorithm(self, dataset, target_size, fold, algorithm_name, repeat_no):
+    def get_saved_metrics(self, dataset, target_size, fold, algorithm_name, repeat_no):
         df = pd.read_csv(self.details_file)
         if len(df) == 0:
             return None, None, None, None, None
@@ -110,7 +102,7 @@ class Reporter:
         row = rows.iloc[0]
         return row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"]
 
-    def get_saved_metrics_for_all_feature_set_fold(self, fold, dataset):
+    def get_saved_metrics_for_all_feature(self, fold, dataset):
         df = pd.read_csv(self.all_features_details_file)
         if len(df) == 0:
             return None, None

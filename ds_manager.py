@@ -4,6 +4,7 @@ from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
+from data_splits import DataSplits
 
 
 class DSManager:
@@ -100,7 +101,7 @@ class DSManager:
     def split_train_validation_ev_parts(self, train_data, test_data):
         train_data, validation_data = train_test_split(train_data, test_size=0.1, random_state=40)
         test_for_train_data, test_for_test_data = train_test_split(test_data, test_size=0.5, random_state=40)
-        return (*DSManager.get_X_y_from_data(train_data),
+        return DataSplits(*DSManager.get_X_y_from_data(train_data),
                *DSManager.get_X_y_from_data(validation_data),
                *DSManager.get_X_y_from_data(test_for_train_data),
                *DSManager.get_X_y_from_data(test_for_test_data)
