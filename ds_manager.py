@@ -20,13 +20,13 @@ class DSManager:
         if self.get_task() != "regression":
             df[self.y_column], class_labels = pd.factorize(df[self.y_column])
         self.full_data = df.to_numpy()
-        self.full_data = DSManager._normalize(self.full_data)
+        self.full_data = self._normalize(self.full_data)
 
     def __repr__(self):
         return self.get_name()
 
     def get_task(self):
-        DSManager.get_task_by_name(self.name)
+        return DSManager.get_task_by_name(self.name)
 
     @staticmethod
     def get_dataset_names():
@@ -83,10 +83,11 @@ class DSManager:
             return "class"
         return "oc"
 
-
-    @staticmethod
-    def _normalize(data):
-        for i in range(data.shape[1]):
+    def _normalize(self, data):
+        normalized_len = data.shape[1]
+        if self.get_task() == "classification":
+            normalized_len = data.shape[1] - 1
+        for i in range(normalized_len):
             scaler = MinMaxScaler()
             x_scaled = scaler.fit_transform(data[:, i].reshape(-1, 1))
             data[:, i] = np.squeeze(x_scaled)
