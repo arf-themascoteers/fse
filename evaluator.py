@@ -7,7 +7,6 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import cohen_kappa_score
 import my_utils
 from reporter import Reporter
-from data_splits import DataSplits
 
 
 class Evaluator:

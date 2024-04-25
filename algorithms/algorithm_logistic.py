@@ -4,8 +4,8 @@ import numpy as np
 
 
 class AlgorithmLogistic(Algorithm):
-    def __init__(self, task, target_feature_size, X_train, y_train, X_validation, y_validation):
-        super().__init__(task, target_feature_size, X_train, y_train, X_validation, y_validation)
+    def __init__(self, target_feature_size, X_train, y_train, X_validation, y_validation):
+        super().__init__(target_feature_size, X_train, y_train, X_validation, y_validation)
         self.indices = None
 
     def get_selected_indices(self):

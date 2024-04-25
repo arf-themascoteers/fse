@@ -5,21 +5,32 @@ import torch
 from algorithms.fscr.ann import ANN
 from datetime import datetime
 import os
-import my_utils
+import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import cohen_kappa_score
 
 
 class FSCR:
-    def __init__(self, target_feature_size):
+    def __init__(self, target_feature_size, class_size=1):
         self.target_feature_size = target_feature_size
+        self.class_size = class_size
         self.lr = 0.001
-        self.model = ANN(self.target_feature_size)
+        self.model = ANN(self.target_feature_size, self.class_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
-        self.criterion = torch.nn.MSELoss(reduction='mean')
+        self.criterion = self.get_criterion()
         self.epochs = 1500
         self.csv_file = os.path.join("results", f"fscr-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
+
+    def get_criterion(self):
+        if self.is_regression():
+            return torch.nn.MSELoss(reduction='mean')
+        return torch.nn.CrossEntropyLoss()
+
+    def is_regression(self):
+        return self.class_size == 1
 
     def get_elapsed_time(self):
         return round((datetime.now() - self.start_time).total_seconds(),2)
@@ -29,7 +40,6 @@ class FSCR:
         return torch.optim.Adam(self.model.parameters(), lr=self.lr, weight_decay=weight_decay)
 
     def fit(self, X, y, X_validation, y_validation):
-        print(f"X,X_validation: {X.shape} {X_validation.shape}")
         row_size = X.shape[0]
         row_test_size = X_validation.shape[0]
         self.original_feature_size = X.shape[1]
@@ -56,13 +66,19 @@ class FSCR:
     def evaluate(self,spline,y,size):
         self.model.eval()
         y_hat = self.model(spline, size)
-        y_hat = y_hat.reshape(-1)
         y_hat = y_hat.detach().cpu().numpy()
         y = y.detach().cpu().numpy()
-        r2 = r2_score(y, y_hat)
-        rmse = math.sqrt(mean_squared_error(y, y_hat))
+        if self.is_regression():
+            y_hat = y_hat.reshape(-1)
+            r2 = r2_score(y, y_hat)
+            rmse = math.sqrt(mean_squared_error(y, y_hat))
+            self.model.train()
+            return max(r2,0), rmse
+
+        accuracy = accuracy_score(y, y_hat)
+        kappa = cohen_kappa_score(y, y_hat)
         self.model.train()
-        return max(r2,0), rmse
+        return accuracy, kappa
 
     def write_columns(self):
         columns = ["epoch","train_r2","validation_r2","train_rmse","validation_rmse","time"]
