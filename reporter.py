@@ -71,7 +71,7 @@ class Reporter:
         df2.to_csv(self.summary_file, index=False)
 
     def write_details_all_features(self, fold, dataset, metric1, metric2):
-        with open(self.details_file, 'a') as file:
+        with open(self.all_features_details_file, 'a') as file:
             file.write(f"{fold},{dataset},{metric1},{metric2}\n")
         self.update_summary_for_all_features(dataset)
 
