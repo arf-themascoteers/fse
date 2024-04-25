@@ -39,6 +39,9 @@ class Reporter:
                 file.write("fold,dataset,metric1,metric2\n")
 
     def write_details(self, dataset, target_size, fold, algorithm_name, repeat_no, final_size, time, metric1, metric2, selected_features):
+        time = Reporter.sanitize_metric(time)
+        metric1 = Reporter.sanitize_metric(metric1)
+        metric2 = Reporter.sanitize_metric(metric2)
         with open(self.details_file, 'a') as file:
             file.write(f"{dataset},{target_size},{fold},{algorithm_name},"
                        f"{repeat_no},"
@@ -51,8 +54,8 @@ class Reporter:
         if len(df) == 0:
             return
         time = round(df["time"].mean(), 2)
-        metric1 = Reporter.sanitize_metric(df["metric1"])
-        metric2 = Reporter.sanitize_metric(df["metric2"])
+        metric1 = Reporter.sanitize_metric(df["metric1"].mean())
+        metric2 = Reporter.sanitize_metric(df["metric2"].mean())
         selected_features = '||'.join(df['selected_features'])
 
         df2 = pd.read_csv(self.summary_file)
@@ -70,6 +73,8 @@ class Reporter:
         df2.to_csv(self.summary_file, index=False)
 
     def write_details_all_features(self, fold, dataset, metric1, metric2):
+        metric1 = Reporter.sanitize_metric(metric1)
+        metric2 = Reporter.sanitize_metric(metric2)
         with open(self.all_features_details_file, 'a') as file:
             file.write(f"{fold},{dataset},{metric1},{metric2}\n")
         self.update_summary_for_all_features(dataset)
@@ -117,4 +122,4 @@ class Reporter:
 
     @staticmethod
     def sanitize_metric(metric):
-        return max(round(metric.mean(), 2),0)
+        return max(round(metric, 2), 0)
