@@ -1,12 +1,10 @@
 import torch.nn as nn
 import torch
-import torch.nn.functional as F
 from algorithms.fscr.band_index import BandIndex
-import my_utils
 
 
 class ANN(nn.Module):
-    def __init__(self, rows, target_feature_size, sigmoid=True):
+    def __init__(self, target_feature_size):
         super().__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.target_feature_size = target_feature_size
@@ -17,17 +15,10 @@ class ANN(nn.Module):
             nn.LeakyReLU(),
             nn.Linear(10, 1)
         )
-        # self.linear = nn.Sequential(
-        #     nn.Linear(self.target_feature_size, 4),
-        #     nn.LeakyReLU(),
-        #     nn.Linear(4, 4),
-        #     nn.LeakyReLU(),
-        #     nn.Linear(4, 1)
-        # )
         init_vals = torch.linspace(0.001,0.99, target_feature_size+2)
         modules = []
         for i in range(self.target_feature_size):
-            modules.append(BandIndex( ANN.inverse_sigmoid_torch(init_vals[i+1]),sigmoid))
+            modules.append(BandIndex( ANN.inverse_sigmoid_torch(init_vals[i+1])))
         self.machines = nn.ModuleList(modules)
 
     @staticmethod

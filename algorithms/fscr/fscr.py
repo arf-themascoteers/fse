@@ -9,16 +9,15 @@ import my_utils
 
 
 class FSCR:
-    def __init__(self, rows, target_feature_size, sigmoid=True):
-        self.sigmoid = sigmoid
+    def __init__(self, target_feature_size):
         self.target_feature_size = target_feature_size
         self.lr = 0.001
-        self.model = ANN(rows, self.target_feature_size, sigmoid)
+        self.model = ANN(self.target_feature_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = torch.nn.MSELoss(reduction='mean')
         self.epochs = 1500
-        self.csv_file = os.path.join("results", f"fscr-{sigmoid}-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
+        self.csv_file = os.path.join("results", f"fscr-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
 
@@ -46,8 +45,6 @@ class FSCR:
         for epoch in range(self.epochs):
             y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
-            for machine in self.model.machines:
-                loss = loss + machine.range_loss()
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
@@ -91,8 +88,6 @@ class FSCR:
 
     def indexify_raw_index(self, raw_index):
         multiplier = self.original_feature_size
-        if not self.sigmoid:
-            multiplier = multiplier-1
         return round(raw_index.item() * multiplier)
 
     def get_indices(self):
