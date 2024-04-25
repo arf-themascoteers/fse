@@ -12,8 +12,9 @@ from reporter import Reporter
 
 
 class Evaluator:
-    def __init__(self, task, folds=1, filename="results.csv"):
+    def __init__(self, task, repeat=1, folds=1, filename="results.csv"):
         self.task = task
+        self.repeat = repeat
         self.folds = folds
         self.reporter = Reporter(filename)
 
@@ -29,23 +30,26 @@ class Evaluator:
                         test_for_test_x, test_for_test_y
                 ) in enumerate(dataset.get_k_folds()):
                     for algorithm in self.task["algorithms"]:
-                        self.evaluate_for_dataset_target_fold_algorithm(
-                            dataset_name, target_size, fold, algorithm,
+                        for repeat_no in range(self.repeat):
+                            self.evaluate_for_a_case(
+                                dataset_name, target_size, fold, algorithm,
+                                repeat_no,
+                                train_x, train_y,
+                                validation_x, validation_y,
+                                test_for_train_x, test_for_train_y,
+                                test_for_test_x, test_for_test_y
+                            )
+
+    def evaluate_for_a_case(self,
+                            dataset, target_size, fold, algorithm_name,
+                            repeat_no,
                             train_x, train_y,
                             validation_x, validation_y,
                             test_for_train_x, test_for_train_y,
                             test_for_test_x, test_for_test_y
-                        )
-
-    def evaluate_for_dataset_target_fold_algorithm(self,
-                                                   dataset, target_size, fold, algorithm_name,
-                                                   train_x, train_y,
-                                                   validation_x, validation_y,
-                                                   test_for_train_x, test_for_train_y,
-                                                   test_for_test_x, test_for_test_y
-                                                   ):
+                            ):
         final_size, time, metric1, metric2, selected_features = \
-            self.reporter.get_saved_metrics_dataset_target_fold_algorithm(dataset, target_size, fold, algorithm_name)
+            self.reporter.get_saved_metrics_dataset_target_fold_algorithm(dataset, target_size, fold, algorithm_name, repeat_no)
         if time is not None:
             print(f"{dataset} for size {target_size} for fold {fold} for {algorithm_name} was done")
             return
@@ -59,7 +63,7 @@ class Evaluator:
         test_for_test_x = algorithm.transform(test_for_test_x)
         algorithm.fit()
         metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y)
-        self.reporter.write_details(dataset, target_size, fold, algorithm_name, test_for_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
+        self.reporter.write_details(dataset, target_size, fold, algorithm_name, repeat_no, test_for_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
 
     def evaluate_for_all_features(self, dataset):
         for fold, (_, _, _, _, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(dataset.get_k_folds()):

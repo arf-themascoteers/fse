@@ -7,9 +7,9 @@ if __name__ == '__main__':
         "target_sizes" : [5, 10, 15, 20, 25, 30]
     }
     tasks = {
-        "algorithms" : ["mi", "lasso"],
+        "algorithms" : ["mi","lasso"],
         "datasets" : ["lucas_downsampled_min", "lucas_skipped_min"],
         "target_sizes" : [2, 5]
     }
-    ev = Evaluator(tasks,3,"quick.csv")
+    ev = Evaluator(tasks,3,4,"quick.csv")
     ev.evaluate()

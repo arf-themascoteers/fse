@@ -28,7 +28,7 @@ class Reporter:
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("dataset,target_size,fold,algorithm,final_size,time,metric1,metric2,selected_features\n")
+                file.write("dataset,target_size,fold,algorithm,repeat,final_size,time,metric1,metric2,selected_features\n")
 
         if not os.path.exists(self.all_features_summary_file):
             with open(self.all_features_summary_file, 'w') as file:
@@ -38,9 +38,10 @@ class Reporter:
             with open(self.all_features_details_file, 'w') as file:
                 file.write("fold,dataset,metric1,metric2\n")
 
-    def write_details(self, dataset, target_size, fold, algorithm_name, final_size, time, metric1, metric2, selected_features):
+    def write_details(self, dataset, target_size, fold, algorithm_name, repeat_no, final_size, time, metric1, metric2, selected_features):
         with open(self.details_file, 'a') as file:
             file.write(f"{dataset},{target_size},{fold},{algorithm_name},"
+                       f"{repeat_no},"
                        f"{final_size},{time},{metric1},{metric2},{'-'.join([str(i) for i in selected_features])}\n")
         self.update_summary(algorithm_name, dataset, target_size)
 
@@ -91,11 +92,14 @@ class Reporter:
             df2.loc[mask, 'metric2'] = metric2
         df2.to_csv(self.all_features_summary_file, index=False)
 
-    def get_saved_metrics_dataset_target_fold_algorithm(self, dataset, target_size, fold, algorithm_name):
+    def get_saved_metrics_dataset_target_fold_algorithm(self, dataset, target_size, fold, algorithm_name, repeat_no):
         df = pd.read_csv(self.details_file)
         if len(df) == 0:
             return None, None, None, None, None
-        rows = df.loc[(df["dataset"] == dataset) & (df["target_size"] == target_size) & (df["fold"] == fold) & (df["algorithm"] == algorithm_name) ]
+        rows = df.loc[(df["dataset"] == dataset) & (df["target_size"] == target_size) &
+                      (df["fold"] == fold) & (df["algorithm"] == algorithm_name) &
+                      (df["repeat"] == repeat_no)
+                      ]
         if len(rows) == 0:
             return None, None, None, None, None
         row = rows.iloc[0]
