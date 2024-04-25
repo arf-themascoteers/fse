@@ -19,7 +19,7 @@ class FSCR:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
         self.criterion = self.get_criterion()
-        self.epochs = 1500
+        self.epochs = 5000
         self.csv_file = os.path.join("results", f"fscr-{target_feature_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()

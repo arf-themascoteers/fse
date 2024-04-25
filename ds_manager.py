@@ -79,7 +79,7 @@ class DSManager:
             return "MO (gddm3)"
         if dataset == "ghsi":
             return "crop"
-        if dataset == "pines":
+        if dataset == "indian_pines":
             return "class"
         return "oc"
 
