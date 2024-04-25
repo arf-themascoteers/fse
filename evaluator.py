@@ -5,8 +5,13 @@ from sklearn.metrics import r2_score, mean_squared_error
 import math
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import cohen_kappa_score
-import my_utils
 from reporter import Reporter
+from sklearn.svm import SVR
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPRegressor
+from sklearn.neural_network import MLPClassifier
 
 
 class Evaluator:
@@ -59,7 +64,7 @@ class Evaluator:
 
     @staticmethod
     def evaluate_train_test_pair(dataset_name, X_train, y_train, X_test, y_test):
-        algorithm = my_utils.get_metric_evaluator(DSManager.get_task_by_name(dataset_name))
+        algorithm = Evaluator.get_metric_evaluator(DSManager.get_task_by_name(dataset_name))
         algorithm.fit(X_train, y_train)
         y_pred = algorithm.predict(X_test)
         return Evaluator.calculate_metrics(dataset_name, y_test, y_pred)
@@ -82,5 +87,20 @@ class Evaluator:
         rmse = math.sqrt(mean_squared_error(y_test, y_pred))
         return r2, rmse
 
+    @staticmethod
+    def get_metric_evaluator(task):
+        gowith = "sv"
 
+        if gowith == "rf":
+            if task == "regression":
+                return RandomForestRegressor()
+            return RandomForestClassifier()
+        elif gowith == "sv":
+            if task == "regression":
+                return SVR(C=1e5, kernel='rbf', gamma=1.)
+            return SVC(C=1e5, kernel='rbf', gamma=1.)
+        else:
+            if task == "regression":
+                return MLPRegressor(max_iter=2000)
+            return MLPClassifier(max_iter=2000)
 
