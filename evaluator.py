@@ -66,7 +66,7 @@ class Evaluator:
 
     @staticmethod
     def calculate_metrics(dataset_name, y_test, y_pred):
-        if DSManager.get_task(dataset_name) == "classification":
+        if DSManager.get_task_by_name(dataset_name) == "classification":
             return Evaluator.calculate_metrics_for_classification(y_test, y_pred)
         return Evaluator.calculate_metrics_for_regression(y_test, y_pred)
 

@@ -17,15 +17,16 @@ class DSManager:
         self.y_column = DSManager.get_y_column(self.name)
         df = df[self.X_columns+[self.y_column]]
         df = df.sample(frac=1, random_state=0)
+        if self.get_task() != "regression":
+            df[self.y_column], class_labels = pd.factorize(df[self.y_column])
         self.full_data = df.to_numpy()
         self.full_data = DSManager._normalize(self.full_data)
 
     def __repr__(self):
         return self.get_name()
 
-    @staticmethod
-    def get_task(dataset_name):
-        DSManager.get_task_by_name(dataset_name)
+    def get_task(self):
+        DSManager.get_task_by_name(self.name)
 
     @staticmethod
     def get_dataset_names():
@@ -74,10 +75,14 @@ class DSManager:
 
     @staticmethod
     def get_y_column(dataset):
-        col = "oc"
-        if "brazilian" in dataset:
-            col = "MO (gddm3)"
-        return col
+        if dataset == "brazilian":
+            return "MO (gddm3)"
+        if dataset == "ghsi":
+            return "crop"
+        if dataset == "pines":
+            return "class"
+        return "oc"
+
 
     @staticmethod
     def _normalize(data):
