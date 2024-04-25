@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import cohen_kappa_score
+import numpy as np
 
 
 class FSCR:
@@ -52,6 +53,9 @@ class FSCR:
         spline_validation = get_splines(X_validation, self.device)
         y = torch.tensor(y, dtype=torch.float32).to(self.device)
         y_validation = torch.tensor(y_validation, dtype=torch.float32).to(self.device)
+        if not self.is_regression():
+            y = y.type(torch.LongTensor).to(self.device)
+            y_validation = y_validation.type(torch.LongTensor).to(self.device)
         for epoch in range(self.epochs):
             y_hat = self.model(spline, row_size)
             loss = self.criterion(y_hat, y)
@@ -74,7 +78,7 @@ class FSCR:
             rmse = math.sqrt(mean_squared_error(y, y_hat))
             self.model.train()
             return max(r2,0), rmse
-
+        y_hat = np.argmax(y_hat, axis=1)
         accuracy = accuracy_score(y, y_hat)
         kappa = cohen_kappa_score(y, y_hat)
         self.model.train()
@@ -83,11 +87,11 @@ class FSCR:
     def get_metric1(self):
         if self.is_regression():
             return "r2"
-        return "rmse"
+        return "accuracy"
 
     def get_metric2(self):
         if self.is_regression():
-            return "accuracy"
+            return "rmse"
         return "kappa"
 
     def write_columns(self):

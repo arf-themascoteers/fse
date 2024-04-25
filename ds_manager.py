@@ -86,7 +86,7 @@ class DSManager:
 
     @staticmethod
     def _normalize(data):
-        for i in range(data.shape[1]):
+        for i in range(data.shape[1]-1):
             scaler = MinMaxScaler()
             x_scaled = scaler.fit_transform(data[:, i].reshape(-1, 1))
             data[:, i] = np.squeeze(x_scaled)

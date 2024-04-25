@@ -9,9 +9,9 @@ from algorithms.algorithm_mcuve import AlgorithmMCUVE
 
 class AlgorithmCreator:
     @staticmethod
-    def create(name, target_feature_size, X_train, y_train, X_validation, y_validation):
+    def create(name, target_feature_size, task, X_train, y_train, X_validation, y_validation):
         if name == "fsdr":
-            return AlgorithmFSCR(target_feature_size, X_train, y_train, X_validation, y_validation)
+            return AlgorithmFSCR(target_feature_size, task, X_train, y_train, X_validation, y_validation)
         elif name == "lasso":
             return AlgorithmLasso(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "logistic":

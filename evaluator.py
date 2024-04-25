@@ -33,7 +33,7 @@ class Evaluator:
             print(f"{dataset} for size {target_size} for fold {fold} for {algorithm_name} was done")
             return
 
-        algorithm = AlgorithmCreator.create(algorithm_name, target_size,
+        algorithm = AlgorithmCreator.create(algorithm_name, target_size, DSManager.get_task_by_name(dataset),
                                             splits.train_x, splits.train_y, splits.validation_x, splits.validation_y)
         start_time = datetime.now()
         selected_features = algorithm.fit()

@@ -31,7 +31,8 @@ class ANN(nn.Module):
         for i,machine in enumerate(self.machines):
             outputs[:,i] = machine(spline)
         soc_hat = self.linear(outputs)
-        soc_hat = soc_hat.reshape(-1)
+        if self.class_size == 1:
+            soc_hat = soc_hat.reshape(-1)
         return soc_hat
 
     def retention_loss(self):
