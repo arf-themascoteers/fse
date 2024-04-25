@@ -8,6 +8,7 @@ from algorithms.algorithm_mcuve import AlgorithmMCUVE
 from algorithms.algorithm_pcal import AlgorithmPCALoading
 from algorithms.algorithm_pca import AlgorithmPCA
 from algorithms.algorithm_bsnet import AlgorithmBSNet
+from algorithms.algorithm_bsnetig import AlgorithmBSNetIG
 
 
 class AlgorithmCreator:
@@ -33,4 +34,6 @@ class AlgorithmCreator:
             return AlgorithmPCA(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "bsnet":
             return AlgorithmBSNet(target_feature_size, X_train, y_train, X_validation, y_validation)
+        elif name == "bsnetig":
+            return AlgorithmBSNetIG(target_feature_size, X_train, y_train, X_validation, y_validation)
 
