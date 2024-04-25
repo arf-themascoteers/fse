@@ -8,7 +8,7 @@ if __name__ == '__main__':
     }
     tasks = {
         "algorithms" : ["bsnet"],
-        "datasets" : ["lucas_skipped_min"],
+        "datasets" : ["lucas_skipped"],
         "target_sizes" : [5]
     }
     ev = Evaluator(tasks,1,1,"bsnet.csv")
