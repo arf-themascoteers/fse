@@ -62,7 +62,6 @@ class Reporter:
                 "time":time,"metric1":metric1,"metric2":metric2, "selected_features":selected_features
             }
         else:
-            df2.loc[mask, 'final_size'] = final_size
             df2.loc[mask, 'time'] = time
             df2.loc[mask, 'metric1'] = metric1
             df2.loc[mask, 'metric2'] = metric2
