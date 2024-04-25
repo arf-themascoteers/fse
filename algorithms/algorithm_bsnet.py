@@ -17,7 +17,7 @@ class AlgorithmBSNet(Algorithm):
         dataset = TensorDataset(X_train, X_train)
         dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
         channel_weights = None
-        for epoch in range(10):
+        for epoch in range(100):
             for batch_idx, (X, y) in enumerate(dataloader):
                 optimizer.zero_grad()
                 channel_weights, y_hat = bsnet(X)
