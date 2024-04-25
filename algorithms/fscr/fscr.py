@@ -5,7 +5,6 @@ import torch
 from algorithms.fscr.ann import ANN
 from datetime import datetime
 import os
-import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import cohen_kappa_score
 
@@ -33,7 +32,8 @@ class FSCR:
         return self.class_size == 1
 
     def get_elapsed_time(self):
-        return round((datetime.now() - self.start_time).total_seconds(),2)
+        elapsed_time = round((datetime.now() - self.start_time).total_seconds(),2)
+        return float(elapsed_time)
 
     def create_optimizer(self):
         weight_decay = self.lr/10
@@ -80,8 +80,21 @@ class FSCR:
         self.model.train()
         return accuracy, kappa
 
+    def get_metric1(self):
+        if self.is_regression():
+            return "r2"
+        return "rmse"
+
+    def get_metric2(self):
+        if self.is_regression():
+            return "accuracy"
+        return "kappa"
+
     def write_columns(self):
-        columns = ["epoch","train_r2","validation_r2","train_rmse","validation_rmse","time"]
+        columns = ["epoch",
+                   f"train_{self.get_metric1()}",f"validation_{self.get_metric1()}",
+                   f"train_{self.get_metric2()}",f"validation_{self.get_metric2()}",
+                   "time"]
         for index,p in enumerate(self.model.get_indices()):
             columns.append(f"band_{index+1}")
         print("".join([c.ljust(20) for c in columns]))
@@ -90,11 +103,12 @@ class FSCR:
             file.write("\n")
 
     def dump_row(self, epoch, spline, y, spline_test, y_test, row_size, row_test_size):
-        train_r2, train_rmse = self.evaluate(spline, y, row_size)
-        test_r2, test_rmse = self.evaluate(spline_test, y_test, row_test_size)
-        row = [train_r2, test_r2, train_rmse, test_rmse]
+        train_metric1, train_metric2 = self.evaluate(spline, y, row_size)
+        test_metric1, test_metric2 = self.evaluate(spline_test, y_test, row_test_size)
+        row = [train_metric1, test_metric1, train_metric2, test_metric2]
         row = [round(r,5) for r in row]
-        row = [epoch] + row + [self.get_elapsed_time()]
+        elapsed_time = self.get_elapsed_time()
+        row = [epoch] + row + [elapsed_time]
         for p in self.model.get_indices():
             row.append(self.indexify_raw_index(p))
         with open(self.csv_file, 'a') as file:
