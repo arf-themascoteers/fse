@@ -19,7 +19,7 @@ class BandIndex(nn.Module):
 
     def index_value(self):
         if self.sigmoid:
-            return F.sigmoid(self.raw_index)
+            return torch.sigmoid(self.raw_index)
         return self.raw_index
 
     def range_loss(self):
