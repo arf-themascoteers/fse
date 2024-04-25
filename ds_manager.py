@@ -23,6 +23,28 @@ class DSManager:
     def __repr__(self):
         return self.get_name()
 
+    def get_task(self):
+        DSManager.get_task_by_name(self.get_name())
+
+    @staticmethod
+    def get_dataset_names():
+        return [
+            "demmin",
+            "brazilian",
+            "lucas_min",
+            "lucas_skipped",
+            "lucas_downsampled",
+            "lucas_full",
+            "ghsi",
+            "indian_pines"
+        ]
+
+    @staticmethod
+    def get_task_by_name(dataset):
+        if dataset in ["ghsi", "indian_pines"]:
+            return "classification"
+        return "regression"
+
     def get_name(self):
         return self.name
 

@@ -79,14 +79,14 @@ class Evaluator:
 
     @staticmethod
     def evaluate_train_test_pair(dataset_name, X_train, y_train, X_test, y_test):
-        algorithm = my_utils.get_metric_evaluator(dataset_name)
+        algorithm = my_utils.get_metric_evaluator(DSManager.get_task_by_name(dataset_name))
         algorithm.fit(X_train, y_train)
         y_pred = algorithm.predict(X_test)
         return Evaluator.calculate_metrics(dataset_name, y_test, y_pred)
 
     @staticmethod
     def calculate_metrics(dataset_name, y_test, y_pred):
-        if my_utils.get_task(dataset_name) == "classification":
+        if DSManager.get_task(dataset_name) == "classification":
             return Evaluator.calculate_metrics_for_classification(y_test, y_pred)
         return Evaluator.calculate_metrics_for_regression(y_test, y_pred)
 
