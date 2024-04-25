@@ -61,7 +61,6 @@ class Evaluator:
 
         test_for_train_x = algorithm.transform(test_for_train_x)
         test_for_test_x = algorithm.transform(test_for_test_x)
-        algorithm.fit()
         metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y)
         self.reporter.write_details(dataset, target_size, fold, algorithm_name, repeat_no, test_for_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
 
