@@ -28,7 +28,7 @@ class Reporter:
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("dataset,target_size,fold,algorithm,final_size,time,metric1,metric2,selected_features\n")
+                file.write("dataset,target_size,fold,algorithm,time,metric1,metric2,selected_features\n")
 
         if not os.path.exists(self.all_features_summary_file):
             with open(self.all_features_summary_file, 'w') as file:
@@ -49,7 +49,6 @@ class Reporter:
         df = df[(df["dataset"] == dataset) & (df["algorithm"] == algorithm_name) & (df["target_size"] == target_size)]
         if len(df) == 0:
             return
-        final_size = round(df["final_size"].mean(), 2)
         time = round(df["time"].mean(), 2)
         metric1 = Reporter.sanitize_metric(df["metric1"])
         metric2 = Reporter.sanitize_metric(df["metric2"])
@@ -60,7 +59,7 @@ class Reporter:
         if len(df2[mask]) == 0:
             df2.loc[len(df2)] = {
                 "dataset":dataset, "target_size":target_size, "algorithm": algorithm_name,
-                "final_size":str(final_size),"time":time,"metric1":metric1,"metric2":metric2, "selected_features":selected_features
+                "time":time,"metric1":metric1,"metric2":metric2, "selected_features":selected_features
             }
         else:
             df2.loc[mask, 'final_size'] = final_size
