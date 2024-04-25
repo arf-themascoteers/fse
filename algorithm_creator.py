@@ -5,6 +5,8 @@ from algorithms.algorithm_logistic import AlgorithmLogistic
 from algorithms.algorithm_cars import AlgorithmCARS
 from algorithms.algorithm_spa import AlgorithmSPA
 from algorithms.algorithm_mcuve import AlgorithmMCUVE
+from algorithms.algorithm_pcal import AlgorithmPCALoading
+from algorithms.algorithm_pca import AlgorithmPCA
 
 
 class AlgorithmCreator:
@@ -22,6 +24,10 @@ class AlgorithmCreator:
             return AlgorithmSPA(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "mcuve":
             return AlgorithmMCUVE(target_feature_size, X_train, y_train, X_validation, y_validation)
+        elif name == "pcal":
+            return AlgorithmPCALoading(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "fsdrd":
             return AlgorithmFSCRD(target_feature_size, X_train, y_train, X_validation, y_validation)
+        elif name == "pca":
+            return AlgorithmPCA(target_feature_size, X_train, y_train, X_validation, y_validation)
 

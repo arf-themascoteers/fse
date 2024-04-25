@@ -48,7 +48,7 @@ class Reporter:
         time = round(df["time"].mean(), 2)
         metric1 = Reporter.sanitize_metric(df["metric1"].mean())
         metric2 = Reporter.sanitize_metric(df["metric2"].mean())
-        selected_features = '||'.join(df['selected_features'])
+        selected_features = '||'.join(df['selected_features'].astype(str))
 
         df2 = pd.read_csv(self.summary_file)
         mask = ((df2["dataset"] == dataset) & (df2["target_size"] == target_size) & (df2["algorithm"] == algorithm_name))
