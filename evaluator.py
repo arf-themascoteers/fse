@@ -30,7 +30,7 @@ class Evaluator:
                 ) in enumerate(dataset.get_k_folds()):
                     for algorithm in self.task["algorithms"]:
                         self.evaluate_for_dataset_target_fold_algorithm(
-                            fold, algorithm, dataset_name, target_size,
+                            dataset_name, target_size, fold, algorithm,
                             train_x, train_y,
                             validation_x, validation_y,
                             test_for_train_x, test_for_train_y,
@@ -38,16 +38,16 @@ class Evaluator:
                         )
 
     def evaluate_for_dataset_target_fold_algorithm(self,
-                                                   fold, algorithm_name, dataset, target_size,
+                                                   dataset, target_size, fold, algorithm_name,
                                                    train_x, train_y,
                                                    validation_x, validation_y,
                                                    test_for_train_x, test_for_train_y,
                                                    test_for_test_x, test_for_test_y
                                                    ):
         final_size, time, metric1, metric2, selected_features = \
-            self.reporter.get_saved_metrics_dataset_target_fold_algorithm(fold, algorithm_name, dataset, target_size)
+            self.reporter.get_saved_metrics_dataset_target_fold_algorithm(dataset, target_size, fold, algorithm_name)
         if time is not None:
-            print(f"Fold {fold} for {algorithm_name} for {dataset} for size {target_size} was done")
+            print(f"{dataset} for size {target_size} for fold {fold} for {algorithm_name} was done")
             return
 
         algorithm = AlgorithmCreator.create(algorithm_name, target_size, train_x, train_y, validation_x, validation_y)
@@ -59,7 +59,7 @@ class Evaluator:
         test_for_test_x = algorithm.transform(test_for_test_x)
         algorithm.fit()
         metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y)
-        self.reporter.write_details(fold, algorithm_name, dataset, target_size, test_for_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
+        self.reporter.write_details(dataset, target_size, fold, algorithm_name, test_for_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
 
     def evaluate_for_all_features(self, dataset):
         for fold, (_, _, _, _, test_for_train_x, test_for_train_y, test_for_test_x, test_for_test_y) in enumerate(dataset.get_k_folds()):
