@@ -21,7 +21,7 @@ class Reporter:
 
         if not os.path.exists(self.details_file):
             with open(self.details_file, 'w') as file:
-                file.write("dataset,target_size,fold,algorithm,repeat,final_size,time,metric1,metric2,selected_features\n")
+                file.write("dataset,target_size,fold,algorithm,repeat,time,metric1,metric2,selected_features\n")
 
         if not os.path.exists(self.all_features_summary_file):
             with open(self.all_features_summary_file, 'w') as file:
@@ -38,7 +38,7 @@ class Reporter:
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm.splits.get_name()},{algorithm.target_size},{fold},{algorithm.get_name()},"
                        f"{repeat},"
-                       f"{metric.final_size},{time},{metric1},{metric2},{'-'.join([str(i) for i in metric.selected_features])}\n")
+                       f"{time},{metric1},{metric2},{'-'.join([str(i) for i in metric.selected_features])}\n")
         self.update_summary(algorithm)
 
     def update_summary(self, algorithm):
@@ -101,7 +101,7 @@ class Reporter:
         if len(rows) == 0:
             return None, None, None, None, None
         row = rows.iloc[0]
-        return Metrics(row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"])
+        return Metrics(row["time"], row["metric1"], row["metric2"], row["selected_features"])
 
     def get_saved_metrics_for_all_feature(self, fold, dataset):
         df = pd.read_csv(self.all_features_details_file)

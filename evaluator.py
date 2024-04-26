@@ -13,7 +13,7 @@ class Evaluator:
         self.folds = folds
         self.reporter = Reporter(filename)
         self.cache = pd.DataFrame(columns=["dataset","fold","algorithm","repeat",
-                                           "final_size","metric1","metric2","time","selected_features"])
+                                           "metric1","metric2","time","selected_features"])
 
     def evaluate(self):
         for dataset_name in self.task["datasets"]:
@@ -37,8 +37,10 @@ class Evaluator:
     def get_results_for_a_case(self, algorithm:Algorithm, fold, repeat):
         metric = self.get_from_cache(algorithm, fold, repeat)
         if metric is not None:
-            print(f"{algorithm.splits.get_name()} for size {algorithm.target_size} for fold {fold} for {algorithm.get_name()} is procured from cache")
-            return metric
+            print(f"Selected features got from cache for {algorithm.splits.get_name()} for size {algorithm.target_size} for fold {fold} for {algorithm.get_name()}")
+            metric1, metric2 = algorithm.compute_performance_with_selected_indices(metric.selected_features)
+            return Metrics(metric.time, metric1, metric2, metric.selected_features)
+
         metric = algorithm.compute_performance()
         self.save_to_cache(algorithm, fold, repeat, metric)
         return metric
@@ -67,7 +69,7 @@ class Evaluator:
             return None
         row = rows.iloc[0]
         selected_features = row["selected_features"][0:algorithm.target_size]
-        return Metrics(row["final_size"], row["time"], row["metric1"], row["metric2"], selected_features)
+        return Metrics(row["time"], row["metric1"], row["metric2"], selected_features)
 
     def evaluate_for_all_features(self, dataset):
         for fold, splits in enumerate(dataset.get_k_folds()):
@@ -83,7 +85,6 @@ class Evaluator:
         task = DSManager.get_task_by_name(dataset_name)
         metric1, metric2 = Algorithm.evaluate_train_test_pair(task, X_train, y_train, X_test, y_test)
         self.reporter.write_details_all_features(fold, dataset_name, metric1, metric2)
-
 
 
 

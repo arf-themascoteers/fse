@@ -1,6 +1,5 @@
 class Metrics:
-    def __init__(self,final_size, time, metric1, metric2, selected_features):
-        self.final_size = final_size
+    def __init__(self,time, metric1, metric2, selected_features):
         self.time = time
         self.metric1 = metric1
         self.metric2 = metric2

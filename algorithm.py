@@ -29,8 +29,12 @@ class Algorithm(ABC):
 
     def transform(self, X):
         if len(self.selected_indices) != 0:
-            return X[:,self.selected_indices]
+            return self.transform_with_selected_indices(X, self.selected_indices)
         return self.model.transform(X)
+
+    @staticmethod
+    def transform_with_selected_indices(X, selected_indices):
+        return X[:,selected_indices]
 
     def compute_performance(self):
         start_time = datetime.now()
@@ -38,11 +42,20 @@ class Algorithm(ABC):
         elapsed_time = (datetime.now() - start_time).total_seconds()
         evaluation_train_x = self.transform(self.splits.evaluation_train_x)
         evaluation_test_x = self.transform(self.splits.evaluation_test_x)
+        metric1, metric2 = self.compute_performance_with_transformed_xs(evaluation_train_x, evaluation_test_x)
+        return Metrics(evaluation_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
+
+    def compute_performance_with_selected_indices(self, selected_indices):
+        evaluation_train_x = Algorithm.transform_with_selected_indices(self.splits.evaluation_train_x, selected_indices)
+        evaluation_test_x = Algorithm.transform_with_selected_indices(self.splits.evaluation_test_x, selected_indices)
+        return self.compute_performance_with_transformed_xs(evaluation_train_x, evaluation_test_x)
+
+    def compute_performance_with_transformed_xs(self, evaluation_train_x, evaluation_test_x):
         task = DSManager.get_task_by_name(self.splits.get_name())
         metric1, metric2 = Algorithm.evaluate_train_test_pair(task,
                                                               evaluation_train_x, self.splits.evaluation_train_y,
                                                               evaluation_test_x, self.splits.evaluation_test_y)
-        return Metrics(evaluation_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
+        return metric1, metric2
 
     @staticmethod
     def evaluate_train_test_pair(task, X_train, y_train, X_test, y_test):
