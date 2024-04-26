@@ -9,6 +9,7 @@ from algorithms.algorithm_pcal import AlgorithmPCALoading
 from algorithms.algorithm_pca import AlgorithmPCA
 from algorithms.algorithm_bsnet import AlgorithmBSNet
 from algorithms.algorithm_bsnetig import AlgorithmBSNetIG
+from algorithms.algorithm_bsnetig2 import AlgorithmBSNetIG2
 
 
 class AlgorithmCreator:
@@ -36,4 +37,6 @@ class AlgorithmCreator:
             return AlgorithmBSNet(target_feature_size, X_train, y_train, X_validation, y_validation)
         elif name == "bsnetig":
             return AlgorithmBSNetIG(target_feature_size, X_train, y_train, X_validation, y_validation)
+        elif name == "bsnetig2":
+            return AlgorithmBSNetIG2(target_feature_size, X_train, y_train, X_validation, y_validation)
 
