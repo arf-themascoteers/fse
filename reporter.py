@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from metrics import Metrics
 
 
 class Reporter:
@@ -30,14 +31,14 @@ class Reporter:
             with open(self.all_features_details_file, 'w') as file:
                 file.write("fold,dataset,metric1,metric2\n")
 
-    def write_details(self, algorithm, fold, repeat, final_size, time, metric1, metric2, selected_features):
-        time = Reporter.sanitize_metric(time)
-        metric1 = Reporter.sanitize_metric(metric1)
-        metric2 = Reporter.sanitize_metric(metric2)
+    def write_details(self, algorithm, fold, repeat, metric:Metrics):
+        time = Reporter.sanitize_metric(metric.time)
+        metric1 = Reporter.sanitize_metric(metric.metric1)
+        metric2 = Reporter.sanitize_metric(metric.metric2)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm.splits.get_name()},{algorithm.target_size},{fold},{algorithm.get_name()},"
                        f"{repeat},"
-                       f"{final_size},{time},{metric1},{metric2},{'-'.join([str(i) for i in selected_features])}\n")
+                       f"{metric.final_size},{time},{metric1},{metric2},{'-'.join([str(i) for i in metric.selected_features])}\n")
         self.update_summary(algorithm)
 
     def update_summary(self, algorithm):
@@ -100,7 +101,7 @@ class Reporter:
         if len(rows) == 0:
             return None, None, None, None, None
         row = rows.iloc[0]
-        return row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"]
+        return Metrics(row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"])
 
     def get_saved_metrics_for_all_feature(self, fold, dataset):
         df = pd.read_csv(self.all_features_details_file)

@@ -1,18 +1,9 @@
 from ds_manager import DSManager
-from datetime import datetime
 from algorithm_creator import AlgorithmCreator
-from sklearn.metrics import r2_score, mean_squared_error
-import math
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import cohen_kappa_score
 from reporter import Reporter
-from sklearn.svm import SVR
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neural_network import MLPRegressor
-from sklearn.neural_network import MLPClassifier
 import pandas as pd
+from metrics import Metrics
+from algorithm import Algorithm
 
 
 class Evaluator:
@@ -35,44 +26,38 @@ class Evaluator:
                             self.process_a_case(algorithm_object, fold, repeat_no)
 
     def process_a_case(self, algorithm, fold, repeat):
-        final_size, time, metric1, metric2, selected_features = self.reporter.get_saved_metrics(algorithm, fold, repeat)
-        if time is not None:
+        metric = self.reporter.get_saved_metrics(algorithm, fold, repeat)
+        if metric is not None:
             print(f"{algorithm.splits.get_name()} for size {algorithm.target_size} for fold {fold} for {algorithm.get_name()} was done")
             return
-        final_size, elapsed_time, metric1, metric2, selected_features = self.get_results_for_a_case(algorithm, fold, repeat)
-        self.reporter.write_details(algorithm, final_size, elapsed_time, metric1, metric2, selected_features)
+        metric = self.get_results_for_a_case(algorithm, fold, repeat)
+        self.reporter.write_details(algorithm, fold, repeat, metric)
 
-    def get_results_for_a_case(self, algorithm, fold, repeat):
-        final_size, elapsed_time, metric1, metric2, selected_features = self.get_from_cache(splits.get_name(), fold, algorithm, repeat_no)
-        if elapsed_time is not None:
-            print(f"{splits.get_name()} for size {target_size} for fold {fold} for {algorithm.get_name()} is got from cache")
-            return final_size, elapsed_time, metric1, metric2, selected_features
-        return self.compute_case(algorithm, splits)
+    def get_results_for_a_case(self, algorithm:Algorithm, fold, repeat):
+        metric = self.get_from_cache(algorithm, fold, repeat)
+        if metric is not None:
+            print(f"{algorithm.splits.get_name()} for size {algorithm.target_size} for fold {fold} for {algorithm.get_name()} is procured from cache")
+            return metric
+        return self.compute_case(algorithm, fold, repeat)
 
-    def compute_case(self, dataset, target_size, fold, algorithm, repeat_no, splits):
-        start_time = datetime.now()
-        selected_features = algorithm.fit()
-        elapsed_time = (datetime.now() - start_time).total_seconds()
-        evaluation_train_x = algorithm.transform(splits.evaluation_train_x)
-        evaluation_test_x = algorithm.transform(splits.evaluation_test_x)
-        metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset, evaluation_train_x, splits.evaluation_train_y, evaluation_test_x, splits.evaluation_test_y)
-        return evaluation_test_x.shape[1], elapsed_time, metric1, metric2, selected_features
+    def compute_case(self, algorithm, fold, repeat):
+        pass
 
-    def get_from_cache(self, dataset, fold, algorithm, repeat_no):
+    def get_from_cache(self, algorithm:Algorithm, fold, repeat_no):
         if not algorithm.is_independent_of_target_size():
-            return None, None, None, None, None
+            return None
         if len(self.cache) == 0:
-            return None, None, None, None, None
+            return None
         rows = self.cache.loc[
-            (self.cache["dataset"] == dataset) &
+            (self.cache["dataset"] == algorithm.splits.get_name()) &
             (self.cache["fold"] == fold) &
             (self.cache["algorithm"] == algorithm.get_name()) &
             (self.cache["repeat"] == repeat_no)
         ]
         if len(rows) == 0:
-            return None, None, None, None, None
+            return None
         row = rows.iloc[0]
-        return row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"]
+        return Metrics(row["final_size"], row["time"], row["metric1"], row["metric2"], row["selected_features"])
 
     def evaluate_for_all_features(self, dataset):
         for fold, splits in enumerate(dataset.get_k_folds()):
@@ -87,45 +72,9 @@ class Evaluator:
         metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset_name, X_train, y_train, X_test, y_test)
         self.reporter.write_details_all_features(fold, dataset_name, metric1, metric2)
 
-    @staticmethod
-    def evaluate_train_test_pair(dataset_name, X_train, y_train, X_test, y_test):
-        algorithm = Evaluator.get_metric_evaluator(DSManager.get_task_by_name(dataset_name))
-        algorithm.fit(X_train, y_train)
-        y_pred = algorithm.predict(X_test)
-        return Evaluator.calculate_metrics(dataset_name, y_test, y_pred)
 
-    @staticmethod
-    def calculate_metrics(dataset_name, y_test, y_pred):
-        if DSManager.get_task_by_name(dataset_name) == "classification":
-            return Evaluator.calculate_metrics_for_classification(y_test, y_pred)
-        return Evaluator.calculate_metrics_for_regression(y_test, y_pred)
 
-    @staticmethod
-    def calculate_metrics_for_classification(y_test, y_pred):
-        accuracy = accuracy_score(y_test, y_pred)
-        kappa = cohen_kappa_score(y_test, y_pred)
-        return accuracy, kappa
 
-    @staticmethod
-    def calculate_metrics_for_regression(y_test, y_pred):
-        r2 = r2_score(y_test, y_pred)
-        rmse = math.sqrt(mean_squared_error(y_test, y_pred))
-        return r2, rmse
 
-    @staticmethod
-    def get_metric_evaluator(task):
-        gowith = "sv"
 
-        if gowith == "rf":
-            if task == "regression":
-                return RandomForestRegressor()
-            return RandomForestClassifier()
-        elif gowith == "sv":
-            if task == "regression":
-                return SVR(C=1e5, kernel='rbf', gamma=1.)
-            return SVC(C=1e5, kernel='rbf', gamma=1.)
-        else:
-            if task == "regression":
-                return MLPRegressor(max_iter=2000)
-            return MLPClassifier(max_iter=2000)
 
