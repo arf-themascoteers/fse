@@ -42,7 +42,7 @@ class Algorithm(ABC):
         metric1, metric2 = Algorithm.evaluate_train_test_pair(task,
                                                               evaluation_train_x, self.splits.evaluation_train_y,
                                                               evaluation_test_x, self.splits.evaluation_test_y)
-        return evaluation_test_x.shape[1], elapsed_time, metric1, metric2, selected_features
+        return Metrics(evaluation_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
 
     @staticmethod
     def evaluate_train_test_pair(task, X_train, y_train, X_test, y_test):

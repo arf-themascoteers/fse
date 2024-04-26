@@ -1,5 +1,5 @@
 from algorithm import Algorithm
-from algorithms.basenetig2.bs_net_fc2 import BSNetFC2
+from algorithms.bsnetig2.bs_net_fc2 import BSNetFC2
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
