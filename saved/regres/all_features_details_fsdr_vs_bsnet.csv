@@ -1,0 +1,16 @@
+fold,dataset,metric1,metric2
+0,lucas_skipped,0.68,0.08
+1,lucas_skipped,0.45,0.1
+2,lucas_skipped,0.67,0.08
+3,lucas_skipped,0.7,0.08
+4,lucas_skipped,0.71,0.08
+0,lucas_full,0.24,0.12
+1,lucas_full,0.28,0.12
+2,lucas_full,0.23,0.12
+3,lucas_full,0.31,0.13
+4,lucas_full,0.32,0.12
+0,lucas_min,0,0.15
+1,lucas_min,0,0.15
+2,lucas_min,0,0.14
+3,lucas_min,0,0.12
+4,lucas_min,0,0.15
