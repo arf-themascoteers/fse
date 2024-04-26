@@ -24,3 +24,6 @@ class AlgorithmBSNetIG(AlgorithmBSNet):
         loss = mse_loss + l1_loss
         loss.backward()
         return X_train.grad
+
+    def get_name(self):
+        return "bsnetig"

@@ -16,3 +16,6 @@ class AlgorithmLasso(Algorithm):
 
     def transform(self, X):
         return X[:,self.indices]
+
+    def get_name(self):
+        return "lasso"

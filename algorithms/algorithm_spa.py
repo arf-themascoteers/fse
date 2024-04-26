@@ -13,3 +13,6 @@ class AlgorithmSPA(Algorithm):
         mask = vip.vips_ > 0.3
         selector.fit(self.X_train, self.y_train, mask=mask)
         return selector, selector.get_support(indices=True)
+
+    def get_name(self):
+        return "spa"

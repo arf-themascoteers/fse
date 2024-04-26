@@ -8,3 +8,6 @@ class AlgorithmFSCRD(AlgorithmFSCR):
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
         torch.backends.cudnn.deterministic = True
+
+    def get_name(self):
+        return "fsdrs"

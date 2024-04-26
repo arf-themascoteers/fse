@@ -10,3 +10,6 @@ class AlgorithmMCUVE(Algorithm):
         selector = MCUVE(n_features_to_select=self.target_feature_size)
         selector.fit(self.X_train, self.y_train)
         return selector, selector.get_support(indices=True)
+
+    def get_name(self):
+        return "mcuve"

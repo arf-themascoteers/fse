@@ -46,3 +46,5 @@ class AlgorithmBSNetIG2(Algorithm):
         mse_loss.backward()
         return X_train2.grad
 
+    def get_name(self):
+        return "bsnetig2"

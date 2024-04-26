@@ -15,3 +15,6 @@ class AlgorithmFSCR(Algorithm):
         fscr = FSCR(self.target_feature_size, class_size)
         fscr.fit(self.X_train, self.y_train, self.X_validation, self.y_validation)
         return fscr, fscr.get_indices()
+
+    def get_name(self):
+        return "fsdr"

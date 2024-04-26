@@ -33,3 +33,6 @@ class AlgorithmBSNet(Algorithm):
         mean_weight = torch.mean(channel_weights, dim=0)
         band_indx = (torch.argsort(mean_weight, descending=True)[:self.target_feature_size]).tolist()
         return bsnet, band_indx
+
+    def get_name(self):
+        return "bsnet"

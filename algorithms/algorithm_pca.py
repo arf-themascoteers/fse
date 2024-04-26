@@ -10,3 +10,6 @@ class AlgorithmPCA(Algorithm):
         pca = PCA(n_components=self.target_feature_size)
         pca.fit(self.X_train)
         return pca,[]
+
+    def get_name(self):
+        return "pca"
