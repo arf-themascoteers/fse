@@ -44,5 +44,5 @@ class AlgorithmBSNetIG2(Algorithm):
         channel_weights, output = model.recnet(channel_weights, X_train2)
         mse_loss = self.criterion(output, y_train)
         mse_loss.backward()
-        return X_train.grad
+        return X_train2.grad
 
