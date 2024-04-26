@@ -30,14 +30,16 @@ class AlgorithmBSNetIG2(Algorithm):
 
         gradients = self.input_gradient(bsnet)
         gradients = torch.mean(torch.abs(gradients), dim=0)
-        band_indx = (torch.argsort(gradients, descending=True)[:self.target_size]).tolist()
-        return bsnet, band_indx
+        band_indx = (torch.argsort(gradients, descending=True)).tolist()
+        super()._set_all_indices(band_indx)
+        selected_indices = band_indx[: self.target_size]
+        return bsnet, selected_indices
 
     def input_gradient(self, model):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        X_train = torch.tensor(self.train_x, dtype=torch.float32).to(device)
-        X_train2 = torch.tensor(self.train_x, dtype=torch.float32).to(device)
-        y_train = torch.tensor(self.train_x, dtype=torch.float32).to(device)
+        X_train = torch.tensor(self.splits.train_x, dtype=torch.float32).to(device)
+        X_train2 = torch.tensor(self.splits.train_x, dtype=torch.float32).to(device)
+        y_train = torch.tensor(self.splits.train_x, dtype=torch.float32).to(device)
         X_train2.requires_grad_()
 
         channel_weights = model.bam(X_train)
