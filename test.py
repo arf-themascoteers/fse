@@ -12,7 +12,7 @@ if __name__ == '__main__':
         "target_sizes" : [2, 5, 7]
     }
     tasks = {
-        "algorithms" : ["lasso"],
+        "algorithms" : ["bsnet"],
         "datasets" : ["lucas_downsampled_min", "lucas_skipped_min"],
         "target_sizes" : [2, 5, 7]
     }
