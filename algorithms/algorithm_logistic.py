@@ -10,7 +10,7 @@ class AlgorithmLogistic(Algorithm):
 
     def get_selected_indices(self):
         logistic = LogisticRegression(penalty="l1")
-        logistic.fit(self.train_x, self.train_y)
+        logistic.fit(self.splits.train_x, self.splits.train_y)
         self.indices = np.argsort(np.abs(logistic.coef_))[::-1][:self.target_size]
         return self, self.indices
 

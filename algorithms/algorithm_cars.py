@@ -8,7 +8,7 @@ class AlgorithmCARS(Algorithm):
 
     def get_selected_indices(self):
         selector = CARS(n_features_to_select=self.target_size)
-        selector.fit(self.train_x, self.train_y)
+        selector.fit(self.splits.train_x, self.splits.train_y)
         return selector, selector.get_support(indices=True)
 
     def get_name(self):
