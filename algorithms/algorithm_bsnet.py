@@ -17,6 +17,9 @@ class AlgorithmBSNet(Algorithm):
         dataset = TensorDataset(X_train, X_train)
         dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
         channel_weights = None
+        loss = 0
+        l1_loss = 0
+        mse_loss = 0
         for epoch in range(100):
             for batch_idx, (X, y) in enumerate(dataloader):
                 optimizer.zero_grad()
@@ -24,9 +27,9 @@ class AlgorithmBSNet(Algorithm):
                 mse_loss = self.criterion(y_hat, y)
                 l1_loss = bsnet.get_l1_loss()
                 loss = mse_loss + l1_loss
-                print(f"Epoch={epoch} Batch={batch_idx} - MSE={round(mse_loss.item(),5)}, L1={round(l1_loss.item(),5)}, LOSS={round(loss.item(),5)}")
                 loss.backward()
                 optimizer.step()
+            print(f"Epoch={epoch} MSE={round(mse_loss.item(), 5)}, L1={round(l1_loss.item(), 5)}, LOSS={round(loss.item(), 5)}")
         mean_weight = torch.mean(channel_weights, dim=0)
         band_indx = (torch.argsort(mean_weight, descending=True)[:self.target_feature_size]).tolist()
         return bsnet, band_indx
