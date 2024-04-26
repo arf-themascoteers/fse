@@ -43,7 +43,7 @@ class Algorithm(ABC):
         evaluation_train_x = self.transform(self.splits.evaluation_train_x)
         evaluation_test_x = self.transform(self.splits.evaluation_test_x)
         metric1, metric2 = self.compute_performance_with_transformed_xs(evaluation_train_x, evaluation_test_x)
-        return Metrics(evaluation_test_x.shape[1], elapsed_time, metric1, metric2, selected_features)
+        return Metrics(elapsed_time, metric1, metric2, selected_features)
 
     def compute_performance_with_selected_indices(self, selected_indices):
         evaluation_train_x = Algorithm.transform_with_selected_indices(self.splits.evaluation_train_x, selected_indices)

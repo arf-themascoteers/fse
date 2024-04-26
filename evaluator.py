@@ -26,7 +26,7 @@ class Evaluator:
                             algorithm_object = AlgorithmCreator.create(algorithm, target_size, splits)
                             self.process_a_case(algorithm_object, fold, repeat_no)
 
-    def process_a_case(self, algorithm, fold, repeat):
+    def process_a_case(self, algorithm:Algorithm, fold, repeat):
         metric = self.reporter.get_saved_metrics(algorithm, fold, repeat)
         if metric is not None:
             print(f"{algorithm.splits.get_name()} for size {algorithm.target_size} for fold {fold} for {algorithm.get_name()} was done")

@@ -11,9 +11,9 @@ class AlgorithmBSNet(Algorithm):
 
     def get_selected_indices(self):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        bsnet = BSNetFC(self.train_x.shape[1]).to(device)
+        bsnet = BSNetFC(self.splits.train_x.shape[1]).to(device)
         optimizer = torch.optim.Adam(bsnet.parameters(), lr=0.00002)
-        X_train = torch.tensor(self.train_x, dtype=torch.float32).to(device)
+        X_train = torch.tensor(self.splits.train_x, dtype=torch.float32).to(device)
         dataset = TensorDataset(X_train, X_train)
         dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
         channel_weights = None

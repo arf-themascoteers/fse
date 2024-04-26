@@ -93,13 +93,13 @@ class Reporter:
     def get_saved_metrics(self, algorithm, fold, repeat):
         df = pd.read_csv(self.details_file)
         if len(df) == 0:
-            return None, None, None, None, None
+            return None
         rows = df.loc[(df["dataset"] == algorithm.splits.get_name()) & (df["target_size"] == algorithm.target_size) &
                       (df["fold"] == fold) & (df["algorithm"] == algorithm.get_name()) &
                       (df["repeat"] == repeat)
                       ]
         if len(rows) == 0:
-            return None, None, None, None, None
+            return None
         row = rows.iloc[0]
         return Metrics(row["time"], row["metric1"], row["metric2"], row["selected_features"])
 
