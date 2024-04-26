@@ -11,7 +11,9 @@ class AlgorithmLasso(Algorithm):
     def get_selected_indices(self):
         lasso = Lasso(alpha=0.001)
         lasso.fit(self.splits.train_x, self.splits.train_y)
-        self.indices = np.argsort(np.abs(lasso.coef_))[::-1][:self.target_size]
+        all_indices = np.argsort(np.abs(lasso.coef_))[::-1]
+        super()._set_all_indices(all_indices)
+        self.indices = all_indices[:self.target_size]
         return self, self.indices
 
     def transform(self, X):

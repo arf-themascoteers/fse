@@ -8,7 +8,7 @@ class AlgorithmPCA(Algorithm):
 
     def get_selected_indices(self):
         pca = PCA(n_components=self.target_size)
-        pca.fit(self.train_x)
+        pca.fit(self.splits.train_x)
         return pca,[]
 
     def get_name(self):
