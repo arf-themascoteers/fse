@@ -5,15 +5,15 @@ from torch.utils.data import TensorDataset, DataLoader
 
 
 class AlgorithmBSNet(Algorithm):
-    def __init__(self, target_feature_size, splits):
-        super().__init__(target_feature_size, splits)
+    def __init__(self, target_size, splits):
+        super().__init__(target_size, splits)
         self.criterion = torch.nn.MSELoss(reduction='sum')
 
     def get_selected_indices(self):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        bsnet = BSNetFC(self.X_train.shape[1]).to(device)
+        bsnet = BSNetFC(self.train_x.shape[1]).to(device)
         optimizer = torch.optim.Adam(bsnet.parameters(), lr=0.00002)
-        X_train = torch.tensor(self.X_train, dtype=torch.float32).to(device)
+        X_train = torch.tensor(self.train_x, dtype=torch.float32).to(device)
         dataset = TensorDataset(X_train, X_train)
         dataloader = DataLoader(dataset, batch_size=64, shuffle=True)
         channel_weights = None
@@ -31,7 +31,7 @@ class AlgorithmBSNet(Algorithm):
                 optimizer.step()
             print(f"Epoch={epoch} MSE={round(mse_loss.item(), 5)}, L1={round(l1_loss.item(), 5)}, LOSS={round(loss.item(), 5)}")
         mean_weight = torch.mean(channel_weights, dim=0)
-        band_indx = (torch.argsort(mean_weight, descending=True)[:self.target_feature_size]).tolist()
+        band_indx = (torch.argsort(mean_weight, descending=True)[:self.target_size]).tolist()
         return bsnet, band_indx
 
     def get_name(self):

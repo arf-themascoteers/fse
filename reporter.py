@@ -30,19 +30,19 @@ class Reporter:
             with open(self.all_features_details_file, 'w') as file:
                 file.write("fold,dataset,metric1,metric2\n")
 
-    def write_details(self, dataset, target_size, fold, algorithm_name, repeat_no, final_size, time, metric1, metric2, selected_features):
+    def write_details(self, algorithm, fold, repeat, final_size, time, metric1, metric2, selected_features):
         time = Reporter.sanitize_metric(time)
         metric1 = Reporter.sanitize_metric(metric1)
         metric2 = Reporter.sanitize_metric(metric2)
         with open(self.details_file, 'a') as file:
-            file.write(f"{dataset},{target_size},{fold},{algorithm_name},"
-                       f"{repeat_no},"
+            file.write(f"{algorithm.splits.get_name()},{algorithm.target_size},{fold},{algorithm.get_name()},"
+                       f"{repeat},"
                        f"{final_size},{time},{metric1},{metric2},{'-'.join([str(i) for i in selected_features])}\n")
-        self.update_summary(algorithm_name, dataset, target_size)
+        self.update_summary(algorithm)
 
-    def update_summary(self, algorithm_name, dataset, target_size):
+    def update_summary(self, algorithm):
         df = pd.read_csv(self.details_file)
-        df = df[(df["dataset"] == dataset) & (df["algorithm"] == algorithm_name) & (df["target_size"] == target_size)]
+        df = df[(df["dataset"] == algorithm.splits.get_name()) & (df["algorithm"] == algorithm.get_name()) & (df["target_size"] == algorithm.target_size)]
         if len(df) == 0:
             return
         time = round(df["time"].mean(), 2)
@@ -51,10 +51,10 @@ class Reporter:
         selected_features = '||'.join(df['selected_features'].astype(str))
 
         df2 = pd.read_csv(self.summary_file)
-        mask = ((df2["dataset"] == dataset) & (df2["target_size"] == target_size) & (df2["algorithm"] == algorithm_name))
+        mask = ((df2["dataset"] == algorithm.splits.get_name()) & (df2["target_size"] == algorithm.target_size) & (df2["algorithm"] == algorithm.get_name()))
         if len(df2[mask]) == 0:
             df2.loc[len(df2)] = {
-                "dataset":dataset, "target_size":target_size, "algorithm": algorithm_name,
+                "dataset":algorithm.splits.get_name(), "target_size":algorithm.target_size, "algorithm": algorithm.get_name(),
                 "time":time,"metric1":metric1,"metric2":metric2, "selected_features":selected_features
             }
         else:
@@ -89,13 +89,13 @@ class Reporter:
             df2.loc[mask, 'metric2'] = metric2
         df2.to_csv(self.all_features_summary_file, index=False)
 
-    def get_saved_metrics(self, dataset, target_size, fold, algorithm_name, repeat_no):
+    def get_saved_metrics(self, algorithm, fold, repeat):
         df = pd.read_csv(self.details_file)
         if len(df) == 0:
             return None, None, None, None, None
-        rows = df.loc[(df["dataset"] == dataset) & (df["target_size"] == target_size) &
-                      (df["fold"] == fold) & (df["algorithm"] == algorithm_name) &
-                      (df["repeat"] == repeat_no)
+        rows = df.loc[(df["dataset"] == algorithm.splits.get_name()) & (df["target_size"] == algorithm.target_size) &
+                      (df["fold"] == fold) & (df["algorithm"] == algorithm.get_name()) &
+                      (df["repeat"] == repeat)
                       ]
         if len(rows) == 0:
             return None, None, None, None, None

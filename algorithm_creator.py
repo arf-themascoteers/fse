@@ -14,29 +14,29 @@ from algorithms.algorithm_bsnetig2 import AlgorithmBSNetIG2
 
 class AlgorithmCreator:
     @staticmethod
-    def create(name, target_feature_size, splits):
+    def create(name, target_size, splits):
         if name == "fsdr":
-            return AlgorithmFSCR(target_feature_size, splits)
+            return AlgorithmFSCR(target_size, splits)
         elif name == "lasso":
-            return AlgorithmLasso(target_feature_size, splits)
+            return AlgorithmLasso(target_size, splits)
         elif name == "logistic":
-            return AlgorithmLogistic(target_feature_size, splits)
+            return AlgorithmLogistic(target_size, splits)
         elif name == "cars":
-            return AlgorithmCARS(target_feature_size, splits)
+            return AlgorithmCARS(target_size, splits)
         elif name == "spa":
-            return AlgorithmSPA(target_feature_size, splits)
+            return AlgorithmSPA(target_size, splits)
         elif name == "mcuve":
-            return AlgorithmMCUVE(target_feature_size, splits)
+            return AlgorithmMCUVE(target_size, splits)
         elif name == "pcal":
-            return AlgorithmPCALoading(target_feature_size, splits)
+            return AlgorithmPCALoading(target_size, splits)
         elif name == "fsdrd":
-            return AlgorithmFSCRD(target_feature_size, splits)
+            return AlgorithmFSCRD(target_size, splits)
         elif name == "pca":
-            return AlgorithmPCA(target_feature_size, splits)
+            return AlgorithmPCA(target_size, splits)
         elif name == "bsnet":
-            return AlgorithmBSNet(target_feature_size, splits)
+            return AlgorithmBSNet(target_size, splits)
         elif name == "bsnetig":
-            return AlgorithmBSNetIG(target_feature_size, splits)
+            return AlgorithmBSNetIG(target_size, splits)
         elif name == "bsnetig2":
-            return AlgorithmBSNetIG2(target_feature_size, splits)
+            return AlgorithmBSNetIG2(target_size, splits)
 

@@ -3,8 +3,8 @@ import torch
 
 
 class AlgorithmFSCRD(AlgorithmFSCR):
-    def __init__(self, target_feature_size, splits):
-        super().__init__(target_feature_size, splits)
+    def __init__(self, target_size, splits):
+        super().__init__(target_size, splits)
         torch.manual_seed(1)
         torch.cuda.manual_seed(1)
         torch.backends.cudnn.deterministic = True

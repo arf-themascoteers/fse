@@ -10,7 +10,7 @@ if __name__ == '__main__':
                     {
                         "reduced_features":reduced_features,
                         "reduced_rows":reduced_rows,
-                        "target_feature_size": size,
+                        "target_size": size,
                         "algorithm": algorithm
                     }
                 )

@@ -2,12 +2,9 @@ from abc import ABC, abstractmethod
 
 
 class Algorithm(ABC):
-    def __init__(self, target_feature_size, splits):
-        self.X_train = splits.train_x
-        self.y_train = splits.train_y
-        self.X_validation = splits.validation_x
-        self.y_validation = splits.validation_y
-        self.target_feature_size = target_feature_size
+    def __init__(self, target_size, splits):
+        self.target_size = target_size
+        self.splits = splits
         self.selected_indices = []
         self.model = None
         self.all_indices = None

@@ -31,37 +31,32 @@ class Evaluator:
                 for fold, splits in enumerate(dataset.get_k_folds()):
                     for algorithm in self.task["algorithms"]:
                         for repeat_no in range(self.repeat):
-                            self.process_a_case(target_size, fold, algorithm, repeat_no, splits)
+                            algorithm_object = AlgorithmCreator.create(algorithm, target_size, splits)
+                            self.process_a_case(algorithm_object, fold, repeat_no)
 
-    def process_a_case(self, target_size, fold, algorithm_name, repeat_no, splits):
-        final_size, time, metric1, metric2, selected_features = \
-            self.reporter.get_saved_metrics(splits.get_name(), target_size, fold, algorithm_name, repeat_no)
+    def process_a_case(self, algorithm, fold, repeat):
+        final_size, time, metric1, metric2, selected_features = self.reporter.get_saved_metrics(algorithm, fold, repeat)
         if time is not None:
-            print(f"{splits.get_name()} for size {target_size} for fold {fold} for {algorithm_name} was done")
+            print(f"{algorithm.splits.get_name()} for size {algorithm.target_size} for fold {fold} for {algorithm.get_name()} was done")
             return
+        final_size, elapsed_time, metric1, metric2, selected_features = self.get_results_for_a_case(algorithm, fold, repeat)
+        self.reporter.write_details(algorithm, final_size, elapsed_time, metric1, metric2, selected_features)
 
-        algorithm = AlgorithmCreator.create(algorithm_name, target_size, splits)
-
-        final_size, elapsed_time, metric1, metric2, selected_features = \
-            self.get_results_for_a_case(dataset, target_size, fold, algorithm, repeat_no, splits)
-
-        self.reporter.write_details(dataset, target_size, fold, algorithm_name, repeat_no, final_size, elapsed_time, metric1, metric2, selected_features)
-
-    def get_results_for_a_case(self, dataset, target_size, fold, algorithm, repeat_no, splits):
-        final_size, elapsed_time, metric1, metric2, selected_features = self.get_from_cache(dataset, fold, algorithm, repeat_no)
+    def get_results_for_a_case(self, algorithm, fold, repeat):
+        final_size, elapsed_time, metric1, metric2, selected_features = self.get_from_cache(splits.get_name(), fold, algorithm, repeat_no)
         if elapsed_time is not None:
-            print(f"{dataset} for size {target_size} for fold {fold} for {algorithm.get_name()} is got from cache")
+            print(f"{splits.get_name()} for size {target_size} for fold {fold} for {algorithm.get_name()} is got from cache")
             return final_size, elapsed_time, metric1, metric2, selected_features
-        return self.compute_case(dataset, target_size, fold, algorithm, repeat_no, splits)
+        return self.compute_case(algorithm, splits)
 
     def compute_case(self, dataset, target_size, fold, algorithm, repeat_no, splits):
         start_time = datetime.now()
         selected_features = algorithm.fit()
         elapsed_time = (datetime.now() - start_time).total_seconds()
-        test_for_train_x = algorithm.transform(splits.test_for_train_x)
-        test_for_test_x = algorithm.transform(splits.test_for_test_x)
-        metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset, test_for_train_x, splits.test_for_train_y, test_for_test_x, splits.test_for_test_y)
-        return test_for_test_x.shape[1], elapsed_time, metric1, metric2, selected_features
+        evaluation_train_x = algorithm.transform(splits.evaluation_train_x)
+        evaluation_test_x = algorithm.transform(splits.evaluation_test_x)
+        metric1, metric2 = Evaluator.evaluate_train_test_pair(dataset, evaluation_train_x, splits.evaluation_train_y, evaluation_test_x, splits.evaluation_test_y)
+        return evaluation_test_x.shape[1], elapsed_time, metric1, metric2, selected_features
 
     def get_from_cache(self, dataset, fold, algorithm, repeat_no):
         if not algorithm.is_independent_of_target_size():
@@ -82,7 +77,7 @@ class Evaluator:
     def evaluate_for_all_features(self, dataset):
         for fold, splits in enumerate(dataset.get_k_folds()):
             self.evaluate_for_all_features_fold(fold, dataset.name,
-                splits.test_for_train_x, splits.test_for_train_y, splits.test_for_test_x, splits.test_for_test_y)
+                                                splits.evaluation_train_x, splits.evaluation_train_y, splits.evaluation_test_x, splits.evaluation_test_y)
 
     def evaluate_for_all_features_fold(self, fold, dataset_name, X_train, y_train, X_test, y_test):
         metric1, metric2 = self.reporter.get_saved_metrics_for_all_feature(fold, dataset_name)
