@@ -5,8 +5,8 @@ from torch.utils.data import TensorDataset, DataLoader
 
 
 class AlgorithmBSNetIG2(Algorithm):
-    def __init__(self, target_feature_size, X_train, y_train, X_validation, y_validation):
-        super().__init__(target_feature_size, X_train, y_train, X_validation, y_validation)
+    def __init__(self, target_feature_size, splits):
+        super().__init__(target_feature_size, splits)
         self.criterion = torch.nn.MSELoss(reduction='sum')
 
     def get_selected_indices(self):

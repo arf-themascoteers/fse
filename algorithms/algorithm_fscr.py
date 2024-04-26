@@ -1,12 +1,13 @@
 from algorithm import Algorithm
 from algorithms.fscr.fscr import FSCR
 import numpy as np
+from ds_manager import DSManager
 
 
 class AlgorithmFSCR(Algorithm):
-    def __init__(self, target_feature_size, task, X_train, y_train, X_validation, y_validation):
-        super().__init__(target_feature_size, X_train, y_train, X_validation, y_validation)
-        self.task = task
+    def __init__(self, target_feature_size, splits):
+        super().__init__(target_feature_size, splits)
+        self.task = DSManager.get_task_by_name(splits.get_name())
 
     def get_selected_indices(self):
         class_size = 1
