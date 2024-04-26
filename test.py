@@ -11,5 +11,10 @@ if __name__ == '__main__':
         "datasets" : ["lucas_downsampled_min", "lucas_skipped_min"],
         "target_sizes" : [2, 5, 7]
     }
+    tasks = {
+        "algorithms" : ["lasso"],
+        "datasets" : ["lucas_downsampled_min", "lucas_skipped_min"],
+        "target_sizes" : [2, 5, 7]
+    }
     ev = Evaluator(tasks,3,4,"quick.csv")
     ev.evaluate()

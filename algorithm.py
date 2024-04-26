@@ -114,4 +114,8 @@ class Algorithm(ABC):
         self.all_indices = all_indices
 
     def is_independent_of_target_size(self):
-        return self.get_all_indices() is not None
+        name = self.get_name()
+        for ind in ["lasso","bsnet","logistic"]:
+            if name in ind:
+                return True
+        return False

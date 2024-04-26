@@ -40,7 +40,7 @@ class Evaluator:
             print(f"Selected features got from cache for {algorithm.splits.get_name()} for size {algorithm.target_size} for fold {fold} for {algorithm.get_name()}")
             metric1, metric2 = algorithm.compute_performance_with_selected_indices(metric.selected_features)
             return Metrics(metric.time, metric1, metric2, metric.selected_features)
-
+        print(f"Computing {algorithm.get_name()} {algorithm.splits.get_name()} Fold {fold} Repeat {repeat}")
         metric = algorithm.compute_performance()
         self.save_to_cache(algorithm, fold, repeat, metric)
         return metric
