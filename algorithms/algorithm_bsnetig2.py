@@ -27,6 +27,22 @@ class AlgorithmBSNetIG2(Algorithm):
                 print(f"Epoch={epoch} Batch={batch_idx} - MSE={round(mse_loss.item(),5)}, L1={round(l1_loss.item(),5)}, LOSS={round(loss.item(),5)}")
                 loss.backward()
                 optimizer.step()
-        mean_weight = torch.mean(channel_weights, dim=0)
-        band_indx = (torch.argsort(mean_weight, descending=True)[:self.target_feature_size]).tolist()
+
+        gradients = self.input_gradient(bsnet)
+        gradients = torch.mean(torch.abs(gradients), dim=0)
+        band_indx = (torch.argsort(gradients, descending=True)[:self.target_feature_size]).tolist()
         return bsnet, band_indx
+
+    def input_gradient(self, model):
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        X_train = torch.tensor(self.X_train, dtype=torch.float32).to(device)
+        X_train2 = torch.tensor(self.X_train, dtype=torch.float32).to(device)
+        y_train = torch.tensor(self.X_train, dtype=torch.float32).to(device)
+        X_train2.requires_grad_()
+
+        channel_weights = model.bam(X_train)
+        channel_weights, output = model.recnet(channel_weights, X_train2)
+        mse_loss = self.criterion(output, y_train)
+        mse_loss.backward()
+        return X_train.grad
+
