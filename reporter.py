@@ -35,6 +35,7 @@ class Reporter:
         time = Reporter.sanitize_metric(metric.time)
         metric1 = Reporter.sanitize_metric(metric.metric1)
         metric2 = Reporter.sanitize_metric(metric.metric2)
+        metric.selected_features = sorted(metric.selected_features)
         with open(self.details_file, 'a') as file:
             file.write(f"{algorithm.splits.get_name()},{algorithm.target_size},{fold},{algorithm.get_name()},"
                        f"{repeat},"

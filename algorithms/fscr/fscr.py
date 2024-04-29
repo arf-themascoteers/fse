@@ -125,7 +125,7 @@ class FSCR:
         return round(raw_index.item() * multiplier)
 
     def get_indices(self):
-        indices = sorted([self.indexify_raw_index(p) for p in self.model.get_indices()])
+        indices = [self.indexify_raw_index(p) for p in self.model.get_indices()]
         return list(dict.fromkeys(indices))
 
     def transform(self, X):

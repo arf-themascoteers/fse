@@ -31,12 +31,10 @@ class AlgorithmBSNet(Algorithm):
                 loss.backward()
                 optimizer.step()
             print(f"Epoch={epoch} MSE={round(mse_loss.item(), 5)}, L1={round(l1_loss.item(), 5)}, LOSS={round(loss.item(), 5)}")
-            #print(f"Channel Weights: {torch.mean(channel_weights, dim=1)[0:5]}")
         mean_weight = torch.mean(channel_weights, dim=0)
         band_indx = (torch.argsort(mean_weight, descending=True)).tolist()
         super()._set_all_indices(band_indx)
         selected_indices = band_indx[: self.target_size]
-        print(mean_weight)
         return bsnet, selected_indices
 
     def get_name(self):

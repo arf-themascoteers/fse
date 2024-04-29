@@ -33,7 +33,6 @@ class AlgorithmBSNetCW(Algorithm):
         band_indx = (torch.argsort(bsnet.get_channel_weights(), descending=True)).tolist()
         super()._set_all_indices(band_indx)
         selected_indices = band_indx[: self.target_size]
-        print(bsnet.get_channel_weights())
         return bsnet, selected_indices
 
     def get_name(self):

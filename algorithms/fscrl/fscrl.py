@@ -118,7 +118,7 @@ class FSCRL:
 
     def get_indices(self):
         indices = torch.round(self.model.get_indices() * self.original_feature_size ).to(torch.int64).tolist()
-        return sorted(indices)
+        return list(dict.fromkeys(indices))
 
     def transform(self, X):
         return X[:,self.get_indices()]
