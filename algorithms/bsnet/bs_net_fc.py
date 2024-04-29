@@ -35,6 +35,9 @@ class BSNetFC(nn.Module):
             nn.Sigmoid()
         )
 
+        num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        print("Number of learnable parameters:", num_params)
+
     def forward(self, X):
         channel_weights = self.weighter(X)
         channel_weights = self.channel_weight_layer(channel_weights)
