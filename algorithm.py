@@ -115,7 +115,7 @@ class Algorithm(ABC):
 
     def is_independent_of_target_size(self):
         name = self.get_name()
-        for ind in ["lasso","bsnet","logistic"]:
+        for ind in ["lasso","bsnet","logistic", "pca"]:
             if name in ind:
                 return True
         return False
