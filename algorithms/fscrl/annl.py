@@ -17,6 +17,8 @@ class ANNL(nn.Module):
         )
         init_vals = torch.linspace(0.001,0.99, target_size+2)
         self.indices = nn.Parameter(torch.tensor([ANNL.inverse_sigmoid_torch(init_vals[i + 1]) for i in range(self.target_size)], requires_grad=True).to(self.device))
+        num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        print("Number of learnable parameters:", num_params)
 
     @staticmethod
     def inverse_sigmoid_torch(x):
