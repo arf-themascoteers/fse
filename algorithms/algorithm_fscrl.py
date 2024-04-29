@@ -18,4 +18,4 @@ class AlgorithmFSCRL(Algorithm):
         return fscr, fscr.get_indices()
 
     def get_name(self):
-        return "fsdr"
+        return "fsdrl"
