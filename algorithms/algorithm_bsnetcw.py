@@ -1,17 +1,17 @@
 from algorithm import Algorithm
-from algorithms.bsnet.bs_net_fc import BSNetFC
+from algorithms.bsnetcw.bs_net_fc_cw import BSNetFCCW
 import torch
 from torch.utils.data import TensorDataset, DataLoader
 
 
-class AlgorithmBSNet(Algorithm):
+class AlgorithmBSNetCW(Algorithm):
     def __init__(self, target_size, splits):
         super().__init__(target_size, splits)
         self.criterion = torch.nn.MSELoss(reduction='sum')
 
     def get_selected_indices(self):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        bsnet = BSNetFC(self.splits.train_x.shape[1]).to(device)
+        bsnet = BSNetFCCW(self.splits.train_x.shape[1]).to(device)
         optimizer = torch.optim.Adam(bsnet.parameters(), lr=0.00002)
         X_train = torch.tensor(self.splits.train_x, dtype=torch.float32).to(device)
         dataset = TensorDataset(X_train, X_train)
@@ -25,19 +25,17 @@ class AlgorithmBSNet(Algorithm):
                 optimizer.zero_grad()
                 channel_weights, y_hat = bsnet(X)
                 mse_loss = self.criterion(y_hat, y)
-                norms_for_all_batches = torch.norm(channel_weights, p=1, dim=1)
-                l1_loss = torch.mean(norms_for_all_batches)
+                l1_loss = bsnet.get_l1_loss()
                 loss = mse_loss + l1_loss * 0.01
                 loss.backward()
                 optimizer.step()
             print(f"Epoch={epoch} MSE={round(mse_loss.item(), 5)}, L1={round(l1_loss.item(), 5)}, LOSS={round(loss.item(), 5)}")
-            #print(f"Channel Weights: {torch.mean(channel_weights, dim=1)[0:5]}")
-        mean_weight = torch.mean(channel_weights, dim=0)
-        band_indx = (torch.argsort(mean_weight, descending=True)).tolist()
+            print(f"Channel Weights: {bsnet.get_channel_weights()[0:5]}")
+        band_indx = (torch.argsort(bsnet.get_channel_weights(), descending=True)).tolist()
         super()._set_all_indices(band_indx)
         selected_indices = band_indx[: self.target_size]
-        print(mean_weight)
+        print(bsnet.get_channel_weights())
         return bsnet, selected_indices
 
     def get_name(self):
-        return "bsnet"
+        return "bsnetcw"

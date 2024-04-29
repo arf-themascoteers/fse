@@ -9,6 +9,7 @@ from algorithms.algorithm_mcuve import AlgorithmMCUVE
 from algorithms.algorithm_pcal import AlgorithmPCALoading
 from algorithms.algorithm_pca import AlgorithmPCA
 from algorithms.algorithm_bsnet import AlgorithmBSNet
+from algorithms.algorithm_bsnetcw import AlgorithmBSNetCW
 from algorithms.algorithm_bsnetig import AlgorithmBSNetIG
 from algorithms.algorithm_bsnetig2 import AlgorithmBSNetIG2
 
@@ -42,4 +43,6 @@ class AlgorithmCreator:
             return AlgorithmBSNetIG(target_size, splits)
         elif name == "bsnetig2":
             return AlgorithmBSNetIG2(target_size, splits)
+        elif name == "bsnetcw":
+            return AlgorithmBSNetCW(target_size, splits)
 

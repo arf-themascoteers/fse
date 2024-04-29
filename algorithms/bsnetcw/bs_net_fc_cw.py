@@ -2,24 +2,12 @@ import torch.nn as nn
 import torch
 
 
-class BSNetFC(nn.Module):
+class BSNetFCCW(nn.Module):
     def __init__(self, bands):
         super().__init__()
         torch.manual_seed(3)
         self.bands = bands
-        self.weighter = nn.Sequential(
-            nn.BatchNorm1d(self.bands),
-            nn.Linear(self.bands, 64),
-            nn.ReLU(),
-            nn.BatchNorm1d(64),
-            nn.ReLU(),
-            nn.Linear(64, 128),
-            nn.ReLU()
-        )
-        self.channel_weight_layer = nn.Sequential(
-            nn.Linear(128, self.bands),
-            nn.Sigmoid()
-        )
+        self.raw_channel_weights = nn.Parameter(torch.randn(self.bands), requires_grad=True)
         self.encoder = nn.Sequential(
             nn.Linear(self.bands, 64),
             nn.BatchNorm1d(64),
@@ -35,15 +23,19 @@ class BSNetFC(nn.Module):
             nn.Sigmoid()
         )
 
+    def get_channel_weights(self):
+        return torch.sigmoid(self.raw_channel_weights)
+
     def forward(self, X):
-        channel_weights = self.weighter(X)
-        channel_weights = self.channel_weight_layer(channel_weights)
-        channel_weights_ = torch.reshape(channel_weights, (-1, self.bands))
+        channel_weights = self.get_channel_weights()
+        channel_weights_ = channel_weights.expand(X.shape[0],-1)
         reweight_out = X * channel_weights_
         output = self.encoder(reweight_out)
         return channel_weights, output
 
-
+    def get_l1_loss(self):
+        norms = torch.norm(self.get_channel_weights(), p=1)
+        return torch.sum(norms)
 
 
 
