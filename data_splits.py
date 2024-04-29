@@ -17,3 +17,7 @@ class DataSplits:
 
     def get_name(self):
         return self.name
+
+    def print_splits(self):
+        print(f"train={len(self.train_y)}; valid={len(self.validation_y)}; "
+              f"evaluation_train={len(self.evaluation_train_y)}; evaluation_test={len(self.evaluation_test_y)};")

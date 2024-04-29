@@ -21,6 +21,7 @@ class Evaluator:
             self.evaluate_for_all_features(dataset)
             for target_size in self.task["target_sizes"]:
                 for fold, splits in enumerate(dataset.get_k_folds()):
+                    splits.print_splits()
                     for algorithm in self.task["algorithms"]:
                         for repeat_no in range(self.repeat):
                             algorithm_object = AlgorithmCreator.create(algorithm, target_size, splits)
