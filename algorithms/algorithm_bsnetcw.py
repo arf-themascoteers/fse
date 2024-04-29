@@ -30,7 +30,6 @@ class AlgorithmBSNetCW(Algorithm):
                 loss.backward()
                 optimizer.step()
             print(f"Epoch={epoch} MSE={round(mse_loss.item(), 5)}, L1={round(l1_loss.item(), 5)}, LOSS={round(loss.item(), 5)}")
-            print(f"Channel Weights: {bsnet.get_channel_weights()[0:5]}")
         band_indx = (torch.argsort(bsnet.get_channel_weights(), descending=True)).tolist()
         super()._set_all_indices(band_indx)
         selected_indices = band_indx[: self.target_size]
