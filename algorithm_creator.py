@@ -1,5 +1,6 @@
 from algorithms.algorithm_fscr import AlgorithmFSCR
 from algorithms.algorithm_fscrd import AlgorithmFSCRD
+from algorithms.algorithm_fscrl import AlgorithmFSCRL
 from algorithms.algorithm_lasso import AlgorithmLasso
 from algorithms.algorithm_logistic import AlgorithmLogistic
 from algorithms.algorithm_cars import AlgorithmCARS
@@ -31,6 +32,8 @@ class AlgorithmCreator:
             return AlgorithmPCALoading(target_size, splits)
         elif name == "fsdrd":
             return AlgorithmFSCRD(target_size, splits)
+        if name == "fsdrl":
+            return AlgorithmFSCRL(target_size, splits)
         elif name == "pca":
             return AlgorithmPCA(target_size, splits)
         elif name == "bsnet":
