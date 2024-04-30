@@ -105,7 +105,7 @@ class DSManager:
 
     def split_train_validation_ev_parts(self, train_data, test_data):
         train_data, validation_data = train_test_split(train_data, test_size=0.1, random_state=40)
-        evaluation_train_data, evaluation_test_data = train_test_split(test_data, test_size=0.4, random_state=40)
+        evaluation_train_data, evaluation_test_data = train_test_split(test_data, test_size=0.5, random_state=40)
         return DataSplits(self.name, *DSManager.get_X_y_from_data(train_data),
                *DSManager.get_X_y_from_data(validation_data),
                *DSManager.get_X_y_from_data(evaluation_train_data),
@@ -122,7 +122,7 @@ class DSManager:
         return x, y
 
     def get_train_test(self):
-        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.4, random_state=40)
+        train_data, test_data = model_selection.train_test_split(self.full_data, test_size=0.3, random_state=40)
         return train_data, test_data
 
     def get_all_set_X_y(self):
