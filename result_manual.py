@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 
 
 def remove_mcuve():
@@ -55,4 +56,24 @@ def remove_mcuve_lucasmin():
     details_df = details_df[(details_df["algorithm"] != "mcuve") | (details_df["dataset"] != "lucas_min")]
     details_df.to_csv(details, index=False)
 
-remove_lucasmin()
+
+def lasso_remove():
+    root = "saved"
+    locations = [os.path.join(root, subfolder) for subfolder in os.listdir(root) if subfolder.startswith("1_")]
+
+    for loc in locations:
+        if loc == "1_lasso":
+            continue
+        files = os.listdir(loc)
+        for f in files:
+            if "all_features_" in f:
+                continue
+            if "fscrl-" in f:
+                continue
+            p = os.path.join(loc, f)
+            df = pd.read_csv(p)
+            df = df[ (df["algorithm"] != "lasso")]
+            df.to_csv(p, index=False)
+
+lasso_remove()
+

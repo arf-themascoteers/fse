@@ -6,5 +6,5 @@ if __name__ == '__main__':
         "datasets" : ["lucas_min"],
         "target_sizes" : [5, 10, 15, 20, 25, 30]
     }
-    ev = Evaluator(tasks,1,10,"min`.csv")
+    ev = Evaluator(tasks,1,10,"min.csv")
     ev.evaluate()

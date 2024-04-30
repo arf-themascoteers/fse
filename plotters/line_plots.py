@@ -8,6 +8,7 @@ df = df[df["dataset"]=="indian_pines"]
 #df2 = df[df["algorithm"]=="fsdrl"]
 # Create a scatter plot
 fig = px.line(df, x='target_size', y='metric1',# text='metric1',
+                title="Indian Pines",
                  color="algorithm",
                  markers= ".",
                  labels={"target_size": "Number of selected bands", "metric1": "OA (%)", "algorithm":"Algorithms"})  # Adding labels and title
