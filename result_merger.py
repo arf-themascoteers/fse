@@ -17,6 +17,8 @@ for loc in locations:
             continue
         p = os.path.join(loc, f)
         d = pd.read_csv(p)
+        if len(d) == 0:
+            print(f"Empty {p}")
         d['source'] = p
         if df is None:
             df = d
