@@ -15,8 +15,11 @@ class AlgorithmZhang(Algorithm):
 
     def get_selected_indices(self):
         class_size = len(np.unique(self.splits.train_y))
+        last_layer_input = 100
+        if self.splits.get_name() == "ghsi":
+            last_layer_input = 128
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        bsnet = ZhangNet(self.splits.train_x.shape[1], class_size).to(device)
+        bsnet = ZhangNet(self.splits.train_x.shape[1], class_size, last_layer_input).to(device)
         optimizer = torch.optim.Adam(bsnet.parameters(), lr=0.001, betas=(0.9,0.999))
         X_train = torch.tensor(self.splits.train_x, dtype=torch.float32).to(device)
         y_train = torch.tensor(self.splits.train_y, dtype=torch.int32).to(device)

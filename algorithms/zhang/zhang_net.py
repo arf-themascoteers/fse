@@ -3,11 +3,12 @@ import torch
 
 
 class ZhangNet(nn.Module):
-    def __init__(self, bands, number_of_classes):
+    def __init__(self, bands, number_of_classes, last_layer_input):
         super().__init__()
         torch.manual_seed(3)
         self.bands = bands
         self.number_of_classes = number_of_classes
+        self.last_layer_input = last_layer_input
         self.weighter = nn.Sequential(
             nn.Linear(self.bands, 512),
             nn.ReLU(),
@@ -27,7 +28,7 @@ class ZhangNet(nn.Module):
             nn.BatchNorm1d(4),
             nn.MaxPool1d(kernel_size=2, stride=2, padding=0),
             nn.Flatten(start_dim=1),
-            nn.Linear(100,self.number_of_classes)
+            nn.Linear(last_layer_input,self.number_of_classes)
         )
 
         num_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
