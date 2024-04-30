@@ -36,7 +36,9 @@ for d in datasets:
     for a in algorithms:
         for t in targets:
             entries = df[ (df["algorithm"] == a) & (df["dataset"] == d) & (df["target_size"] == t)]
-            if len(entries) > 1:
+            if len(entries) == 0:
+                print(f"Missing {d} {t} {a}")
+            elif len(entries) > 1:
                 print(f"Multiple {d} {t} {a} -- {len(entries)}: {list(entries['source'])}")
                 pass
             elif len(entries) == 1:
