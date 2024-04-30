@@ -19,10 +19,10 @@ total: 14 + 24 = 38
 "spa"
 "lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
 
-3: test_3_classification: 8
+3: test_3_classification: 6
 
 "indian_pines", "ghsi"
-"fsdrl", "mcuve", "pcal", "lasso"
+"mcuve", "pcal", "lasso"
 
 4: test_4_classification: 2
 
@@ -34,6 +34,11 @@ total: 14 + 24 = 38
 "indian_pines", "ghsi"
 "fsdrl", "zhang"
 
-total: 20 + 4 + 8 + 2 + 4 = 38
+6. test_6_classification: 2
+
+"indian_pines", "ghsi"
+"fsdrl"
+
+total: 20 + 4 + 6 + 2 + 4 + 2 = 38
 
 
