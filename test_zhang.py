@@ -2,9 +2,9 @@ from evaluator import Evaluator
 
 if __name__ == '__main__':
     tasks = {
-        "algorithms" : ["fsdrl"],
+        "algorithms" : ["zhang"],
         "datasets" : ["indian_pines"],
-        "target_sizes" : [5]
+        "target_sizes" : [30]
     }
-    ev = Evaluator(tasks,1,1,"work-pines.csv")
+    ev = Evaluator(tasks,1,1,"zhang.csv")
     ev.evaluate()

@@ -41,8 +41,7 @@ class BSNetFC(nn.Module):
     def forward(self, X):
         channel_weights = self.weighter(X)
         channel_weights = self.channel_weight_layer(channel_weights)
-        channel_weights_ = torch.reshape(channel_weights, (-1, self.bands))
-        reweight_out = X * channel_weights_
+        reweight_out = X * channel_weights
         output = self.encoder(reweight_out)
         return channel_weights, output
 
