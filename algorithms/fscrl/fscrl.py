@@ -11,7 +11,7 @@ from algorithms.fscrl.linterp import LinearInterpolationModule
 
 
 class FSCRL:
-    def __init__(self, target_size, class_size=1):
+    def __init__(self, target_size, class_size, dataset_name):
         self.target_size = target_size
         self.class_size = class_size
         self.lr = 0.001
@@ -20,7 +20,7 @@ class FSCRL:
         self.model.to(self.device)
         self.criterion = self.get_criterion()
         self.epochs = 4000
-        self.csv_file = os.path.join("results", f"fscrl-{target_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
+        self.csv_file = os.path.join("results", f"fscrl-{dataset_name}-{target_size}-{str(datetime.now().timestamp()).replace('.','')}.csv")
         self.original_feature_size = None
         self.start_time = datetime.now()
 
