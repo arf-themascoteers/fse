@@ -3,7 +3,7 @@
 =14
 
 "lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
-"fsdrl", "fsdrl", "mcuve", "pcal", "lasso", "spa"
+"fsdrl", "bsnet", "mcuve", "pcal", "lasso", "spa"
 =24
 
 total: 14 + 24 = 38
@@ -11,7 +11,7 @@ total: 14 + 24 = 38
 
 1: test_1_regression: 20
 
-"fsdrl", "fsdrl", "mcuve", "pcal", "lasso"
+"fsdrl", "bsnet", "mcuve", "pcal", "lasso"
 "lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
 
 2: test_2_regression: 4
@@ -22,7 +22,7 @@ total: 14 + 24 = 38
 3: test_3_classification: 6
 
 "indian_pines", "ghsi"
-"mcuve", "pcal", "lasso"
+"bsnet", "mcuve", "pcal", "lasso"
 
 4: test_4_classification: 2
 
@@ -34,11 +34,8 @@ total: 14 + 24 = 38
 "indian_pines", "ghsi"
 "fsdrl", "zhang"
 
-6. test_6_classification: 2
 
-"indian_pines", "ghsi"
-"fsdrl"
 
-total: 20 + 4 + 6 + 2 + 4 + 2 = 38
+total: 20 + 4 + 8 + 2 + 4 = 38
 
 
