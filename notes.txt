@@ -1,3 +1,6 @@
-"indian_pines", "indian_pines"
+"indian_pines", "ghsi"
+"fsdrl", "zhang", "bsdr", "mcuve", "pcal", "lasso", "spa"
 
-"lucas_full"
+
+"lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
+"fsdrl", "bsdr", "mcuve", "pcal", "lasso", "spa"
