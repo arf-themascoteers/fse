@@ -38,6 +38,7 @@ algorithm_map = {
     "all_bands" : "All Bands",
     "fsdrl":"BSDR",
     "bsnet":"BS-Net-FC",
+    "zhang":"Zhang et al.",
     "mcuve":"MCUVE",
     "pcal":"PCA-loading",
     "lasso":"LASSO",

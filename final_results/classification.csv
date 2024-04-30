@@ -1,0 +1,85 @@
+dataset,target_size,algorithm,time,metric1,metric2
+Indian Pines,5,BSDR,25.72,0.66,0.61
+Indian Pines,5,BS-Net-FC,44.84,0.56,0.49
+Indian Pines,5,Zhang et al.,153.63,0.56,0.48
+Indian Pines,5,MCUVE,2.21,0.51,0.41
+Indian Pines,5,PCA-loading,0.09,0.53,0.44
+Indian Pines,5,LASSO,0.62,0.58,0.52
+Indian Pines,10,BSDR,25.99,0.7,0.66
+Indian Pines,10,BS-Net-FC,44.84,0.58,0.52
+Indian Pines,10,Zhang et al.,153.63,0.59,0.53
+Indian Pines,10,MCUVE,2.19,0.54,0.46
+Indian Pines,10,PCA-loading,0.5,0.56,0.5
+Indian Pines,10,LASSO,0.62,0.62,0.56
+Indian Pines,15,BSDR,26.29,0.74,0.7
+Indian Pines,15,BS-Net-FC,44.84,0.6,0.54
+Indian Pines,15,Zhang et al.,153.63,0.68,0.63
+Indian Pines,15,MCUVE,2.18,0.56,0.5
+Indian Pines,15,PCA-loading,0.86,0.53,0.47
+Indian Pines,15,LASSO,0.62,0.65,0.6
+Indian Pines,20,BSDR,26.78,0.75,0.71
+Indian Pines,20,BS-Net-FC,44.84,0.64,0.59
+Indian Pines,20,Zhang et al.,153.63,0.72,0.68
+Indian Pines,20,MCUVE,2.25,0.56,0.5
+Indian Pines,20,PCA-loading,0.65,0.54,0.48
+Indian Pines,20,LASSO,0.62,0.67,0.62
+Indian Pines,25,BSDR,27.22,0.75,0.71
+Indian Pines,25,BS-Net-FC,44.84,0.67,0.63
+Indian Pines,25,Zhang et al.,153.63,0.73,0.69
+Indian Pines,25,MCUVE,2.2,0.59,0.53
+Indian Pines,25,PCA-loading,0.75,0.55,0.49
+Indian Pines,25,LASSO,0.62,0.65,0.6
+Indian Pines,30,BSDR,27.9,0.76,0.73
+Indian Pines,30,BS-Net-FC,44.84,0.68,0.64
+Indian Pines,30,Zhang et al.,153.63,0.74,0.7
+Indian Pines,30,MCUVE,2.18,0.64,0.59
+Indian Pines,30,PCA-loading,0.86,0.59,0.53
+Indian Pines,30,LASSO,0.62,0.66,0.62
+GHSI,5,BSDR,21.52,0.65,0.51
+GHSI,5,BS-Net-FC,30.56,0.62,0.46
+GHSI,5,Zhang et al.,105.92,0.64,0.5
+GHSI,5,MCUVE,1.17,0.49,0.25
+GHSI,5,PCA-loading,0.06,0.65,0.51
+GHSI,5,LASSO,0.12,0.64,0.51
+GHSI,10,BSDR,21.18,0.68,0.56
+GHSI,10,BS-Net-FC,30.56,0.65,0.51
+GHSI,10,Zhang et al.,105.92,0.66,0.52
+GHSI,10,MCUVE,1.17,0.54,0.35
+GHSI,10,PCA-loading,0.5,0.64,0.5
+GHSI,10,LASSO,0.12,0.67,0.54
+GHSI,15,BSDR,21.25,0.72,0.61
+GHSI,15,BS-Net-FC,30.56,0.69,0.57
+GHSI,15,Zhang et al.,105.92,0.7,0.58
+GHSI,15,MCUVE,1.16,0.61,0.46
+GHSI,15,PCA-loading,0.48,0.64,0.49
+GHSI,15,LASSO,0.12,0.67,0.54
+GHSI,20,BSDR,21.53,0.72,0.61
+GHSI,20,BS-Net-FC,30.56,0.69,0.58
+GHSI,20,Zhang et al.,105.92,0.71,0.6
+GHSI,20,MCUVE,1.15,0.63,0.49
+GHSI,20,PCA-loading,0.63,0.65,0.52
+GHSI,20,LASSO,0.12,0.69,0.56
+GHSI,25,BSDR,21.63,0.73,0.63
+GHSI,25,BS-Net-FC,30.56,0.72,0.61
+GHSI,25,Zhang et al.,105.92,0.72,0.62
+GHSI,25,MCUVE,1.16,0.64,0.5
+GHSI,25,PCA-loading,0.65,0.69,0.57
+GHSI,25,LASSO,0.12,0.68,0.56
+GHSI,30,BSDR,21.96,0.74,0.63
+GHSI,30,BS-Net-FC,30.56,0.72,0.61
+GHSI,30,Zhang et al.,105.92,0.73,0.62
+GHSI,30,MCUVE,1.16,0.64,0.5
+GHSI,30,PCA-loading,0.75,0.7,0.58
+GHSI,30,LASSO,0.12,0.68,0.55
+Indian Pines,5,All Bands,0.0,0.74,0.7
+Indian Pines,10,All Bands,0.0,0.74,0.7
+Indian Pines,15,All Bands,0.0,0.74,0.7
+Indian Pines,20,All Bands,0.0,0.74,0.7
+Indian Pines,25,All Bands,0.0,0.74,0.7
+Indian Pines,30,All Bands,0.0,0.74,0.7
+GHSI,5,All Bands,0.0,0.72,0.61
+GHSI,10,All Bands,0.0,0.72,0.61
+GHSI,15,All Bands,0.0,0.72,0.61
+GHSI,20,All Bands,0.0,0.72,0.61
+GHSI,25,All Bands,0.0,0.72,0.61
+GHSI,30,All Bands,0.0,0.72,0.61

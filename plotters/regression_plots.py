@@ -8,12 +8,11 @@ import plotly.graph_objects as go
 root = "../saved_figs"
 
 
-df_original = pd.read_csv("../saved/final.csv")
-df_original["metric1"] = df_original["metric1"] * 100
-#df_original['time'] = df_original['time'].apply(lambda x: np.log(x))
+df_original = pd.read_csv("../final_results/regression.csv")
+
 
 for metric in ["time","metric1", "metric2"]:
-    for dataset in utils.dataset_map.values():
+    for dataset in ["LUCAS","LUCAS (Skipped)", "LUCAS (Downsampled)", "LUCAS (Truncated)"]:
         main_df = df_original[df_original["dataset"] == dataset]
         df_all_bands = main_df[main_df["algorithm"] == "All Bands"]
         df_ex_all_bands = main_df[main_df["algorithm"] != "All Bands"]
@@ -46,7 +45,10 @@ for metric in ["time","metric1", "metric2"]:
         )
 
         #fig.show()
-        subfolder = os.path.join(root, metric)
+        subfolder = os.path.join(root, "regression")
+        if not os.path.exists(subfolder):
+            os.mkdir(subfolder)
+        subfolder = os.path.join(subfolder, metric)
         if not os.path.exists(subfolder):
             os.mkdir(subfolder)
         path = os.path.join(subfolder, f"{dataset}.png")

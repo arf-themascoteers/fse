@@ -4,10 +4,10 @@ import plotters.utils as utils
 
 main_df = None
 all_df = None
-root = "saved"
+root = "../saved"
 locations = [os.path.join(root, subfolder) for subfolder in os.listdir(root) if subfolder.startswith("1_")]
-algorithms = ["fsdrl","bsnet","mcuve","pcal","lasso", "spa"]
-datasets = ["lucas_full","lucas_skipped","lucas_downsampled","lucas_min","indian_pines", "ghsi"]
+algorithms = ["fsdrl","bsnet","mcuve","pcal","lasso"]
+datasets = ["lucas_full","lucas_skipped","lucas_downsampled","lucas_min"]
 targets = [5,10,15,20,25,30]
 df2 = pd.DataFrame(columns=["dataset","target_size","algorithm","time","metric1","metric2"])
 
@@ -115,5 +115,5 @@ add_all_in_main()
 rename_algorithms()
 rename_datasets()
 
-df2.to_csv("saved/final.csv", index=False)
+df2.to_csv("../final_results/regression.csv", index=False)
 
