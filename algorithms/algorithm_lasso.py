@@ -9,7 +9,7 @@ class AlgorithmLasso(Algorithm):
         self.indices = None
 
     def get_selected_indices(self):
-        lasso = Lasso(alpha=0.001)
+        lasso = Lasso(alpha=0.01)
         lasso.fit(self.splits.train_x, self.splits.train_y)
         all_indices = np.argsort(np.abs(lasso.coef_))[::-1]
         super()._set_all_indices(all_indices)
