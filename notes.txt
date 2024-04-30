@@ -1,6 +1,39 @@
 "indian_pines", "ghsi"
-"fsdrl", "zhang", "bsdr", "mcuve", "pcal", "lasso", "spa"
-
+"fsdrl", "zhang", "fsdrl", "mcuve", "pcal", "lasso", "spa"
+=14
 
 "lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
-"fsdrl", "bsdr", "mcuve", "pcal", "lasso", "spa"
+"fsdrl", "fsdrl", "mcuve", "pcal", "lasso", "spa"
+=24
+
+total: 14 + 24 = 38
+=======================
+
+1: test_1_regression: 20
+
+"fsdrl", "fsdrl", "mcuve", "pcal", "lasso"
+"lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
+
+2: test_2_regression: 4
+
+"spa"
+"lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
+
+3: test_3_classification: 8
+
+"indian_pines", "ghsi"
+"fsdrl", "mcuve", "pcal", "lasso"
+
+4: test_4_classification: 2
+
+"indian_pines", "ghsi"
+"spa"
+
+5: test_5_classification: 4
+
+"indian_pines", "ghsi"
+"fsdrl", "zhang"
+
+total: 20 + 4 + 8 + 2 + 4 = 38
+
+
