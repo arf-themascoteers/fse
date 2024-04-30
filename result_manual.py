@@ -36,9 +36,23 @@ def remove_lucasmin():
     summary_df = pd.read_csv(summary)
     details_df = pd.read_csv(details)
 
+    summary_df = summary_df[ (summary_df["dataset"] != "lucas_min")]
+    summary_df.to_csv(summary, index=False)
+
+    details_df = details_df[ (details_df["dataset"] != "lucas_min")]
+    details_df.to_csv(details, index=False)
+
+def remove_mcuve_lucasmin():
+    summary = 'saved\\1_spa_luc\\mcuve_luc.csv'
+    details = 'saved\\1_spa_luc\\details_mcuve_luc.csv'
+
+    summary_df = pd.read_csv(summary)
+    details_df = pd.read_csv(details)
+
     summary_df = summary_df[ (summary_df["algorithm"] != "mcuve") | (summary_df["dataset"] != "lucas_min")]
     summary_df.to_csv(summary, index=False)
 
     details_df = details_df[(details_df["algorithm"] != "mcuve") | (details_df["dataset"] != "lucas_min")]
     details_df.to_csv(details, index=False)
 
+remove_lucasmin()
