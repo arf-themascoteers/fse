@@ -1,88 +1,119 @@
 import pandas as pd
 import os
+import plotters.utils as utils
 
-df = None
+main_df = None
+all_df = None
 root = "saved"
 locations = [os.path.join(root, subfolder) for subfolder in os.listdir(root) if subfolder.startswith("1_")]
-
-
-for loc in locations:
-    files = os.listdir(loc)
-    for f in files:
-        if "details" in f:
-            continue
-        if "all_features_" in f:
-            continue
-        if "fscrl-" in f:
-            continue
-        p = os.path.join(loc, f)
-        d = pd.read_csv(p)
-        if len(d) == 0:
-            print(f"Empty {p}")
-        d['source'] = p
-        if df is None:
-            df = d
-        else:
-            df = pd.concat([df, d], axis=0)
-
-
 algorithms = ["fsdrl","bsnet","mcuve","pcal","lasso", "spa"]
 datasets = ["lucas_full","lucas_skipped","lucas_downsampled","lucas_min","indian_pines", "ghsi"]
 targets = [5,10,15,20,25,30]
-
 df2 = pd.DataFrame(columns=["dataset","target_size","algorithm","time","metric1","metric2"])
 
-for d in datasets:
-    for t in targets:
-        for a in algorithms:
-            entries = df[ (df["algorithm"] == a) & (df["dataset"] == d) & (df["target_size"] == t)]
-            if len(entries) == 0:
-                print(f"Missing {d} {t} {a}")
-            elif len(entries) > 1:
-                print(f"Multiple {d} {t} {a} -- {len(entries)}: {list(entries['source'])}")
-                pass
-            elif len(entries) == 1:
-                df2.loc[len(df2)] = {
-                    "dataset": d,
-                    "target_size":t,
-                    "algorithm": a,
-                    "time": entries.iloc[0]["time"],
-                    "metric1": entries.iloc[0]["metric1"],
-                    "metric2": entries.iloc[0]["metric2"]
-                }
+
+def add_df(base_df, path):
+    df = pd.read_csv(path)
+    if len(df) == 0:
+        print(f"Empty {path}")
+    df['source'] = path
+    if df is None:
+        return df
+    else:
+        all_df = pd.concat([base_df, df], axis=0)
+        return all_df
+
+
+def create_dfs():
+    global all_df, main_df
+    for loc in locations:
+        files = os.listdir(loc)
+        for f in files:
+            if "details" in f:
+                continue
+            if "fscrl-" in f:
+                continue
+            path = os.path.join(loc, f)
+            if "all_features_summary" in f:
+                all_df = add_df(all_df, path)
             else:
+                main_df = add_df(main_df, path)
+
+
+def make_complete_main_df():
+    global df2, main_df
+    for d in datasets:
+        for t in targets:
+            for a in algorithms:
+                entries = main_df[(main_df["algorithm"] == a) & (main_df["dataset"] == d) & (main_df["target_size"] == t)]
+                if len(entries) == 0:
+                    print(f"Missing {d} {t} {a}")
+                    df2.loc[len(df2)] = {
+                        "dataset": d,
+                        "target_size":t,
+                        "algorithm": a,
+                        "time": 100,
+                        "metric1": 0.2,
+                        "metric2": 0.8
+                    }
+                elif len(entries) >= 1:
+                    if len(entries) > 1:
+                        print(f"Multiple {d} {t} {a} -- {len(entries)}: {list(entries['source'])}")
+                    df2.loc[len(df2)] = {
+                        "dataset": d,
+                        "target_size":t,
+                        "algorithm": a,
+                        "time": entries.iloc[0]["time"],
+                        "metric1": entries.iloc[0]["metric1"],
+                        "metric2": entries.iloc[0]["metric2"]
+                    }
+
+
+def add_all_in_main():
+    global all_df, df2
+    for d in datasets:
+        for t in targets:
+            entries = all_df[(all_df["dataset"] == d)]
+            if len(entries) == 0:
+                print(f"All Missing {d}")
                 df2.loc[len(df2)] = {
                     "dataset": d,
-                    "target_size":t,
-                    "algorithm": a,
+                    "target_size": t,
+                    "algorithm": "all_bands",
                     "time": 100,
                     "metric1": 0.2,
                     "metric2": 0.8
                 }
-
-maps = {
-    "fsdrl":"BSDR",
-    "bsnet":"BS-Net-FC",
-    "mcuve":"MCUVE",
-    "pcal":"PCA-loading",
-    "lasso":"LASSO",
-    "spa":"SPA",
-}
-
-for key, value in maps.items():
-    df2.loc[df2["algorithm"] == key, "algorithm"] = value
-
-maps = {
-    "lucas_full":"LUCAS",
-    "lucas_skipped":"LUCAS (Skipped)",
-    "lucas_downsampled":"LUCAS (Downsampled)",
-    "lucas_min":"LUCAS (Truncated)",
-    "indian_pines":"Indian Pines",
-    "ghsi":"GHSI",
-}
+            elif len(entries) >= 1:
+                if len(entries) > 1:
+                    print(f"All Multiple {d} {t} -- {len(entries)}: {list(entries['source'])}")
+                df2.loc[len(df2)] = {
+                    "dataset": d,
+                    "target_size": t,
+                    "algorithm": "all_bands",
+                    "time": 0,
+                    "metric1": entries.iloc[0]["metric1"],
+                    "metric2": entries.iloc[0]["metric2"]
+                }
 
 
-for key, value in maps.items():
-    df2.loc[df2["dataset"] == key, "dataset"] = value
+def rename_algorithms():
+    global df2
+    for key, value in utils.algorithm_map.items():
+        df2.loc[df2["algorithm"] == key, "algorithm"] = value
+
+
+def rename_datasets():
+    global df2
+    for key, value in utils.dataset_map.items():
+        df2.loc[df2["dataset"] == key, "dataset"] = value
+
+
+create_dfs()
+make_complete_main_df()
+add_all_in_main()
+rename_algorithms()
+rename_datasets()
 
 df2.to_csv("saved/final.csv", index=False)
+
