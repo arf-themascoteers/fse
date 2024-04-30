@@ -59,11 +59,9 @@ def remove_mcuve_lucasmin():
 
 def lasso_remove():
     root = "saved"
-    locations = [os.path.join(root, subfolder) for subfolder in os.listdir(root) if subfolder.startswith("1_")]
+    locations = [os.path.join(root, subfolder) for subfolder in os.listdir(root) if subfolder.startswith("1_") and subfolder!= "1_lasso"]
 
     for loc in locations:
-        if loc == "1_lasso":
-            continue
         files = os.listdir(loc)
         for f in files:
             if "all_features_" in f:
