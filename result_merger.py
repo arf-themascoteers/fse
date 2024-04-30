@@ -33,8 +33,8 @@ targets = [5,10,15,20,25,30]
 df2 = pd.DataFrame(columns=["dataset","target_size","algorithm","time","metric1","metric2"])
 
 for d in datasets:
-    for a in algorithms:
-        for t in targets:
+    for t in targets:
+        for a in algorithms:
             entries = df[ (df["algorithm"] == a) & (df["dataset"] == d) & (df["target_size"] == t)]
             if len(entries) == 0:
                 print(f"Missing {d} {t} {a}")
@@ -56,8 +56,8 @@ for d in datasets:
                     "target_size":t,
                     "algorithm": a,
                     "time": 100,
-                    "metric1": 0,
-                    "metric2": 1
+                    "metric1": 0.2,
+                    "metric2": 0.8
                 }
 
 maps = {
@@ -71,5 +71,18 @@ maps = {
 
 for key, value in maps.items():
     df2.loc[df2["algorithm"] == key, "algorithm"] = value
+
+maps = {
+    "lucas_full":"LUCAS",
+    "lucas_skipped":"LUCAS (Skipped)",
+    "lucas_downsampled":"LUCAS (Downsampled)",
+    "lucas_min":"LUCAS (Truncated)",
+    "indian_pines":"Indian Pines",
+    "ghsi":"GHSI",
+}
+
+
+for key, value in maps.items():
+    df2.loc[df2["dataset"] == key, "dataset"] = value
 
 df2.to_csv("saved/final.csv", index=False)

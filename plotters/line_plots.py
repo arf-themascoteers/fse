@@ -1,22 +1,55 @@
 import plotly.express as px
 import pandas as pd
 
-df = pd.read_csv("../saved/final.csv")
-df["metric1"] = df["metric1"] * 100
-df = df[df["dataset"]=="indian_pines"]
+dataset_maps = {
+    "lucas_full":"LUCAS",
+    "lucas_skipped":"LUCAS (Skipped)",
+    "lucas_downsampled":"LUCAS (Downsampled)",
+    "lucas_min":"LUCAS (Truncated)",
+    "indian_pines":"Indian Pines",
+    "ghsi":"GHSI",
+}
 
-#df2 = df[df["algorithm"]=="fsdrl"]
-# Create a scatter plot
-fig = px.line(df, x='target_size', y='metric1',# text='metric1',
-                title="Indian Pines",
-                 color="algorithm",
-                 markers= ".",
-                 labels={"target_size": "Number of selected bands", "metric1": "OA (%)", "algorithm":"Algorithms"})  # Adding labels and title
+metric1_map = {
+    "LUCAS": "R^2",
+    "LUCAS (Skipped)": "R^2",
+    "LUCAS (Downsampled)": "R^2",
+    "LUCAS (Truncated)": "R^2",
+    "Indian Pines": "OA (%)",
+    "GHSI": "OA (%)",
+}
 
-fig.update_layout({
-    'plot_bgcolor': 'white',  # Changes the plot background color to white
-    'paper_bgcolor': 'white',  # Changes the paper background color to white
-})
-fig.show()
+df_original = pd.read_csv("../saved/final.csv")
+df_original["metric1"] = df_original["metric1"] * 100
 
-fig.write_image("../saved_figs/indian_pines.png", scale=5)
+for dataset in dataset_maps.values():
+    df = df_original[df_original["dataset"]==dataset]
+    fig = px.line(df, x='target_size', y='metric1',# text='metric1',
+                    title=dataset,
+                     color="algorithm",
+                     markers= ".",
+                     labels={"target_size": "Number of selected bands", "metric1": metric1_map[dataset], "algorithm":"Algorithms"})  # Adding labels and title
+
+    fig.update_layout({
+        'plot_bgcolor': 'white',
+        'paper_bgcolor': 'white',
+        'title_x':0.5
+    })
+
+    fig.update_layout(
+        xaxis=dict(
+            showgrid=True,
+            gridcolor='lightgray',
+            gridwidth=1
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='lightgray',
+            gridwidth=1
+        )
+    )
+
+    #fig.show()
+
+    fig.write_image(f"../saved_figs/{dataset}.png", scale=5)
+
