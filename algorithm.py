@@ -74,7 +74,7 @@ class Algorithm(ABC):
             return RandomForestClassifier()
         elif gowith == "sv":
             if task == "regression":
-                return SVR(C=1e5, kernel='rbf', gamma=1.)
+                return SVR(C=100, kernel='rbf', gamma=1.)
             return SVC(C=1e5, kernel='rbf', gamma=1.)
         else:
             if task == "regression":

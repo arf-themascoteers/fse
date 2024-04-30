@@ -21,7 +21,7 @@ for i in range(10):
     train_x, test_x, train_y, test_y = model_selection.train_test_split(X,y, test_size=0.1, shuffle=True)
     model = SVC(C=1e5, kernel='rbf', gamma=1.)
     if regression:
-        model = SVR(C=1e5, kernel='rbf', gamma=1.)
+        model = SVR(C=100, kernel='rbf', gamma=1.)
     model.fit(train_x, train_y)
     y_pred = model.predict(test_x)
     if not regression:

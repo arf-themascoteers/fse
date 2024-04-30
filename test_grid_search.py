@@ -13,7 +13,7 @@ param_grid = {
     'gamma': [1,2]
 }
 
-grid_search = GridSearchCV(SVR(kernel='rbf'), param_grid, cv=5, verbose=3)
+grid_search = GridSearchCV(SVR(kernel='rbf'), param_grid, cv=2, verbose=2)
 grid_search.fit(X, y)
 best_params = grid_search.best_params_
 best_estimator = grid_search.best_estimator_
