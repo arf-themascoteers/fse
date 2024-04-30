@@ -4,7 +4,7 @@ if __name__ == '__main__':
     tasks = {
         "algorithms" : ["spa"],
         "datasets" : ["lucas_full"],
-        "target_sizes" : [5,10,15, 20, 25, 30]
+        "target_sizes" : [20, 25, 30]
     }
     ev = Evaluator(tasks,1,1,"luc2.csv")
     ev.evaluate()
