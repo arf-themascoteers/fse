@@ -48,7 +48,7 @@ class AlgorithmZhang(Algorithm):
         return bsnet, selected_indices
 
     def get_name(self):
-        return "bsnet"
+        return "zhang"
 
     def get_lambda(self, epoch):
         return 0.001 * math.exp(epoch/500)
