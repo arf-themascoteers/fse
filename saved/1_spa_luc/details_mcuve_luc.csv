@@ -1,0 +1,8 @@
+dataset,target_size,fold,algorithm,repeat,time,metric1,metric2,selected_features
+lucas_min,5,0,mcuve,0,3.85,0.3,0.16,767-770-771-773-776
+lucas_min,5,1,mcuve,0,4.66,0.15,0.14,449-450-451-453-454
+lucas_min,5,2,mcuve,0,3.59,0,0.11,438-439-440-441-442
+lucas_min,5,3,mcuve,0,3.48,0,1.58,2998-2999-3000-3001-3002
+lucas_min,5,4,mcuve,0,3.8,0,0.13,797-798-800-801-802
+lucas_min,5,5,mcuve,0,4.23,0,0.21,797-800-801-802-803
+lucas_min,5,6,mcuve,0,6.76,-0.0,0.17,807-808-809-810-811
