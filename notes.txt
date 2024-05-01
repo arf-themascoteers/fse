@@ -19,16 +19,19 @@ total: 14 + 24 = 38
 "spa"
 "lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
 
+*********************************
 3: test_3_classification: 6
 
 "indian_pines", "ghsi"
 "bsnet", "mcuve", "pcal", "lasso"
 
+*********************************
 4: test_4_classification: 2
 
 "indian_pines", "ghsi"
 "spa"
 
+*********************************
 5: test_5_classification: 4
 
 "indian_pines", "ghsi"
