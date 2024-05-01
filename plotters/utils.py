@@ -9,12 +9,12 @@ dataset_map = {
 
 metric_map = {
     "time":{
-        "LUCAS": "Logarithmic Execution Time (Seconds)",
-        "LUCAS (Skipped)": "Logarithmic Execution Time (Seconds)",
-        "LUCAS (Downsampled)": "Logarithmic Execution Time (Seconds)",
-        "LUCAS (Truncated)": "Logarithmic Execution Time (Seconds)",
-        "Indian Pines": "Logarithmic Execution Time (Seconds)",
-        "GHSI": "Logarithmic Execution Time (Seconds)",
+        "LUCAS": "Logarithmic Execution Time",
+        "LUCAS (Skipped)": "Logarithmic Execution Time",
+        "LUCAS (Downsampled)": "Logarithmic Execution Time",
+        "LUCAS (Truncated)": "Logarithmic Execution Time",
+        "Indian Pines": "Logarithmic Execution Time",
+        "GHSI": "Logarithmic Execution Time",
     },
     "metric1":{
         "LUCAS": "$R^2$",

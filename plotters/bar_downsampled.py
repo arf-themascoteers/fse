@@ -1,57 +1,55 @@
 import os.path
 import numpy as np
-import plotly.express as px
 import pandas as pd
-import plotters.utils as utils
 import plotly.graph_objects as go
 
-root = "../saved_figs"
+
+def plot_bar(task = "regression"):
+    root = "../saved_figs"
+    df_original = pd.read_csv(f"../final_results/{task}.csv")
+    df = df_original[df_original["algorithm"] != "All Bands"].copy()
+    df['time'] = df['time'].apply(lambda x: np.log10(x+10))
+    algorithms = ['BSDR', 'BS-Net-FC', 'MCUVE', 'PCA-loading', 'LASSO', 'SPA']
+    if task == "classification":
+        algorithms.insert(1,"Zhang et al.")
+    df_lucas = df[(df["dataset"] == "LUCAS") & (df["target_size"] == 30)]
+    df_short = df[(df["dataset"] == "LUCAS (Downsampled)") & (df["target_size"] == 30)]
+
+    lucas_time = []
+    short_time = []
+
+    for a in algorithms:
+        rows = df_lucas[df_lucas["algorithm"] == a]
+        lucas_time.append(rows.iloc[0]["time"])
+
+        rows = df_short[df_short["algorithm"] == a]
+        short_time.append(rows.iloc[0]["time"])
+
+    fig = go.Figure(data=[
+        go.Bar(name='LUCAS (Downsampled)', x=algorithms, y=short_time),
+        go.Bar(name='LUCAS', x=algorithms, y=lucas_time)
+    ])
+
+    fig.update_yaxes(showticklabels=False)
+
+    fig.update_layout(
+        barmode='group',
+        xaxis_title='Algorithm',
+        yaxis_title='Logarithmic execution time',
+    )
+
+    fig.update_layout({
+        'plot_bgcolor': 'white',
+        'paper_bgcolor': 'white',
+        'title_x': 0.5
+    })
+
+    subfolder = os.path.join(root, "bars")
+    if not os.path.exists(subfolder):
+        os.mkdir(subfolder)
+    path = os.path.join(subfolder,f"{task}_downsampled.png")
+    fig.write_image(path, scale=5)
 
 
-df_original = pd.read_csv("../final_results/regression.csv")
-df_original['time'] = df_original['time'].apply(lambda x: np.log10(np.where(x <= 1,1,x)))
-
-for metric in ["time","metric1", "metric2"]:
-    for dataset in ["LUCAS","LUCAS (Skipped)", "LUCAS (Downsampled)", "LUCAS (Truncated)"]:
-        main_df = df_original[df_original["dataset"] == dataset]
-        df_all_bands = main_df[main_df["algorithm"] == "All Bands"]
-        df_ex_all_bands = main_df[main_df["algorithm"] != "All Bands"]
-        fig = px.line(df_ex_all_bands, x='target_size', y=metric,
-                      color="algorithm",
-                      markers= ".",
-                      labels={"target_size": "Number of selected bands", metric: utils.metric_map[metric][dataset], "algorithm":"Algorithms"})
-
-        if metric != "time":
-            additional_trace = go.Scatter(x=df_all_bands["target_size"], y=df_all_bands[metric], mode='lines', line=dict(dash='dash'), name='All Bands')
-            fig.add_trace(additional_trace)
-
-        fig.update_layout({
-            'plot_bgcolor': 'white',
-            'paper_bgcolor': 'white',
-            'title_x':0.5
-        })
-
-        fig.update_layout(
-            xaxis=dict(
-                showgrid=True,
-                gridcolor='lightgray',
-                gridwidth=1
-            ),
-            yaxis=dict(
-                showgrid=True,
-                gridcolor='lightgray',
-                gridwidth=1
-            )
-        )
-
-        #fig.show()
-        subfolder = os.path.join(root, "regression")
-        if not os.path.exists(subfolder):
-            os.mkdir(subfolder)
-        subfolder = os.path.join(subfolder, metric)
-        if not os.path.exists(subfolder):
-            os.mkdir(subfolder)
-        path = os.path.join(subfolder, f"{dataset}.png")
-        fig.write_image(path, scale=5)
-
-
+#plot_bar("regression")
+plot_bar("classification")

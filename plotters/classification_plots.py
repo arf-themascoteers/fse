@@ -16,7 +16,8 @@ for metric in ["time","metric1", "metric2"]:
     for dataset in ["Indian Pines","GHSI"]:
         main_df = df_original[df_original["dataset"] == dataset]
         df_all_bands = main_df[main_df["algorithm"] == "All Bands"]
-        df_ex_all_bands = main_df[main_df["algorithm"] != "All Bands"]
+        df_ex_all_bands = main_df[main_df["algorithm"] != "All Bands"].copy()
+        df_ex_all_bands['time'] = df_ex_all_bands['time'].apply(lambda x: np.log10(x))
         fig = px.line(df_ex_all_bands, x='target_size', y=metric,
                       color="algorithm",
                       markers= ".",
