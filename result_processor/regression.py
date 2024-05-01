@@ -2,11 +2,12 @@ import pandas as pd
 import os
 import plotters.utils as utils
 
-main_df = None
-all_df = None
+main_df = pd.DataFrame()
+all_df = pd.DataFrame()
 root = "../saved"
-locations = [os.path.join(root, subfolder) for subfolder in os.listdir(root) if subfolder.startswith("1_")]
-algorithms = ["fsdrl","bsnet","mcuve","pcal","lasso"]
+subfolders = ["0_1","0_2_1","0_3","0_4","0_5","0_6"]
+locations = [os.path.join(root, subfolder) for subfolder in subfolders]
+algorithms = ["fsdrl","bsnet","mcuve","pcal","lasso","spa"]
 datasets = ["lucas_full","lucas_skipped","lucas_downsampled","lucas_min"]
 targets = [5,10,15,20,25,30]
 df2 = pd.DataFrame(columns=["dataset","target_size","algorithm","time","metric1","metric2"])
@@ -16,12 +17,13 @@ def add_df(base_df, path):
     df = pd.read_csv(path)
     if len(df) == 0:
         print(f"Empty {path}")
+        return base_df
     df['source'] = path
-    if df is None:
+    if base_df is None:
         return df
     else:
-        all_df = pd.concat([base_df, df], axis=0)
-        return all_df
+        base_df = pd.concat([base_df, df], axis=0)
+        return base_df
 
 
 def create_dfs():
@@ -86,7 +88,8 @@ def add_all_in_main():
                 }
             elif len(entries) >= 1:
                 if len(entries) > 1:
-                    print(f"All Multiple {d} {t} -- {len(entries)}: {list(entries['source'])}")
+                    #print(f"All Multiple {d} {t} -- {len(entries)}: {list(entries['source'])}")
+                    pass
                 df2.loc[len(df2)] = {
                     "dataset": d,
                     "target_size": t,

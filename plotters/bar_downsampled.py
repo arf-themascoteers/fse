@@ -9,14 +9,13 @@ root = "../saved_figs"
 
 
 df_original = pd.read_csv("../final_results/regression.csv")
-
+df_original['time'] = df_original['time'].apply(lambda x: np.log10(np.where(x <= 1,1,x)))
 
 for metric in ["time","metric1", "metric2"]:
     for dataset in ["LUCAS","LUCAS (Skipped)", "LUCAS (Downsampled)", "LUCAS (Truncated)"]:
         main_df = df_original[df_original["dataset"] == dataset]
         df_all_bands = main_df[main_df["algorithm"] == "All Bands"]
-        df_ex_all_bands = main_df[main_df["algorithm"] != "All Bands"].copy()
-        df_ex_all_bands['time'] = df_ex_all_bands['time'].apply(lambda x: np.log10(x))
+        df_ex_all_bands = main_df[main_df["algorithm"] != "All Bands"]
         fig = px.line(df_ex_all_bands, x='target_size', y=metric,
                       color="algorithm",
                       markers= ".",
