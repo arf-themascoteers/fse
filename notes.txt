@@ -9,10 +9,10 @@
 total: 14 + 24 = 38
 =======================
 
-1: test_1_regression: 20
+1: test_1_regression: 5
 
 "fsdrl", "bsnet", "mcuve", "pcal", "lasso"
-"lucas_full","lucas_skipped","lucas_downsampled","lucas_min"
+"lucas_full"
 
 2: test_2_regression: 4
 
@@ -37,8 +37,13 @@ total: 14 + 24 = 38
 "indian_pines", "ghsi"
 "fsdrl", "zhang"
 
+6: test_6_classification: 15
+
+"fsdrl", "bsnet", "mcuve", "pcal", "lasso"
+"lucas_skipped","lucas_downsampled","lucas_min"
 
 
-total: 20 + 4 + 8 + 2 + 4 = 38
+
+total: 5 + 4 + 8 + 2 + 4 + 15 = 38
 
 
