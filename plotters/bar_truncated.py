@@ -11,7 +11,7 @@ def plot_bar():
     df['time'] = df['time'].apply(lambda x: np.log10(x+10))
     algorithms = ['BSDR', 'BS-Net-FC', 'MCUVE', 'PCA-loading', 'LASSO', 'SPA']
     df_lucas = df[(df["dataset"] == "LUCAS") & (df["target_size"] == 30)]
-    df_short = df[(df["dataset"] == "LUCAS (Downsampled)") & (df["target_size"] == 30)]
+    df_short = df[(df["dataset"] == "LUCAS (Truncated)") & (df["target_size"] == 30)]
 
     lucas_time = []
     short_time = []
@@ -24,7 +24,7 @@ def plot_bar():
         short_time.append(rows.iloc[0]["time"])
 
     fig = go.Figure(data=[
-        go.Bar(name='LUCAS (Downsampled)', x=algorithms, y=short_time),
+        go.Bar(name='LUCAS (Truncated)', x=algorithms, y=short_time),
         go.Bar(name='LUCAS', x=algorithms, y=lucas_time)
     ])
 
@@ -45,7 +45,7 @@ def plot_bar():
     subfolder = os.path.join(root, "bars")
     if not os.path.exists(subfolder):
         os.mkdir(subfolder)
-    path = os.path.join(subfolder,f"downsampled.png")
+    path = os.path.join(subfolder,f"truncated.png")
     fig.write_image(path, scale=5)
 
 
