@@ -22,6 +22,8 @@ class AlgorithmBSNet(Algorithm):
         mse_loss = 0
         for epoch in range(100):
             for batch_idx, (X, y) in enumerate(dataloader):
+                if X.shape[0] == 1:
+                    continue
                 optimizer.zero_grad()
                 channel_weights, y_hat = bsnet(X)
                 mse_loss = self.criterion(y_hat, y)
