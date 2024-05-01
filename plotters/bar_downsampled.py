@@ -4,14 +4,12 @@ import pandas as pd
 import plotly.graph_objects as go
 
 
-def plot_bar(task = "regression"):
+def plot_bar():
     root = "../saved_figs"
-    df_original = pd.read_csv(f"../final_results/{task}.csv")
+    df_original = pd.read_csv(f"../final_results/regression.csv")
     df = df_original[df_original["algorithm"] != "All Bands"].copy()
     df['time'] = df['time'].apply(lambda x: np.log10(x+10))
     algorithms = ['BSDR', 'BS-Net-FC', 'MCUVE', 'PCA-loading', 'LASSO', 'SPA']
-    if task == "classification":
-        algorithms.insert(1,"Zhang et al.")
     df_lucas = df[(df["dataset"] == "LUCAS") & (df["target_size"] == 30)]
     df_short = df[(df["dataset"] == "LUCAS (Downsampled)") & (df["target_size"] == 30)]
 
@@ -47,9 +45,9 @@ def plot_bar(task = "regression"):
     subfolder = os.path.join(root, "bars")
     if not os.path.exists(subfolder):
         os.mkdir(subfolder)
-    path = os.path.join(subfolder,f"{task}_downsampled.png")
+    path = os.path.join(subfolder,f"regression_downsampled.png")
     fig.write_image(path, scale=5)
 
 
-#plot_bar("regression")
-plot_bar("classification")
+
+plot_bar()
