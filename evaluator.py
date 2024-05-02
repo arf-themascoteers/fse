@@ -7,10 +7,11 @@ from algorithm import Algorithm
 
 
 class Evaluator:
-    def __init__(self, task, repeat=1, folds=1, filename="results.csv"):
+    def __init__(self, task, repeat=1, folds=1, filename="results.csv", skip_all_bands=False):
         self.task = task
         self.repeat = repeat
         self.folds = folds
+        self.skip_all_bands = skip_all_bands
         self.reporter = Reporter(filename)
         self.cache = pd.DataFrame(columns=["dataset","fold","algorithm","repeat",
                                            "metric1","metric2","time","selected_features"])
@@ -18,7 +19,8 @@ class Evaluator:
     def evaluate(self):
         for dataset_name in self.task["datasets"]:
             dataset = DSManager(name=dataset_name, folds=self.folds)
-            self.evaluate_for_all_features(dataset)
+            if not self.skip_all_bands:
+                self.evaluate_for_all_features(dataset)
             for target_size in self.task["target_sizes"]:
                 for fold, splits in enumerate(dataset.get_k_folds()):
                     splits.print_splits()
