@@ -4,16 +4,18 @@ from metrics import Metrics
 
 
 class Reporter:
-    def __init__(self, filename="results.csv"):
+    def __init__(self, filename="results.csv", skip_all_bands=False):
+        self.skip_all_bands = skip_all_bands
         self.summary_filename = filename
         self.details_filename = f"details_{self.summary_filename}"
-        self.all_features_details_filename = f"all_features_details_{self.summary_filename}"
-        self.all_features_summary_filename = f"all_features_summary_{self.summary_filename}"
-
         self.summary_file = os.path.join("results", self.summary_filename)
         self.details_file = os.path.join("results", self.details_filename)
-        self.all_features_summary_file = os.path.join("results", self.all_features_summary_filename)
-        self.all_features_details_file = os.path.join("results", self.all_features_details_filename)
+
+        if not self.skip_all_bands:
+            self.all_features_details_filename = f"all_features_details_{self.summary_filename}"
+            self.all_features_summary_filename = f"all_features_summary_{self.summary_filename}"
+            self.all_features_summary_file = os.path.join("results", self.all_features_summary_filename)
+            self.all_features_details_file = os.path.join("results", self.all_features_details_filename)
 
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
