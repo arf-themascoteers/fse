@@ -1,12 +1,12 @@
-bsdr - ip
-bsdr - ghsi
-bsdr - lucas
-bsdr - down
+bsdr - ip: 431
+bsdr - ghsi: 310
+bsdr - lucas: 266
+bsdr - down: 266
 
-bdnset - ip
-bdnset - ghsi
-bdnset - lucas
-bdnset - down
+bdnset - ip: 154416
+bdnset - ghsi: 118674
+bdnset - lucas:2226416
+bdnset - down:85004
 
-zhang - ip
-zhang - ghsi
+zhang - ip: 207740
+zhang - ghsi: 135724
