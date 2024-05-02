@@ -21,10 +21,16 @@ for metric in ["time","metric1", "metric2"]:
         fig = px.line(df_ex_all_bands, x='target_size', y=metric,
                       color="algorithm",
                       markers= ".",
-                      labels={"target_size": "Number of selected bands", metric: utils.metric_map[metric][dataset], "algorithm":"Algorithms"})
+                      color_discrete_map = utils.color_map,
+                      labels={"target_size": "Number of selected bands", metric: utils.metric_map[metric][dataset], "algorithm":"Algorithms"}
+                      )
 
         if metric != "time":
-            additional_trace = go.Scatter(x=df_all_bands["target_size"], y=df_all_bands[metric], mode='lines', line=dict(dash='dash'), name='All Bands')
+            additional_trace = go.Scatter(x=df_all_bands["target_size"],
+                                          y=df_all_bands[metric],
+                                          mode='lines', line=dict(dash='dash', color="black"), name='All Bands',
+
+                                          )
             fig.add_trace(additional_trace)
 
         fig.update_layout({
@@ -44,6 +50,10 @@ for metric in ["time","metric1", "metric2"]:
                 gridcolor='lightgray',
                 gridwidth=1
             )
+        )
+
+        fig.update_layout(
+            font=dict(size=17),
         )
 
         #fig.show()

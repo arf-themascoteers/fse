@@ -44,3 +44,15 @@ algorithm_map = {
     "lasso":"LASSO",
     "spa":"SPA",
 }
+
+color_map = {
+    "All Bands" : "black",
+    "BSDR":"blue",
+    "BS-Net-FC":"red",
+    "Zhang et al.":"green",
+    "MCUVE":"purple",
+    "PCA-loading":"brown",
+    "LASSO":"pink",
+    "SPA":"cyan",
+}
+
