@@ -12,7 +12,7 @@ class Evaluator:
         self.repeat = repeat
         self.folds = folds
         self.skip_all_bands = skip_all_bands
-        self.reporter = Reporter(filename, skip_all_bands=False)
+        self.reporter = Reporter(filename, self.skip_all_bands)
         self.cache = pd.DataFrame(columns=["dataset","fold","algorithm","repeat",
                                            "metric1","metric2","time","selected_features"])
 
