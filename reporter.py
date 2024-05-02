@@ -11,12 +11,6 @@ class Reporter:
         self.summary_file = os.path.join("results", self.summary_filename)
         self.details_file = os.path.join("results", self.details_filename)
 
-        if not self.skip_all_bands:
-            self.all_features_details_filename = f"all_features_details_{self.summary_filename}"
-            self.all_features_summary_filename = f"all_features_summary_{self.summary_filename}"
-            self.all_features_summary_file = os.path.join("results", self.all_features_summary_filename)
-            self.all_features_details_file = os.path.join("results", self.all_features_details_filename)
-
         if not os.path.exists(self.summary_file):
             with open(self.summary_file, 'w') as file:
                 file.write("dataset,target_size,algorithm,time,metric1,metric2,selected_features\n")
@@ -25,13 +19,19 @@ class Reporter:
             with open(self.details_file, 'w') as file:
                 file.write("dataset,target_size,fold,algorithm,repeat,time,metric1,metric2,selected_features\n")
 
-        if not os.path.exists(self.all_features_summary_file):
-            with open(self.all_features_summary_file, 'w') as file:
-                file.write("dataset,metric1,metric2\n")
+        if not self.skip_all_bands:
+            self.all_features_details_filename = f"all_features_details_{self.summary_filename}"
+            self.all_features_summary_filename = f"all_features_summary_{self.summary_filename}"
+            self.all_features_summary_file = os.path.join("results", self.all_features_summary_filename)
+            self.all_features_details_file = os.path.join("results", self.all_features_details_filename)
 
-        if not os.path.exists(self.all_features_details_file):
-            with open(self.all_features_details_file, 'w') as file:
-                file.write("fold,dataset,metric1,metric2\n")
+            if not os.path.exists(self.all_features_summary_file):
+                with open(self.all_features_summary_file, 'w') as file:
+                    file.write("dataset,metric1,metric2\n")
+
+            if not os.path.exists(self.all_features_details_file):
+                with open(self.all_features_details_file, 'w') as file:
+                    file.write("fold,dataset,metric1,metric2\n")
 
     def write_details(self, algorithm, fold, repeat, metric:Metrics):
         time = Reporter.sanitize_metric(metric.time)
