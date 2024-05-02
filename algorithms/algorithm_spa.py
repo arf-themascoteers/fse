@@ -8,7 +8,7 @@ class AlgorithmSPA(Algorithm):
 
     def get_selected_indices(self):
         vip = VIP()
-        selector = SPA(n_features_to_select=self.target_size, n_jobs=100)
+        selector = SPA(n_features_to_select=self.target_size)
         vip.fit(self.splits.train_x, self.splits.train_y)
         mask = vip.vips_ > 0.3
         selector.fit(self.splits.train_x, self.splits.train_y, mask=mask)
