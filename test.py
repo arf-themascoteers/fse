@@ -2,19 +2,9 @@ from evaluator import Evaluator
 
 if __name__ == '__main__':
     tasks = {
-        "algorithms" : ["mcuve", "cars", "lasso", "rf"],
-        "datasets" : ["brazilian", "lucas_skipped", "lucas_full"],
-        "target_sizes" : [5, 10, 15, 20, 25, 30]
+        "algorithms" : ["fsdrl"],
+        "datasets" : ["indian_pines"],
+        "target_sizes" : [5]
     }
-    tasks = {
-        "algorithms" : ["lasso","bsnet","fsdr"],
-        "datasets" : ["lucas_downsampled_min", "lucas_skipped_min"],
-        "target_sizes" : [2, 5, 7]
-    }
-    tasks = {
-        "algorithms" : ["bsnet"],
-        "datasets" : ["lucas_downsampled_min", "lucas_skipped_min"],
-        "target_sizes" : [2, 5, 7]
-    }
-    ev = Evaluator(tasks,3,4,"quick.csv")
+    ev = Evaluator(tasks,1,1,"dummy3.csv",skip_all_bands=True)
     ev.evaluate()

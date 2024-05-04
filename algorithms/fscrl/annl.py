@@ -9,11 +9,11 @@ class ANNL(nn.Module):
         self.target_size = target_size
         self.class_size = class_size
         self.linear = nn.Sequential(
-            nn.Linear(self.target_size, 15),
+            nn.Linear(self.target_size, 128),
             nn.LeakyReLU(),
-            nn.Linear(15, 10),
+            nn.Linear(128, 64),
             nn.LeakyReLU(),
-            nn.Linear(10, self.class_size)
+            nn.Linear(64, self.class_size)
         )
         init_vals = torch.linspace(0.001,0.99, target_size+2)
         self.indices = nn.Parameter(torch.tensor([ANNL.inverse_sigmoid_torch(init_vals[i + 1]) for i in range(self.target_size)], requires_grad=True).to(self.device))
